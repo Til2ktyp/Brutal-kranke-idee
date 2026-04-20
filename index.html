@@ -1,12 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Virtuelles Gambling</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #balance {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+    }
+    #history {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .result {
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 4px;
+    }
+    .win { background-color: #d4edda; color: #155724; }
+    .loss { background-color: #f8d7da; color: #721c24; }
+    .jackpot { background-color: #fff3cd; color: #856404; }
+  </style>
 </head>
 <body>
-  <h1>ich bin schwul.</h1>
-  <h4>kann nicht jeder von sich behaupten ahahah</h4>
+  <h1>Virtuelles Gambling</h1>
+
+  <div class="grid-container">
+  <div class="section">
+    <h2>Kreditkartennummer eingeben</h2>
+    <input type="text" id="cardNumber" placeholder="Virtuelle Kreditkartennummer (z.B. 1234-5678-9012-3456)">
+    <button onclick="setCard()">Karte setzen</button>
+  </div>
+
+  <div class="section">
+    <h2>Kontostand</h2>
+    <p id="balance">0€</p>
+  </div>
+
+  <div class="section">
+    <h2>Einsatz setzen</h2>
+    <input type="number" id="betAmount" min="5" max="500" placeholder="Betrag (5-500€)">
+    <button onclick="gamble()">Gamblen</button>
+  </div>
+
+  <div class="section">
+    <h2>Verlauf</h2>
+    <div id="history"></div>
+  </div>
+
+  <div class="section">
+    <h2>Auszahlen</h2>
+    <button onclick="withdraw()">Auszahlen</button>
+    <p id="withdrawMessage"></p>
+  </div>
+  </div>
+
+  <script>
+    let balance = 0;
+    let cardSet = false;
+
+    function setCard() {
+      const card = document.getElementById('cardNumber').value;
+      if (card.trim() !== '') {
+        cardSet = true;
+        balance = 500; // Startguthaben
+        document.getElementById('balance').textContent = balance + '€';
+        addToHistory('Karte gesetzt. Guthaben: 500€');
+      } else {
+        alert('Bitte eine Kreditkartennummer eingeben.');
+      }
+    }
+
+    function gamble() {
+      if (!cardSet) {
+        alert('Bitte zuerst eine Kreditkartennummer setzen.');
+        return;
+      }
+      const bet = parseInt(document.getElementById('betAmount').value);
+      if (isNaN(bet) || bet < 5 || bet > 500 || bet > balance) {
+        alert('Ungültiger Einsatz. Muss zwischen 5 und 500€ liegen und nicht höher als Guthaben sein.');
+        return;
+      }
+
+      // Einfaches Gamble: Zufällig Gewinn oder Verlust
+      const rand = Math.random();
+      let result, amount;
+      if (rand < 0.1) { // 10% Jackpot
+        result = 'Jackpot';
+        amount = bet * 10;
+        balance += amount;
+      } else if (rand < 0.3) { // 20% Großer Gewinn
+        result = 'Großer Gewinn';
+        amount = bet * 2;
+        balance += amount;
+      } else if (rand < 0.5) { // 20% Kleiner Gewinn
+        result = 'Kleiner Gewinn';
+        amount = bet * 0.5;
+        balance += amount;
+      } else { // 50% Verlust
+        result = 'Verlust';
+        amount = -bet;
+        balance -= bet;
+      }
+
+      document.getElementById('balance').textContent = balance + '€';
+      addToHistory(`${result}: ${amount > 0 ? '+' : ''}${amount}€ (Einsatz: ${bet}€)`);
+    }
+
+    function addToHistory(message) {
+      const history = document.getElementById('history');
+      const div = document.createElement('div');
+      div.className = 'result';
+      if (message.includes('Jackpot')) div.classList.add('jackpot');
+      else if (message.includes('Gewinn')) div.classList.add('win');
+      else if (message.includes('Verlust')) div.classList.add('loss');
+      div.textContent = message;
+      history.appendChild(div);
+      history.scrollTop = history.scrollHeight;
+    }
+
+    function withdraw() {
+      if (!cardSet) {
+        alert('Bitte zuerst eine Kreditkartennummer setzen.');
+        return;
+      }
+      document.getElementById('withdrawMessage').textContent = `Auszahlung beantragt. Betrag: ${balance}€. (Virtuell - kein echtes Geld)`;
+      balance = 0;
+      document.getElementById('balance').textContent = balance + '€';
+      addToHistory('Auszahlung beantragt.');
+    }
+  </script>
 </body>
 </html>
