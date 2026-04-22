@@ -228,9 +228,97 @@
             color: #666;
             margin-left: 5px;
         }
+
+        .graph-settings-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            background: #9c88ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .graph-settings-btn:hover {
+            background: #8c7ae6;
+        }
+
+        .graph-settings-panel {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 280px;
+            background: rgba(30, 39, 46, 0.97);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 16px;
+            z-index: 1003;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            display: none;
+        }
+
+        .graph-settings-panel.show {
+            display: block;
+        }
+
+        .graph-settings-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fbc531;
+            margin-bottom: 14px;
+        }
+
+        .graph-toggle-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .graph-toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .graph-toggle-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <button class="graph-settings-btn" onclick="toggleGraphSettingsPanel()">⚙️ Graphen</button>
+
+    <div class="graph-settings-panel" id="graphSettingsPanel">
+        <div class="graph-settings-title">📋 Graphen auswählen</div>
+        <div class="graph-toggle-list">
+            <label class="graph-toggle-item">
+                <input type="checkbox" data-dataset-index="0" checked onchange="toggleDatasetVisibility(this)">
+                <span>Portfolio Wert</span>
+            </label>
+            <label class="graph-toggle-item">
+                <input type="checkbox" data-dataset-index="1" checked onchange="toggleDatasetVisibility(this)">
+                <span>Investierte Summe</span>
+            </label>
+            <label class="graph-toggle-item">
+                <input type="checkbox" data-dataset-index="2" checked onchange="toggleDatasetVisibility(this)">
+                <span>Kumulierte Dividenden</span>
+            </label>
+            <label class="graph-toggle-item">
+                <input type="checkbox" data-dataset-index="3" checked onchange="toggleDatasetVisibility(this)">
+                <span>Aktienkurs</span>
+            </label>
+        </div>
+    </div>
+
     <div class="container">
         <h1>📈 Investment Portfolio Rechner</h1>
 
@@ -297,6 +385,7 @@
         let portfolioData = null;
         let zoomEnabled = false;
         let lastTouchX = null;
+        let datasetVisibility = [true, true, true, true];
         const TWELVE_DATA_API_KEY = 'e4cfbe247e62449c999d101f5fc4dc6a';
         const TWELVE_DATA_URL = 'https://api.twelvedata.com/time_series';
         const ALPHA_VANTAGE_DIVIDEND_KEYS = [
@@ -374,10 +463,59 @@
             autocompleteList.classList.remove('show');
         }
 
+        function toggleGraphSettingsPanel() {
+            const panel = document.getElementById('graphSettingsPanel');
+            panel.classList.toggle('show');
+        }
+
+        function saveDatasetVisibility() {
+            localStorage.setItem('datasetVisibility', JSON.stringify(datasetVisibility));
+        }
+
+        function loadDatasetVisibility() {
+            const saved = localStorage.getItem('datasetVisibility');
+            if (!saved) return;
+
+            try {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length === 4) {
+                    datasetVisibility = parsed.map(value => Boolean(value));
+                }
+            } catch (error) {
+                console.error('Fehler beim Laden der Graph-Sichtbarkeit:', error);
+            }
+        }
+
+        function syncDatasetCheckboxes() {
+            document.querySelectorAll('#graphSettingsPanel input[type="checkbox"]').forEach(checkbox => {
+                const index = Number(checkbox.dataset.datasetIndex);
+                checkbox.checked = datasetVisibility[index] !== false;
+            });
+        }
+
+        function toggleDatasetVisibility(checkbox) {
+            const datasetIndex = Number(checkbox.dataset.datasetIndex);
+            datasetVisibility[datasetIndex] = checkbox.checked;
+            saveDatasetVisibility();
+
+            if (chart) {
+                chart.setDatasetVisibility(datasetIndex, checkbox.checked);
+                chart.update();
+                updateVisibleStats();
+            }
+        }
+
         // Schließe Autocomplete, wenn außerhalb geklickt wird
         document.addEventListener('click', function(e) {
             if (e.target !== stockInput) {
                 autocompleteList.classList.remove('show');
+            }
+
+            const graphPanel = document.getElementById('graphSettingsPanel');
+            const graphButton = document.querySelector('.graph-settings-btn');
+
+            if (graphPanel && graphButton && !graphPanel.contains(e.target) && !graphButton.contains(e.target)) {
+                graphPanel.classList.remove('show');
             }
         });
 
@@ -825,11 +963,20 @@
                     }
                 }
             });
+
+            datasetVisibility.forEach((isVisible, index) => {
+                chart.setDatasetVisibility(index, isVisible);
+            });
+
+            chart.update();
+            syncDatasetCheckboxes();
             updateVisibleStats();
         }
 
         // Initial laden
         window.addEventListener('load', () => {
+            loadDatasetVisibility();
+            syncDatasetCheckboxes();
             zoomEnabled = currentPeriod >= 5;
             updateZoomControls();
             loadData();
