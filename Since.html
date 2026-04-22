@@ -299,6 +299,13 @@
         let lastTouchX = null;
         const TWELVE_DATA_API_KEY = 'e4cfbe247e62449c999d101f5fc4dc6a';
         const TWELVE_DATA_URL = 'https://api.twelvedata.com/time_series';
+        const ALPHA_VANTAGE_DIVIDEND_KEYS = [
+            'N0CWHO7Y381KVSYP',
+            'SKITKTP494KO86G7',
+            'I9WO5YY3PHDUGJT0',
+            'U2Q57V7DZGHUQQJP'
+        ];
+        const ALPHA_VANTAGE_URL = 'https://www.alphavantage.co/query';
 
         // Liste beliebter Aktien
         const stocks = [
@@ -429,6 +436,7 @@
         function resetZoom() {
             if (chart) {
                 chart.resetZoom();
+                updateVisibleStats();
             }
         }
 
@@ -454,7 +462,66 @@
             return json.values;
         }
 
-        function buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values) {
+        async function fetchAlphaVantageDividends(symbol) {
+            let lastError = null;
+
+            for (const apiKey of ALPHA_VANTAGE_DIVIDEND_KEYS) {
+                try {
+                    const url = `${ALPHA_VANTAGE_URL}?function=DIVIDENDS&symbol=${encodeURIComponent(symbol)}&apikey=${encodeURIComponent(apiKey)}`;
+                    const response = await fetch(url);
+
+                    if (!response.ok) {
+                        lastError = new Error(`Dividend API HTTP-Fehler: ${response.status}`);
+                        continue;
+                    }
+
+                    const json = await response.json();
+
+                    if (json['Note']) {
+                        lastError = new Error('Alpha Vantage Dividend API-Limit erreicht');
+                        continue;
+                    }
+
+                    if (json['Error Message'] || json['Information']) {
+                        lastError = new Error(json['Error Message'] || json['Information']);
+                        continue;
+                    }
+
+                    const rawDividends = json.data || [];
+                    if (!Array.isArray(rawDividends)) {
+                        return [];
+                    }
+
+                    return rawDividends;
+                } catch (error) {
+                    lastError = error;
+                }
+            }
+
+            console.warn('Alpha Vantage Dividenden konnten nicht geladen werden:', lastError);
+            return [];
+        }
+
+        function buildDividendMap(dividends) {
+            const dividendMap = new Map();
+
+            dividends.forEach(entry => {
+                const rawDate = entry.payment_date || entry.ex_date || entry.date || entry.datetime;
+                const rawAmount = entry.amount || entry.value || entry.dividend || entry.cash_amount || entry.dividend_amount;
+                const amount = parseFloat(rawAmount);
+
+                if (!rawDate || !Number.isFinite(amount) || amount <= 0) {
+                    return;
+                }
+
+                const monthKey = String(rawDate).slice(0, 7);
+                dividendMap.set(monthKey, (dividendMap.get(monthKey) || 0) + amount);
+            });
+
+            return dividendMap;
+        }
+
+        function buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values, dividendMap) {
             const data = {
                 stock: stock,
                 monthlyAmount: monthlyAmount,
@@ -469,7 +536,7 @@
                 .map(entry => ({
                     date: entry.datetime,
                     close: parseFloat(entry.close),
-                    dividend: 0
+                    dividend: dividendMap.get(String(entry.datetime).slice(0, 7)) || 0
                 }))
                 .filter(entry => Number.isFinite(entry.close) && entry.close > 0)
                 .sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -515,8 +582,62 @@
         }
 
         async function getPortfolioData(stock, monthlyAmount, years) {
-            const values = await fetchTwelveDataMonthly(stock, years);
-            return buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values);
+            const [values, dividends] = await Promise.all([
+                fetchTwelveDataMonthly(stock, years),
+                fetchAlphaVantageDividends(stock)
+            ]);
+
+            const dividendMap = buildDividendMap(dividends);
+            return buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values, dividendMap);
+        }
+
+        function applyStatsFromRange(startIndex, endIndex) {
+            if (!portfolioData) return;
+
+            const portfolioValues = portfolioData.portfolioValues;
+            const investedAmounts = portfolioData.investedAmounts;
+            const cumulativeDividends = portfolioData.cumulativeDividends;
+
+            const safeStart = Math.max(0, startIndex);
+            const safeEnd = Math.min(endIndex, portfolioValues.length - 1);
+
+            const previousPortfolio = safeStart > 0 ? portfolioValues[safeStart - 1] : 0;
+            const previousInvested = safeStart > 0 ? investedAmounts[safeStart - 1] : 0;
+            const previousDividends = safeStart > 0 ? cumulativeDividends[safeStart - 1] : 0;
+
+            const currentPortfolio = portfolioValues[safeEnd] || 0;
+            const currentInvestedTotal = investedAmounts[safeEnd] || 0;
+            const currentDividendsTotal = cumulativeDividends[safeEnd] || 0;
+
+            const investedInRange = currentInvestedTotal - previousInvested;
+            const dividendsInRange = currentDividendsTotal - previousDividends;
+            const gainLoss = currentPortfolio - previousPortfolio - investedInRange;
+            const baseCapital = previousPortfolio + investedInRange;
+            const returnPercent = baseCapital > 0 ? (gainLoss / baseCapital * 100).toFixed(2) : 0;
+
+            document.getElementById('portfolioValue').innerText = '€ ' + currentPortfolio.toLocaleString('de-DE', { maximumFractionDigits: 2 });
+            document.getElementById('investedAmount').innerText = '€ ' + investedInRange.toLocaleString('de-DE', { maximumFractionDigits: 2 });
+            document.getElementById('gainLoss').innerText = (gainLoss >= 0 ? '+ €' : '- €') + Math.abs(gainLoss).toLocaleString('de-DE', { maximumFractionDigits: 2 });
+            document.getElementById('dividendText').innerText = '+ € ' + dividendsInRange.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' Dividenden';
+            document.getElementById('returnPercent').innerText = (returnPercent >= 0 ? '+' : '') + returnPercent + '%';
+
+            const gainLossElement = document.getElementById('gainLoss');
+            gainLossElement.style.color = gainLoss >= 0 ? '#2ecc71' : '#e74c3c';
+        }
+
+        function updateVisibleStats() {
+            if (!portfolioData) return;
+
+            if (!chart || !chart.scales || !chart.scales.x) {
+                applyStatsFromRange(0, portfolioData.months.length - 1);
+                return;
+            }
+
+            const xScale = chart.scales.x;
+            const startIndex = Number.isFinite(xScale.min) ? Math.max(0, Math.floor(xScale.min)) : 0;
+            const endIndex = Number.isFinite(xScale.max) ? Math.min(portfolioData.months.length - 1, Math.ceil(xScale.max)) : portfolioData.months.length - 1;
+
+            applyStatsFromRange(startIndex, endIndex);
         }
 
         function updateChart() {
@@ -528,23 +649,6 @@
             const investedAmounts = portfolioData.investedAmounts;
             const cumulativeDividends = portfolioData.cumulativeDividends;
             const prices = portfolioData.prices;
-
-            // Berechne Statistiken
-            const invested = investedAmounts[investedAmounts.length - 1] || 0;
-            const current = portfolioValues[portfolioValues.length - 1] || 0;
-            const totalDividends = cumulativeDividends[cumulativeDividends.length - 1] || 0;
-            const gainLoss = current - invested;
-            const returnPercent = invested > 0 ? (gainLoss / invested * 100).toFixed(2) : 0;
-
-            document.getElementById('portfolioValue').innerText = '€ ' + current.toLocaleString('de-DE', { maximumFractionDigits: 2 });
-            document.getElementById('investedAmount').innerText = '€ ' + invested.toLocaleString('de-DE', { maximumFractionDigits: 2 });
-            document.getElementById('gainLoss').innerText = (gainLoss >= 0 ? '+ €' : '- €') + Math.abs(gainLoss).toLocaleString('de-DE', { maximumFractionDigits: 2 });
-            document.getElementById('dividendText').innerText = '+ € ' + totalDividends.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' Dividenden';
-            document.getElementById('returnPercent').innerText = (returnPercent >= 0 ? '+' : '') + returnPercent + '%';
-
-            // Farbe anpassen
-            const gainLossElement = document.getElementById('gainLoss');
-            gainLossElement.style.color = gainLoss >= 0 ? '#2ecc71' : '#e74c3c';
 
             // Erstelle Chart
             const ctx = document.getElementById('portfolioChart').getContext('2d');
@@ -627,7 +731,10 @@
                             pan: {
                                 enabled: zoomEnabled,
                                 mode: 'x',
-                                threshold: 2
+                                threshold: 2,
+                                onPanComplete: function() {
+                                    updateVisibleStats();
+                                }
                             },
                             zoom: {
                                 wheel: {
@@ -645,7 +752,10 @@
                                     borderColor: '#00a8ff',
                                     borderWidth: 1
                                 },
-                                mode: 'x'
+                                mode: 'x',
+                                onZoomComplete: function() {
+                                    updateVisibleStats();
+                                }
                             },
                             limits: {
                                 x: {
@@ -712,6 +822,7 @@
                     }
                 }
             });
+            updateVisibleStats();
         }
 
         // Initial laden
@@ -728,6 +839,7 @@
                 if (!e.shiftKey) {
                     e.preventDefault();
                     chart.pan({ x: e.deltaY * 1.2 }, undefined, 'default');
+                    updateVisibleStats();
                 }
             }, { passive: false });
 
@@ -749,6 +861,7 @@
                         const deltaX = currentTouchX - lastTouchX;
                         if (Math.abs(deltaX) > 1) {
                             chart.pan({ x: deltaX * -1 }, undefined, 'default');
+                            updateVisibleStats();
                         }
                     }
 
