@@ -175,7 +175,7 @@
             <p>Gewinnchance: <b>15%</b></p>
             <ul>
                 <li>0.1% → 🌌 Mega weltraum??? (150x)</li>
-                <li>0.1% → 🔥 Super Jackpot (55x)</li>
+                <li>0.5% → 🔥 Super Jackpot (55x)</li>
                 <li>1.3% → 💰 Jackpot (12x)</li>
                 <li>2% → ✨ Großer Gewinn (5x)</li>
                 <li>11.5% → ✅ Kleiner Gewinn (2.5x)</li>
@@ -303,7 +303,7 @@ function spielen() {
         geld += gewinn;
         log("🌌 Mega weltraum??? +" + gewinn + "€");
     }
-    else if (r < 0.002) {
+    else if (r < 0.005) {
         let gewinn = einsatz * 55;
         geld += gewinn;
         log("🔥 SUPER JACKPOT!!! +" + gewinn + "€");
