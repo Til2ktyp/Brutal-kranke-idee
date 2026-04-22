@@ -77,7 +77,12 @@
             <p>Gesamt: <span id="gesamt">100</span>€</p>
             <p>Bilanz: <span id="bilanz">0</span>€</p>
 
-            <button onclick="spielen()">Spielen (5€)</button>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1px;">
+                <button onclick="minus()">-</button>
+                <button onclick="spielen()" id="einsatzBtn">5€</button>
+                <button onclick="plus()">+</button>
+            </div>
+
             <button onclick="auszahlen()">💳 Auszahlen</button>
             <button onclick="zurueckholen()">🔄 Bank → Spielen</button>
             <button onclick="autoSpielen()">100 Runden</button>
@@ -123,92 +128,23 @@
 let geld = 100;
 let bank = 0;
 let start = 100;
-const einsatz = 5;
+var einsatz = 5;
 
-function spielen() {
-    if (geld < einsatz) {
-        log("❌ Kein Geld mehr!");
-        return;
-    }
-
-    geld -= einsatz;
-
-    let r = Math.random();
-
-    if (r < 0.04) {
-        let gewinn = einsatz * 10;
-        geld += gewinn;
-        log("💰 JACKPOT! +" + gewinn + "€");
-    } 
-    else if (r < 0.125) {
-        let gewinn = einsatz * 4;
-        geld += gewinn;
-        log("✨ Großer Gewinn +" + gewinn + "€");
-    } 
-    else if (r < 0.25) {
-        let gewinn = einsatz * 2;
-        geld += gewinn;
-        log("✅ Kleiner Gewinn +" + gewinn + "€");
-    } 
-    else {
-        log("❌ Verlust -5€");
-    }
-
-    update();
-}
-
-function auszahlen() {
-    if (geld <= 0) {
-        log("⚠️ Nichts zum Auszahlen!");
-        return;
-    }
-
-    bank += geld;
-    log("💳 Ausgezahlt: " + geld + "€");
-
-    geld = 0;
-    update();
-}
-
-function zurueckholen() {
-    if (bank <= 0) {
-        log("⚠️ Keine Bankguthaben!");
-        return;
-    }
-
-    geld += bank;
-    log("🔄 Geld zurück ins Spiel: " + bank + "€");
-
-    bank = 0;
-    update();
-}
-
-function autoSpielen() {
-    for (let i = 0; i < 100; i++) {
-        spielen();
+function minus() {
+    if (einsatz > 1) {
+        einsatz--;
+        updateEinsatz();
     }
 }
 
-function update() {
-    document.getElementById("geld").innerText = geld;
-    document.getElementById("bank").innerText = bank;
-    document.getElementById("gesamt").innerText = geld + bank;
-    document.getElementById("bilanz").innerText = (geld + bank) - start;
- }
-function zurueckholen() {
-    if (bank < 5) {
-        log("⚠️ Nicht genug Geld in der Bank!");
-        return;
-    }
-
-    bank -= 5;
-    geld += 5;
-
-    log("🔄 5€ zurück ins Spiel geholt");
-
-    update();
+function plus() {
+    einsatz++;
+    updateEinsatz();
 }
 
+function updateEinsatz() {
+    document.getElementById("einsatzBtn").innerText = einsatz + "€";
+}
 
 function spielen() {
     if (geld < einsatz) {
@@ -242,12 +178,51 @@ function spielen() {
         log("✅ Kleiner Gewinn +" + gewinn + "€");
     } 
     else {
-        log("❌ Verlust -5€");
+        log("❌ Verlust -" + einsatz + "€");
     }
 
     update();
 }
 
+function auszahlen() {
+    if (geld <= 0) {
+        log("⚠️ Nichts zum Auszahlen!");
+        return;
+    }
+
+    bank += geld;
+    log("💳 Ausgezahlt: " + geld + "€");
+
+    geld = 0;
+    update();
+}
+
+function zurueckholen() {
+    if (bank < 5) {
+        log("⚠️ Nicht genug Geld in der Bank!");
+        return;
+    }
+
+    bank -= 5;
+    geld += 5;
+
+    log("🔄 5€ zurück ins Spiel geholt");
+
+    update();
+}
+
+function autoSpielen() {
+    for (let i = 0; i < 100; i++) {
+        spielen();
+    }
+}
+
+function update() {
+    document.getElementById("geld").innerText = geld;
+    document.getElementById("bank").innerText = bank;
+    document.getElementById("gesamt").innerText = geld + bank;
+    document.getElementById("bilanz").innerText = (geld + bank) - start;
+ }
 
 function log(text) {
     let div = document.getElementById("log");
