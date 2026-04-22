@@ -18,6 +18,10 @@
             min-height: 100vh;
             text-align: center;
         }
+        body.locked .container,
+        body.locked footer {
+            visibility: hidden;
+        }
         .container {
             background: rgba(255, 255, 255, 0.1);
             padding: 40px;
@@ -62,9 +66,75 @@
             text-align: center;
             color: white;
         }
+        .password-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .password-box {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 360px;
+            width: 100%;
+        }
+        .password-box h2 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .password-box p {
+            margin-bottom: 18px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .password-box input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        .password-box button {
+            width: 100%;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.22);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .password-box button:hover {
+            background: rgba(255, 255, 255, 0.32);
+        }
+        .password-error {
+            min-height: 20px;
+            margin-top: 12px;
+            color: #ff8a8a;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
-<body>
+<body class="locked">
+    <div class="password-overlay" id="passwordOverlay">
+        <div class="password-box">
+            <h2>Zugang geschützt</h2>
+            <p>Gib den Zugangscode ein, um die Seite zu öffnen.</p>
+            <input type="password" id="passwordInput" placeholder="Passwort eingeben" autocomplete="off">
+            <button type="button" onclick="checkPassword()">Entsperren</button>
+            <div class="password-error" id="passwordError"></div>
+        </div>
+    </div>
     <div class="container">
         <h1>Willkommen bei der BlopperBold AG.</h1>
         <div class="links">
@@ -76,4 +146,43 @@
     <footer>
         <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
     </footer>
+    <script>
+        const PAGE_PASSWORD = '25110913';
+
+        function unlockPage() {
+            document.body.classList.remove('locked');
+            document.getElementById('passwordOverlay').style.display = 'none';
+            sessionStorage.setItem('blopperbold_access_granted', 'true');
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const error = document.getElementById('passwordError');
+
+            if (input.value === PAGE_PASSWORD) {
+                error.textContent = '';
+                unlockPage();
+            } else {
+                error.textContent = 'Falscher Code. Versuch es nochmal.';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const input = document.getElementById('passwordInput');
+
+            if (sessionStorage.getItem('blopperbold_access_granted') === 'true') {
+                unlockPage();
+            } else {
+                input.focus();
+            }
+
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
+    </script>
 </html>
