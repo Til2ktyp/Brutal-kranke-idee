@@ -260,7 +260,7 @@
             <button class="period-btn" onclick="setPeriod(40)">40 Jahre</button>
         </div>
         <div class="zoom-controls">
-            <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">🔎 Zoom zurücksetzen</button>
+            <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">Zoom zurücksetzen</button>
             <div class="zoom-hint" id="zoomHint">Ab 5 Jahren: Mit dem Mausrad scrollen, mit Shift + Mausrad zoomen, mit zwei Fingern seitlich scrollen oder mit gedrückter Maustaste einen Bereich markieren.</div>
         </div>
 
@@ -467,7 +467,7 @@
 
             for (const apiKey of ALPHA_VANTAGE_DIVIDEND_KEYS) {
                 try {
-                    const url = `${ALPHA_VANTAGE_URL}?function=DIVIDENDS&symbol=${encodeURIComponent(symbol)}&apikey=${encodeURIComponent(apiKey)}`;
+                    const url = `${ALPHA_VANTAGE_URL}?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=${encodeURIComponent(symbol)}&outputsize=full&apikey=${encodeURIComponent(apiKey)}`;
                     const response = await fetch(url);
 
                     if (!response.ok) {
@@ -487,12 +487,15 @@
                         continue;
                     }
 
-                    const rawDividends = json.data || [];
-                    if (!Array.isArray(rawDividends)) {
+                    const series = json['Monthly Adjusted Time Series'];
+                    if (!series || typeof series !== 'object') {
                         return [];
                     }
 
-                    return rawDividends;
+                    return Object.entries(series).map(([date, values]) => ({
+                        date,
+                        dividend_amount: values['7. dividend amount']
+                    }));
                 } catch (error) {
                     lastError = error;
                 }
