@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exponentieller Klick-Zähler mit Speicherung & Rendite</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            color: #333;
+        }
+
+        h1 {
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        label {
+            font-size: 1.1em;
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 80px;
+            text-align: right;
+        }
+
+        #clickButton {
+            padding: 15px 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            background-color: #28a745; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        #clickButton:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        #clickButton:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #currentValue {
+            margin-top: 30px;
+            font-size: 3em;
+            font-weight: bold;
+            color: #007bff;
+            white-space: nowrap; /* Prevents wrapping */
+        }
+
+        #totalReturn {
+            margin-top: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e67e22; /* Orange for emphasis */
+        }
+
+        #resetButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #dc3545; /* Red button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #resetButton:hover {
+            background-color: #c82333;
+        }
+
+        /* Styling für den Chart-Container */
+        #chartContainer {
+            width: 80%; /* Breite des Diagramms */
+            max-width: 700px;
+            margin-top: 40px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            height: 450px; /* Höhe des Diagramm-Containers */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Exponentieller Klick-Zähler</h1>
+
+    <div class="controls">
+        <label for="increasePercentage">Steigerung pro Klick (%):</label>
+        <input type="number" id="increasePercentage" value="10" min="0.1" step="0.1">
+    </div>
+
+    <button id="clickButton">Klicke mich!</button>
+
+    <p id="currentValue">1.00 €</p>
+    <p id="totalReturn">Gesamtrendite: 0.00 %</p>
+
+    <button id="resetButton">Zurücksetzen</button>
+
+    <div id="chartContainer">
+        <canvas id="valueChart"></canvas>
+    </div>
+
+    <script>
+        const clickButton = document.getElementById('clickButton');
+        const resetButton = document.getElementById('resetButton');
+        const currentValueDisplay = document.getElementById('currentValue');
+        const totalReturnDisplay = document.getElementById('totalReturn');
+        const increasePercentageInput = document.getElementById('increasePercentage');
+        const valueChartCanvas = document.getElementById('valueChart');
+
+        const initialValue = 1.00; // Dein fester Startwert
+        let currentValue;
+        let clickCount;
+        let chartLabels;
+        let chartData;
+        let increasePercentage;
+
+        // --- Speichern und Laden der Daten ---
+
+        // Funktion zum Speichern der Daten
+        function saveData() {
+            localStorage.setItem('currentValue', currentValue);
+            localStorage.setItem('clickCount', clickCount);
+            localStorage.setItem('chartLabels', JSON.stringify(chartLabels)); // Arrays müssen als String gespeichert werden
+            localStorage.setItem('chartData', JSON.stringify(chartData));     // Arrays müssen als String gespeichert werden
+            localStorage.setItem('increasePercentage', increasePercentageInput.value); // Speichert den Wert aus dem Input-Feld
+        }
+
+        // Funktion zum Laden der Daten
+        function loadData() {
+            const savedValue = localStorage.getItem('currentValue');
+            const savedClickCount = localStorage.getItem('clickCount');
+            const savedChartLabels = localStorage.getItem('chartLabels');
+            const savedChartData = localStorage.getItem('chartData');
+            const savedIncreasePercentage = localStorage.getItem('increasePercentage');
+
+            if (savedValue !== null) {
+                currentValue = parseFloat(savedValue);
+                clickCount = parseInt(savedClickCount);
+                chartLabels = JSON.parse(savedChartLabels);
+                chartData = JSON.parse(savedChartData);
+                increasePercentageInput.value = parseFloat(savedIncreasePercentage);
+            } else {
+                // Wenn keine Daten gespeichert sind, initialisiere mit Standardwerten
+                currentValue = initialValue;
+                clickCount = 0;
+                chartLabels = [0];
+                chartData = [currentValue];
+                increasePercentageInput.value = 10; // Standardwert für die Steigerung
+            }
+        }
+
+        // Lade Daten beim Start der Seite
+        loadData();
+
+        // --- Diagramm-Initialisierung (nach dem Laden der Daten) ---
+        const valueChart = new Chart(valueChartCanvas, {
+            type: 'line',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Wert in €',
+                    data: chartData,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Anzahl der Klicks'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Wert (€)'
+                        },
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + ' €';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- Funktionen für die Anzeige und Diagramm-Updates ---
+        function updateDisplay() {
+            currentValueDisplay.textContent = currentValue.toFixed(2) + ' €';
+            const totalReturnPercentage = ((currentValue - initialValue) / initialValue) * 100;
+            totalReturnDisplay.textContent = `Gesamtrendite: ${totalReturnPercentage.toFixed(2)} %`;
+        }
+
+        function addDataToChart() {
+            chartLabels.push(clickCount);
+            chartData.push(currentValue);
+            valueChart.update();
+        }
+
+        // --- Event Listener ---
+        clickButton.addEventListener('click', () => {
+            const increasePercent = parseFloat(increasePercentageInput.value);
+            if (isNaN(increasePercent) || increasePercent < 0) {
+                alert('Bitte geben Sie einen gültigen positiven Prozentsatz ein.');
+                return;
+            }
+
+            const multiplier = 1 + (increasePercent / 100);
+            currentValue *= multiplier;
+            clickCount++;
+            
+            updateDisplay();
+            addDataToChart();
+            saveData(); // Speichern nach jedem Klick
+        });
+
+        resetButton.addEventListener('click', () => {
+            currentValue = initialValue;
+            clickCount = 0;
+
+            chartLabels = [0];
+            chartData = [currentValue];
+            valueChart.data.labels = chartLabels;
+            valueChart.data.datasets[0].data = chartData;
+            valueChart.update();
+
+            updateDisplay();
+            saveData(); // Speichern nach dem Reset
+        });
+
+        // Initialisierung der Anzeige und des Diagramms
+        updateDisplay();
+        valueChart.update();
+    </script>
+
+</body>
+</html>

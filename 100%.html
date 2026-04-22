@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klick-Balken mit Risiko & Rekorden</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar-container {
+            width: 300px;
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #4CAF50; /* Grüne Farbe für den Fortschritt */
+            border-radius: 15px;
+            transition: width 0.1s ease-in-out;
+        }
+
+        #clickCount {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        #resetChance {
+            margin-top: 10px;
+            font-size: 1em;
+            color: #666;
+        }
+
+        .records-container {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+
+        .records-container p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .records-container span {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 1.3em;
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        .reset-message {
+            color: #D9534F; /* Rot für die Reset-Nachricht */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Klick den Balken 100 Mal!</h1>
+        <div class="progress-bar-container" id="progressBarContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p id="clickCount">Klicks: 0 / 100</p>
+        <p id="resetChance">Chance auf Reset: 0%</p>
+
+        <div class="records-container">
+            <p>Niedrigster Reset-Rekord: <span id="minResetRecord">N/A</span> Klicks</p>
+            <p>Höchster Reset-Rekord: <span id="maxResetRecord">N/A</span> Klicks</p>
+        </div>
+
+        <p id="message"></p>
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const clickCountDisplay = document.getElementById('clickCount');
+        const resetChanceDisplay = document.getElementById('resetChance');
+        const minResetRecordDisplay = document.getElementById('minResetRecord');
+        const maxResetRecordDisplay = document.getElementById('maxResetRecord');
+        const messageDisplay = document.getElementById('message');
+
+        let clicks = 0;
+        const totalClicks = 100;
+        const resetChanceIncrement = 1; // Chance steigt um 1% pro Klick
+
+        // Rekorde im Local Storage speichern, damit sie auch nach dem Neuladen der Seite erhalten bleiben
+        let minResetRecord = localStorage.getItem('minResetRecord') ? parseInt(localStorage.getItem('minResetRecord')) : Infinity; // Infinity für den Anfang
+        let maxResetRecord = localStorage.getItem('maxResetRecord') ? parseInt(localStorage.getItem('maxResetRecord')) : 0;
+
+        // Funktion zum Aktualisieren der Rekordanzeigen
+        function updateRecordDisplays() {
+            minResetRecordDisplay.textContent = minResetRecord === Infinity ? 'N/A' : minResetRecord;
+            maxResetRecordDisplay.textContent = maxResetRecord === 0 ? 'N/A' : maxResetRecord;
+        }
+
+        // Rekorde beim Start der Seite laden und anzeigen
+        updateRecordDisplays();
+
+        progressBarContainer.addEventListener('click', () => {
+            // Nur klicken, wenn das Spiel noch läuft (nicht schon 100 Klicks erreicht)
+            if (clicks < totalClicks) {
+                const currentClicksBeforeAttempt = clicks; // Klicks vor dem aktuellen Versuch speichern
+                
+                // Überprüfen, ob ein Reset stattfindet
+                const currentResetChance = clicks * resetChanceIncrement; // Chance ist Klickzahl * 1%
+                const randomNumber = Math.random() * 100; // Zufallszahl zwischen 0 und 100
+
+                if (randomNumber < currentResetChance && clicks > 0) { // Reset nur, wenn die Klickzahl > 0 ist, damit ein Reset bei 0 Klicks nicht zählt
+                    // Reset!
+                    messageDisplay.textContent = `Oh nein! Der Balken wurde bei ${currentClicksBeforeAttempt} Klicks zurückgesetzt!`;
+                    messageDisplay.classList.add('reset-message');
+
+                    // Rekorde aktualisieren
+                    if (currentClicksBeforeAttempt < minResetRecord) {
+                        minResetRecord = currentClicksBeforeAttempt;
+                        localStorage.setItem('minResetRecord', minResetRecord);
+                    }
+                    if (currentClicksBeforeAttempt > maxResetRecord) {
+                        maxResetRecord = currentClicksBeforeAttempt;
+                        localStorage.setItem('maxResetRecord', maxResetRecord);
+                    }
+                    updateRecordDisplays(); // Rekordanzeigen aktualisieren
+
+                    clicks = 0;
+                    progressBar.style.width = '0%';
+                    
+                    setTimeout(() => {
+                        messageDisplay.classList.remove('reset-message');
+                        messageDisplay.textContent = ''; // Nachricht zurücksetzen
+                    }, 2500); // Nachricht für 2.5 Sekunden anzeigen, um die Reset-Info zu sehen
+
+                } else {
+                    // Kein Reset, Fortschritt machen
+                    clicks++;
+                    const percentage = (clicks / totalClicks) * 100;
+                    progressBar.style.width = percentage + '%';
+                    messageDisplay.textContent = ''; // Alte Nachricht löschen
+                }
+
+                // Immer die Klickzahl und Reset-Chance aktualisieren
+                clickCountDisplay.textContent = `Klicks: ${clicks} / ${totalClicks}`;
+                resetChanceDisplay.textContent = `Chance auf Reset: ${clicks * resetChanceIncrement}%`;
+
+                if (clicks === totalClicks) {
+                    messageDisplay.textContent = 'Geschafft! Du hast den Balken 100 Mal geklickt!';
+                    messageDisplay.classList.remove('reset-message'); // Sicherstellen, dass keine Reset-Nachrichten-Klasse aktiv ist
+                    // Wenn man 100 Klicks erreicht, gibt es keinen Reset, daher keine Rekordaktualisierung hier.
+                }
+            }
+        });
+    </script>
+</body>
+</html>
