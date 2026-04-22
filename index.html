@@ -222,22 +222,22 @@ function spielen() {
 
     // 🔥 NEU: extrem seltener Super-Jackpot (0.5%)
     if (r < 0.0045) {
-        let gewinn = einsatz * 50;
+        let gewinn = einsatz * 55;
         geld += gewinn;
         log("🔥 SUPER JACKPOT!!! +" + gewinn + "€");
     }
-    else if (r < 0.05) {
-        let gewinn = einsatz * 10;
+    else if (r < 0.04) {
+        let gewinn = einsatz * 12;
         geld += gewinn;
         log("💰 JACKPOT! +" + gewinn + "€");
     } 
-    else if (r < 0.15) {
-        let gewinn = einsatz * 4;
+    else if (r < 0.08) {
+        let gewinn = einsatz * 5;
         geld += gewinn;
         log("✨ Großer Gewinn +" + gewinn + "€");
     } 
-    else if (r < 0.30) {
-        let gewinn = einsatz * 2;
+    else if (r < 0.20) {
+        let gewinn = einsatz * 2.5;
         geld += gewinn;
         log("✅ Kleiner Gewinn +" + gewinn + "€");
     } 
