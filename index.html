@@ -1,176 +1,260 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virtuelles Gambling</title>
-  <style>
+<meta charset="UTF-8">
+<title>Glücksspiel Simulation – Aufklärung</title>
+<style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f0f0f0;
+        font-family: Arial;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        text-align: center;
     }
-    h1 {
-      text-align: center;
-      color: #333;
+    h1 { color: #fbc531; }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        align-items: flex-start;
     }
-    .grid-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+
+    .left {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
-    .section {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+    .box {
+        background: #1e272e;
+        padding: 20px;
+        width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px black;
     }
-    input, button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      font-size: 16px;
-    }
+
     button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
+        padding: 10px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        background: #00a8ff;
+        color: white;
+        cursor: pointer;
     }
-    button:hover {
-      background-color: #45a049;
+    button:hover { background: #0097e6; }
+
+    #log {
+        height: 200px;
+        overflow-y: scroll;
+        background: black;
+        padding: 10px;
+        text-align: left;
+        font-size: 14px;
     }
-    #balance {
-      font-size: 24px;
-      font-weight: bold;
-      color: #007bff;
+
+    .info {
+        font-size: 14px;
+        text-align: left;
+        color: #dcdde1;
     }
-    #history {
-      max-height: 200px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-    .result {
-      margin: 5px 0;
-      padding: 5px;
-      border-radius: 4px;
-    }
-    .win { background-color: #d4edda; color: #155724; }
-    .loss { background-color: #f8d7da; color: #721c24; }
-    .jackpot { background-color: #fff3cd; color: #856404; }
-  </style>
+</style>
 </head>
 <body>
-  <h1>Virtuelles Gambling</h1>
 
-  <div class="grid-container">
-  <div class="section">
-    <h2>Kreditkartennummer eingeben</h2>
-    <input type="text" id="cardNumber" placeholder="Virtuelle Kreditkartennummer (z.B. 1234-5678-9012-3456)">
-    <button onclick="setCard()">Karte setzen</button>
-  </div>
+<h1>🎰 Glücksspiel Simulation (Aufklärung)</h1>
 
-  <div class="section">
-    <h2>Kontostand</h2>
-    <p id="balance">0€</p>
-  </div>
+<div class="container">
 
-  <div class="section">
-    <h2>Einsatz setzen</h2>
-    <input type="number" id="betAmount" min="5" max="500" placeholder="Betrag (5-500€)">
-    <button onclick="gamble()">Gamblen</button>
-  </div>
+    <div class="left">
 
-  <div class="section">
-    <h2>Verlauf</h2>
-    <div id="history"></div>
-  </div>
+        <div class="box">
+            <h3>Spiel</h3>
+            <p>Startgeld: 100€</p>
+            <p>Kontostand: <span id="geld">100</span>€</p>
+            <p>Bank: <span id="bank">0</span>€</p>
+            <p>Gesamt: <span id="gesamt">100</span>€</p>
+            <p>Bilanz: <span id="bilanz">0</span>€</p>
 
-  <div class="section">
-    <h2>Auszahlen</h2>
-    <button onclick="withdraw()">Auszahlen</button>
-    <p id="withdrawMessage"></p>
-  </div>
-  </div>
+            <button onclick="spielen()">Spielen (5€)</button>
+            <button onclick="auszahlen()">💳 Auszahlen</button>
+            <button onclick="zurueckholen()">🔄 Bank → Spielen</button>
+            <button onclick="autoSpielen()">100 Runden</button>
+        </div>
 
-  <script>
-    let balance = 0;
-    let cardSet = false;
+        <div class="box">
+            <h3>📜 Verlauf</h3>
+            <div id="log"></div>
+        </div>
 
-    function setCard() {
-      const card = document.getElementById('cardNumber').value;
-      if (card.trim() !== '') {
-        cardSet = true;
-        balance = 500; // Startguthaben
-        document.getElementById('balance').textContent = balance + '€';
-        addToHistory('Karte gesetzt. Guthaben: 500€');
-      } else {
-        alert('Bitte eine Kreditkartennummer eingeben.');
-      }
-    }
+    </div>
 
-    function gamble() {
-      if (!cardSet) {
-        alert('Bitte zuerst eine Kreditkartennummer setzen.');
+    <div class="box">
+        <h3>📊 Chancen</h3>
+        <div class="info">
+            <p>Gewinnchance: <b>30%</b></p>
+            <ul>
+                <li>0.45% → 🔥 Super Jackpot (50x)</li>
+                <li>4% → 💰 Jackpot (10x)</li>
+                <li>8% → ✨ Großer Gewinn (4x)</li>
+                <li>12.5% → ✅ Kleiner Gewinn (2x)</li>
+            </ul>
+            <p>Verlustchance: <b>70%</b></p>
+            <p>➡️ Vorteil liegt beim Spiel</p>
+        </div>
+    </div>
+
+    <div class="box">
+        <h3>🧠 Aufklärung</h3>
+        <div class="info">
+            <p>• Gewinne bleiben im Kopf</p>
+            <p>• Verluste werden unterschätzt</p>
+            <p>• Geld wird oft wieder eingesetzt</p>
+            <p>➡️ Typisch für problematisches Verhalten</p>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+let geld = 100;
+let bank = 0;
+let start = 100;
+const einsatz = 5;
+
+function spielen() {
+    if (geld < einsatz) {
+        log("❌ Kein Geld mehr!");
         return;
-      }
-      const bet = parseInt(document.getElementById('betAmount').value);
-      if (isNaN(bet) || bet < 5 || bet > 500 || bet > balance) {
-        alert('Ungültiger Einsatz. Muss zwischen 5 und 500€ liegen und nicht höher als Guthaben sein.');
+    }
+
+    geld -= einsatz;
+
+    let r = Math.random();
+
+    if (r < 0.04) {
+        let gewinn = einsatz * 10;
+        geld += gewinn;
+        log("💰 JACKPOT! +" + gewinn + "€");
+    } 
+    else if (r < 0.125) {
+        let gewinn = einsatz * 4;
+        geld += gewinn;
+        log("✨ Großer Gewinn +" + gewinn + "€");
+    } 
+    else if (r < 0.25) {
+        let gewinn = einsatz * 2;
+        geld += gewinn;
+        log("✅ Kleiner Gewinn +" + gewinn + "€");
+    } 
+    else {
+        log("❌ Verlust -5€");
+    }
+
+    update();
+}
+
+function auszahlen() {
+    if (geld <= 0) {
+        log("⚠️ Nichts zum Auszahlen!");
         return;
-      }
-
-      // Einfaches Gamble: Zufällig Gewinn oder Verlust
-      const rand = Math.random();
-      let result, amount;
-      if (rand < 0.1) { // 10% Jackpot
-        result = 'Jackpot';
-        amount = bet * 10;
-        balance += amount;
-      } else if (rand < 0.3) { // 20% Großer Gewinn
-        result = 'Großer Gewinn';
-        amount = bet * 2;
-        balance += amount;
-      } else if (rand < 0.5) { // 20% Kleiner Gewinn
-        result = 'Kleiner Gewinn';
-        amount = bet * 0.5;
-        balance += amount;
-      } else { // 50% Verlust
-        result = 'Verlust';
-        amount = -bet;
-        balance -= bet;
-      }
-
-      document.getElementById('balance').textContent = balance + '€';
-      addToHistory(`${result}: ${amount > 0 ? '+' : ''}${amount}€ (Einsatz: ${bet}€)`);
     }
 
-    function addToHistory(message) {
-      const history = document.getElementById('history');
-      const div = document.createElement('div');
-      div.className = 'result';
-      if (message.includes('Jackpot')) div.classList.add('jackpot');
-      else if (message.includes('Gewinn')) div.classList.add('win');
-      else if (message.includes('Verlust')) div.classList.add('loss');
-      div.textContent = message;
-      history.appendChild(div);
-      history.scrollTop = history.scrollHeight;
-    }
+    bank += geld;
+    log("💳 Ausgezahlt: " + geld + "€");
 
-    function withdraw() {
-      if (!cardSet) {
-        alert('Bitte zuerst eine Kreditkartennummer setzen.');
+    geld = 0;
+    update();
+}
+
+function zurueckholen() {
+    if (bank <= 0) {
+        log("⚠️ Keine Bankguthaben!");
         return;
-      }
-      document.getElementById('withdrawMessage').textContent = `Auszahlung beantragt. Betrag: ${balance}€. (Virtuell - kein echtes Geld)`;
-      balance = 0;
-      document.getElementById('balance').textContent = balance + '€';
-      addToHistory('Auszahlung beantragt.');
     }
-  </script>
+
+    geld += bank;
+    log("🔄 Geld zurück ins Spiel: " + bank + "€");
+
+    bank = 0;
+    update();
+}
+
+function autoSpielen() {
+    for (let i = 0; i < 100; i++) {
+        spielen();
+    }
+}
+
+function update() {
+    document.getElementById("geld").innerText = geld;
+    document.getElementById("bank").innerText = bank;
+    document.getElementById("gesamt").innerText = geld + bank;
+    document.getElementById("bilanz").innerText = (geld + bank) - start;
+ }
+function zurueckholen() {
+    if (bank < 5) {
+        log("⚠️ Nicht genug Geld in der Bank!");
+        return;
+    }
+
+    bank -= 5;
+    geld += 5;
+
+    log("🔄 5€ zurück ins Spiel geholt");
+
+    update();
+}
+
+
+function spielen() {
+    if (geld < einsatz) {
+        log("❌ Kein Geld mehr!");
+        return;
+    }
+
+    geld -= einsatz;
+
+    let r = Math.random();
+
+    // 🔥 NEU: extrem seltener Super-Jackpot (0.5%)
+    if (r < 0.0045) {
+        let gewinn = einsatz * 50;
+        geld += gewinn;
+        log("🔥 SUPER JACKPOT!!! +" + gewinn + "€");
+    }
+    else if (r < 0.05) {
+        let gewinn = einsatz * 10;
+        geld += gewinn;
+        log("💰 JACKPOT! +" + gewinn + "€");
+    } 
+    else if (r < 0.15) {
+        let gewinn = einsatz * 4;
+        geld += gewinn;
+        log("✨ Großer Gewinn +" + gewinn + "€");
+    } 
+    else if (r < 0.30) {
+        let gewinn = einsatz * 2;
+        geld += gewinn;
+        log("✅ Kleiner Gewinn +" + gewinn + "€");
+    } 
+    else {
+        log("❌ Verlust -5€");
+    }
+
+    update();
+}
+
+
+function log(text) {
+    let div = document.getElementById("log");
+    div.innerHTML += text + "<br>";
+    div.scrollTop = div.scrollHeight;
+}
+</script>
+
 </body>
 </html>
