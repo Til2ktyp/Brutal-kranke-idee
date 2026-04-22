@@ -338,14 +338,14 @@
         </div>
 
         <div class="period-buttons">
-            <button class="period-btn active" onclick="setPeriod(1)">1 Jahr</button>
+            <button class="period-btn" onclick="setPeriod(1)">1 Jahr</button>
             <button class="period-btn" onclick="setPeriod(5)">5 Jahre</button>
             <button class="period-btn" onclick="setPeriod(10)">10 Jahre</button>
             <button class="period-btn" onclick="setPeriod(15)">15 Jahre</button>
             <button class="period-btn" onclick="setPeriod(20)">20 Jahre</button>
             <button class="period-btn" onclick="setPeriod(25)">25 Jahre</button>
             <button class="period-btn" onclick="setPeriod(30)">30 Jahre</button>
-            <button class="period-btn" onclick="setPeriod(40)">40 Jahre</button>
+            <button class="period-btn active" onclick="setPeriod(40)">40 Jahre</button>
         </div>
         <div class="zoom-controls">
             <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">Zoom zurücksetzen</button>
@@ -381,7 +381,7 @@
 
     <script>
         let chart = null;
-        let currentPeriod = 1;
+        let currentPeriod = 40;
         let portfolioData = null;
         let zoomEnabled = false;
         let lastTouchX = null;
@@ -410,7 +410,7 @@
             { name: 'AMD', ticker: 'AMD' },
             { name: 'Nestle', ticker: 'NSRGY' },
             { name: 'Coca Cola', ticker: 'KO' },
-            { name: 'McDonald\'s', ticker: 'MCD' },
+            { name: 'McDonalds', ticker: 'MCD' },
             { name: 'Nike', ticker: 'NKE' },
             { name: 'Volkswagen', ticker: 'VWAGY' },
             { name: 'BMW', ticker: 'BMWYY' },
