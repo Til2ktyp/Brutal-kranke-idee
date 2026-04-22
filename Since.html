@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investment Portfolio Rechner</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,6 +40,8 @@
             display: flex;
             gap: 10px;
             align-items: center;
+            flex: 1;
+            min-width: 250px;
         }
 
         label {
@@ -70,6 +73,8 @@
             gap: 10px;
             justify-content: center;
             flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .period-btn {
@@ -93,6 +98,36 @@
             background: #fda502;
         }
 
+        .zoom-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .zoom-btn {
+            padding: 10px 15px;
+            background: #27ae60;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            display: none;
+        }
+
+        .zoom-btn:hover {
+            background: #219150;
+        }
+
+        .zoom-hint {
+            font-size: 14px;
+            opacity: 0.85;
+            display: none;
+        }
+
         .chart-container {
             position: relative;
             height: 500px;
@@ -100,6 +135,8 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 20px;
             border-radius: 10px;
+            overflow: hidden;
+            touch-action: pan-x pan-y;
         }
 
         .stats {
@@ -127,11 +164,69 @@
             font-weight: bold;
             color: #fbc531;
         }
+        .dividend-subtext {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #2ecc71;
+            font-weight: bold;
+        }
 
         .loading {
             text-align: center;
             padding: 20px;
             font-size: 16px;
+        }
+
+        .autocomplete-container {
+            position: relative;
+            width: 100%;
+            flex: 1;
+        }
+
+        .stock-input {
+            width: 100% !important;
+            box-sizing: border-box;
+        }
+
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #00a8ff;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .autocomplete-list.show {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+
+        .autocomplete-item:hover {
+            background: #f0f0f0;
+        }
+
+        .autocomplete-item-ticker {
+            font-weight: bold;
+            color: #00a8ff;
+        }
+
+        .autocomplete-item-name {
+            font-size: 12px;
+            color: #666;
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -141,8 +236,11 @@
 
         <div class="controls">
             <div class="control-group">
-                <label for="stock">Aktie (Ticker):</label>
-                <input type="text" id="stock" value="NSRGY" placeholder="z.B. NSRGY">
+                <label for="stock">Aktie (Ticker/Name):</label>
+                <div class="autocomplete-container">
+                    <input type="text" id="stock" class="stock-input" value="NVDA" placeholder="z.B. Nvidia, Apple, Tesla..." autocomplete="off">
+                    <div class="autocomplete-list" id="autocompleteList"></div>
+                </div>
             </div>
             <div class="control-group">
                 <label for="monthlyAmount">Monatliche Investition (€):</label>
@@ -160,6 +258,10 @@
             <button class="period-btn" onclick="setPeriod(25)">25 Jahre</button>
             <button class="period-btn" onclick="setPeriod(30)">30 Jahre</button>
             <button class="period-btn" onclick="setPeriod(40)">40 Jahre</button>
+        </div>
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">🔎 Zoom zurücksetzen</button>
+            <div class="zoom-hint" id="zoomHint">Ab 5 Jahren: Mit dem Mausrad scrollen, mit Shift + Mausrad zoomen, mit zwei Fingern seitlich scrollen oder mit gedrückter Maustaste einen Bereich markieren.</div>
         </div>
 
         <div id="loadingMsg" class="loading" style="display: none;">Laden...</div>
@@ -180,6 +282,7 @@
             <div class="stat-box">
                 <div class="stat-label">Gewinn / Verlust</div>
                 <div class="stat-value" id="gainLoss">€ 0</div>
+                <div class="dividend-subtext" id="dividendText">+ € 0 Dividenden</div>
             </div>
             <div class="stat-box">
                 <div class="stat-label">Rendite</div>
@@ -192,17 +295,100 @@
         let chart = null;
         let currentPeriod = 1;
         let portfolioData = null;
+        let zoomEnabled = false;
+        let lastTouchX = null;
+        const TWELVE_DATA_API_KEY = 'e4cfbe247e62449c999d101f5fc4dc6a';
+        const TWELVE_DATA_URL = 'https://api.twelvedata.com/time_series';
+
+        // Liste beliebter Aktien
+        const stocks = [
+            { name: 'Nvidia', ticker: 'NVDA' },
+            { name: 'Apple', ticker: 'AAPL' },
+            { name: 'Microsoft', ticker: 'MSFT' },
+            { name: 'Tesla', ticker: 'TSLA' },
+            { name: 'Amazon', ticker: 'AMZN' },
+            { name: 'Google', ticker: 'GOOGL' },
+            { name: 'Meta', ticker: 'META' },
+            { name: 'Netflix', ticker: 'NFLX' },
+            { name: 'Intel', ticker: 'INTC' },
+            { name: 'AMD', ticker: 'AMD' },
+            { name: 'Nestle', ticker: 'NSRGY' },
+            { name: 'Coca Cola', ticker: 'KO' },
+            { name: 'McDonald\'s', ticker: 'MCD' },
+            { name: 'Nike', ticker: 'NKE' },
+            { name: 'Volkswagen', ticker: 'VWAGY' },
+            { name: 'BMW', ticker: 'BMWYY' },
+            { name: 'Siemens', ticker: 'SIEGY' },
+            { name: 'SAP', ticker: 'SAP' },
+            { name: 'Adidas', ticker: 'ADDYY' },
+            { name: 'Berkshire Hathaway', ticker: 'BRK.B' }
+        ];
+
+        // Autocomplete-Funktionalität
+        const stockInput = document.getElementById('stock');
+        const autocompleteList = document.getElementById('autocompleteList');
+
+        stockInput.addEventListener('input', function() {
+            const value = this.value.toLowerCase().trim();
+            
+            if (value.length === 0) {
+                autocompleteList.classList.remove('show');
+                return;
+            }
+
+            const filtered = stocks.filter(stock =>
+                stock.name.toLowerCase().includes(value) ||
+                stock.ticker.toLowerCase().includes(value)
+            );
+
+            if (filtered.length === 0) {
+                autocompleteList.classList.remove('show');
+                return;
+            }
+
+            autocompleteList.innerHTML = filtered.map(stock =>
+                `<div class="autocomplete-item" onclick="selectStock('${stock.ticker}', '${stock.name}')">
+                    <span class="autocomplete-item-ticker">${stock.ticker}</span>
+                    <span class="autocomplete-item-name">${stock.name}</span>
+                </div>`
+            ).join('');
+
+            autocompleteList.classList.add('show');
+        });
+
+        stockInput.addEventListener('focus', function() {
+            if (this.value.length > 0) {
+                this.dispatchEvent(new Event('input'));
+            }
+        });
+
+        function selectStock(ticker, name) {
+            stockInput.value = ticker;
+            autocompleteList.classList.remove('show');
+        }
+
+        // Schließe Autocomplete, wenn außerhalb geklickt wird
+        document.addEventListener('click', function(e) {
+            if (e.target !== stockInput) {
+                autocompleteList.classList.remove('show');
+            }
+        });
 
         function setPeriod(years) {
             currentPeriod = years;
+            zoomEnabled = years >= 5;
             
             // Update active button
             document.querySelectorAll('.period-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
+            updateZoomControls();
             
-            updateChart();
+            // Regeneriere Daten für diese Periode
+            if (portfolioData) {
+                loadData();
+            }
         }
 
         async function loadData() {
@@ -215,11 +401,11 @@
             }
 
             document.getElementById('loadingMsg').style.display = 'block';
+            zoomEnabled = currentPeriod >= 5;
+            updateZoomControls();
 
             try {
-                // Hier würden echte API-Daten verwendet
-                // Für Demo: Generiere Mock-Daten
-                portfolioData = generateMockData(stock, monthlyAmount);
+                portfolioData = await getPortfolioData(stock, monthlyAmount, currentPeriod);
                 updateChart();
             } catch (error) {
                 alert('Fehler beim Laden: ' + error.message);
@@ -227,9 +413,48 @@
                 document.getElementById('loadingMsg').style.display = 'none';
             }
         }
+        function updateZoomControls() {
+            const resetBtn = document.getElementById('resetZoomBtn');
+            const zoomHint = document.getElementById('zoomHint');
 
-        function generateMockData(stock, monthlyAmount) {
-            // Generiere realistische Mock-Daten für die Demo
+            if (zoomEnabled) {
+                resetBtn.style.display = 'inline-block';
+                zoomHint.style.display = 'block';
+            } else {
+                resetBtn.style.display = 'none';
+                zoomHint.style.display = 'none';
+            }
+        }
+
+        function resetZoom() {
+            if (chart) {
+                chart.resetZoom();
+            }
+        }
+
+        async function fetchTwelveDataMonthly(symbol, years) {
+            const outputsize = Math.max(years * 12 + 12, 24);
+            const url = `${TWELVE_DATA_URL}?symbol=${encodeURIComponent(symbol)}&interval=1month&outputsize=${outputsize}&order=asc&apikey=${encodeURIComponent(TWELVE_DATA_API_KEY)}`;
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Netzwerkfehler beim Laden der Kursdaten');
+            }
+
+            const json = await response.json();
+
+            if (json.status === 'error') {
+                throw new Error(json.message || 'Ticker nicht gefunden oder ungültig');
+            }
+
+            if (!Array.isArray(json.values) || json.values.length === 0) {
+                throw new Error('Keine historischen Daten verfügbar');
+            }
+
+            return json.values;
+        }
+
+        function buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values) {
             const data = {
                 stock: stock,
                 monthlyAmount: monthlyAmount,
@@ -240,56 +465,69 @@
                 prices: []
             };
 
-            const startDate = new Date();
-            startDate.setFullYear(startDate.getFullYear() - 40);
+            const sortedEntries = values
+                .map(entry => ({
+                    date: entry.datetime,
+                    close: parseFloat(entry.close),
+                    dividend: 0
+                }))
+                .filter(entry => Number.isFinite(entry.close) && entry.close > 0)
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            if (sortedEntries.length === 0) {
+                throw new Error('Keine nutzbaren Kursdaten gefunden');
+            }
+
+            const monthsNeeded = years * 12;
+            const filteredEntries = sortedEntries.slice(-monthsNeeded);
+
+            if (filteredEntries.length < 2) {
+                throw new Error('Zu wenig historische Daten für diesen Zeitraum');
+            }
 
             let shares = 0;
-            let currentPrice = 50; // Start price
-            let volatility = 0.02; // Daily volatility
             let cumulativeDividend = 0;
 
-            for (let i = 0; i < 480; i++) { // 40 Jahre * 12 Monate
-                const date = new Date(startDate);
-                date.setMonth(date.getMonth() + i);
+            filteredEntries.forEach((entry, index) => {
+                const price = entry.close;
+                const dividendPerShare = entry.dividend;
 
-                // Simuliere Aktienkurs mit trend
-                const dailyReturn = (Math.random() - 0.5) * volatility * 2;
-                const monthlyTrend = 0.005; // ~6% annual growth
-                currentPrice *= (1 + dailyReturn + monthlyTrend);
-                currentPrice = Math.max(currentPrice, 1);
-
-                // Monatliche Investition
-                shares += monthlyAmount / currentPrice;
-
-                // Dividenden: 4x pro Jahr, ~2-3% dividend yield
-                let dividend = 0;
-                if (i % 3 === 0) {
-                    dividend = (shares * currentPrice) * 0.02 / 4;
-                    shares += dividend / currentPrice;
-                    cumulativeDividend += dividend;
+                let dividendCash = 0;
+                if (dividendPerShare > 0) {
+                    dividendCash = shares * dividendPerShare;
+                    shares += dividendCash / price;
+                    cumulativeDividend += dividendCash;
                 }
 
-                const portfolioValue = shares * currentPrice;
-                const investedAmount = monthlyAmount * (i + 1);
+                shares += monthlyAmount / price;
 
-                data.months.push(date.toISOString().split('T')[0]);
+                const investedAmount = monthlyAmount * (index + 1);
+                const portfolioValue = shares * price;
+
+                data.months.push(entry.date);
                 data.portfolioValues.push(Math.round(portfolioValue * 100) / 100);
                 data.investedAmounts.push(Math.round(investedAmount * 100) / 100);
                 data.cumulativeDividends.push(Math.round(cumulativeDividend * 100) / 100);
-                data.prices.push(Math.round(currentPrice * 100) / 100);
-            }
+                data.prices.push(Math.round(price * 100) / 100);
+            });
 
             return data;
+        }
+
+        async function getPortfolioData(stock, monthlyAmount, years) {
+            const values = await fetchTwelveDataMonthly(stock, years);
+            return buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values);
         }
 
         function updateChart() {
             if (!portfolioData) return;
 
-            const startIdx = Math.max(0, portfolioData.months.length - (currentPeriod * 12));
-            const months = portfolioData.months.slice(startIdx);
-            const portfolioValues = portfolioData.portfolioValues.slice(startIdx);
-            const investedAmounts = portfolioData.investedAmounts.slice(startIdx);
-            const cumulativeDividends = portfolioData.cumulativeDividends.slice(startIdx);
+            // Verwende alle Daten (da sie bereits für den Zeitraum generiert wurden)
+            const months = portfolioData.months;
+            const portfolioValues = portfolioData.portfolioValues;
+            const investedAmounts = portfolioData.investedAmounts;
+            const cumulativeDividends = portfolioData.cumulativeDividends;
+            const prices = portfolioData.prices;
 
             // Berechne Statistiken
             const invested = investedAmounts[investedAmounts.length - 1] || 0;
@@ -301,6 +539,7 @@
             document.getElementById('portfolioValue').innerText = '€ ' + current.toLocaleString('de-DE', { maximumFractionDigits: 2 });
             document.getElementById('investedAmount').innerText = '€ ' + invested.toLocaleString('de-DE', { maximumFractionDigits: 2 });
             document.getElementById('gainLoss').innerText = (gainLoss >= 0 ? '+ €' : '- €') + Math.abs(gainLoss).toLocaleString('de-DE', { maximumFractionDigits: 2 });
+            document.getElementById('dividendText').innerText = '+ € ' + totalDividends.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' Dividenden';
             document.getElementById('returnPercent').innerText = (returnPercent >= 0 ? '+' : '') + returnPercent + '%';
 
             // Farbe anpassen
@@ -329,6 +568,7 @@
                             tension: 0.3,
                             pointRadius: 0,
                             pointHoverRadius: 5,
+                            pointHitRadius: 20,
                             pointBackgroundColor: '#e74c3c'
                         },
                         {
@@ -340,6 +580,7 @@
                             fill: true,
                             tension: 0,
                             pointRadius: 0,
+                            pointHitRadius: 20,
                             pointBackgroundColor: '#c0392b',
                             borderDash: [5, 5]
                         },
@@ -352,14 +593,66 @@
                             fill: true,
                             tension: 0.3,
                             pointRadius: 0,
+                            pointHitRadius: 20,
                             pointBackgroundColor: '#27ae60'
+                        },
+                        {
+                            label: 'Aktienkurs (€)',
+                            data: prices,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.05)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHitRadius: 20,
+                            pointBackgroundColor: '#3498db',
+                            yAxisID: 'yPrice'
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    hover: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     plugins: {
+                        zoom: {
+                            pan: {
+                                enabled: zoomEnabled,
+                                mode: 'x',
+                                threshold: 2
+                            },
+                            zoom: {
+                                wheel: {
+                                    enabled: zoomEnabled,
+                                    modifierKey: 'shift',
+                                    speed: 0.01
+                                },
+                                pinch: {
+                                    enabled: zoomEnabled,
+                                    threshold: 0.08
+                                },
+                                drag: {
+                                    enabled: zoomEnabled,
+                                    backgroundColor: 'rgba(0, 168, 255, 0.2)',
+                                    borderColor: '#00a8ff',
+                                    borderWidth: 1
+                                },
+                                mode: 'x'
+                            },
+                            limits: {
+                                x: {
+                                    minRange: 12
+                                }
+                            }
+                        },
                         legend: {
                             labels: {
                                 color: 'white',
@@ -377,7 +670,7 @@
                             callbacks: {
                                 label: function(context) {
                                     const value = context.parsed.y;
-                                    return context.dataset.label + ': €' + value.toLocaleString('de-DE', { maximumFractionDigits: 2 });
+                                    return context.dataset.label + ': € ' + value.toLocaleString('de-DE', { maximumFractionDigits: 2 });
                                 }
                             }
                         }
@@ -403,6 +696,18 @@
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.1)'
                             }
+                        },
+                        yPrice: {
+                            position: 'right',
+                            ticks: {
+                                color: '#3498db',
+                                callback: function(value) {
+                                    return '€ ' + value.toLocaleString('de-DE');
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
                         }
                     }
                 }
@@ -411,7 +716,53 @@
 
         // Initial laden
         window.addEventListener('load', () => {
+            zoomEnabled = currentPeriod >= 5;
+            updateZoomControls();
             loadData();
+
+            const canvas = document.getElementById('portfolioChart');
+
+            canvas.addEventListener('wheel', (e) => {
+                if (!zoomEnabled || !chart) return;
+
+                if (!e.shiftKey) {
+                    e.preventDefault();
+                    chart.pan({ x: e.deltaY * 1.2 }, undefined, 'default');
+                }
+            }, { passive: false });
+
+            canvas.addEventListener('touchstart', (e) => {
+                if (!zoomEnabled || !chart) return;
+
+                if (e.touches.length === 2) {
+                    lastTouchX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                }
+            }, { passive: true });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (!zoomEnabled || !chart) return;
+
+                if (e.touches.length === 2) {
+                    const currentTouchX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+
+                    if (lastTouchX !== null) {
+                        const deltaX = currentTouchX - lastTouchX;
+                        if (Math.abs(deltaX) > 1) {
+                            chart.pan({ x: deltaX * -1 }, undefined, 'default');
+                        }
+                    }
+
+                    lastTouchX = currentTouchX;
+                }
+            }, { passive: true });
+
+            canvas.addEventListener('touchend', () => {
+                lastTouchX = null;
+            }, { passive: true });
+
+            canvas.addEventListener('touchcancel', () => {
+                lastTouchX = null;
+            }, { passive: true });
         });
     </script>
 </body>
