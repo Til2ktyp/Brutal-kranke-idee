@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Portfolio Rechner</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select, button {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            background: #00a8ff;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        input[type="number"], select {
+            background: white;
+            color: #333;
+            cursor: text;
+        }
+
+        button:hover {
+            background: #0097e6;
+        }
+
+        .period-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .period-btn {
+            padding: 10px 15px;
+            background: #00a8ff;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .period-btn.active {
+            background: #fbc531;
+            color: #1e272e;
+            border-color: white;
+        }
+
+        .period-btn:hover {
+            background: #0097e6;
+        }
+
+        .period-btn.active:hover {
+            background: #fda502;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fbc531;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Investment Portfolio Rechner</h1>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="stock">Aktie (Ticker):</label>
+                <input type="text" id="stock" value="NSRGY" placeholder="z.B. NSRGY">
+            </div>
+            <div class="control-group">
+                <label for="monthlyAmount">Monatliche Investition (€):</label>
+                <input type="number" id="monthlyAmount" value="10" min="1">
+            </div>
+            <button onclick="loadData()">📊 Berechnen</button>
+        </div>
+
+        <div class="period-buttons">
+            <button class="period-btn active" onclick="setPeriod(1)">1 Jahr</button>
+            <button class="period-btn" onclick="setPeriod(5)">5 Jahre</button>
+            <button class="period-btn" onclick="setPeriod(10)">10 Jahre</button>
+            <button class="period-btn" onclick="setPeriod(15)">15 Jahre</button>
+            <button class="period-btn" onclick="setPeriod(20)">20 Jahre</button>
+            <button class="period-btn" onclick="setPeriod(25)">25 Jahre</button>
+            <button class="period-btn" onclick="setPeriod(30)">30 Jahre</button>
+            <button class="period-btn" onclick="setPeriod(40)">40 Jahre</button>
+        </div>
+
+        <div id="loadingMsg" class="loading" style="display: none;">Laden...</div>
+
+        <div class="chart-container">
+            <canvas id="portfolioChart"></canvas>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">Aktueller Portfolio Wert</div>
+                <div class="stat-value" id="portfolioValue">€ 0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Eingezahlte Summe</div>
+                <div class="stat-value" id="investedAmount">€ 0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Gewinn / Verlust</div>
+                <div class="stat-value" id="gainLoss">€ 0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Rendite</div>
+                <div class="stat-value" id="returnPercent">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chart = null;
+        let currentPeriod = 1;
+        let portfolioData = null;
+
+        function setPeriod(years) {
+            currentPeriod = years;
+            
+            // Update active button
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            updateChart();
+        }
+
+        async function loadData() {
+            const stock = document.getElementById('stock').value.toUpperCase();
+            const monthlyAmount = parseInt(document.getElementById('monthlyAmount').value);
+
+            if (!stock || monthlyAmount <= 0) {
+                alert('Bitte gültige Werte eingeben');
+                return;
+            }
+
+            document.getElementById('loadingMsg').style.display = 'block';
+
+            try {
+                // Hier würden echte API-Daten verwendet
+                // Für Demo: Generiere Mock-Daten
+                portfolioData = generateMockData(stock, monthlyAmount);
+                updateChart();
+            } catch (error) {
+                alert('Fehler beim Laden: ' + error.message);
+            } finally {
+                document.getElementById('loadingMsg').style.display = 'none';
+            }
+        }
+
+        function generateMockData(stock, monthlyAmount) {
+            // Generiere realistische Mock-Daten für die Demo
+            const data = {
+                stock: stock,
+                monthlyAmount: monthlyAmount,
+                months: [],
+                portfolioValues: [],
+                investedAmounts: [],
+                cumulativeDividends: [],
+                prices: []
+            };
+
+            const startDate = new Date();
+            startDate.setFullYear(startDate.getFullYear() - 40);
+
+            let shares = 0;
+            let currentPrice = 50; // Start price
+            let volatility = 0.02; // Daily volatility
+            let cumulativeDividend = 0;
+
+            for (let i = 0; i < 480; i++) { // 40 Jahre * 12 Monate
+                const date = new Date(startDate);
+                date.setMonth(date.getMonth() + i);
+
+                // Simuliere Aktienkurs mit trend
+                const dailyReturn = (Math.random() - 0.5) * volatility * 2;
+                const monthlyTrend = 0.005; // ~6% annual growth
+                currentPrice *= (1 + dailyReturn + monthlyTrend);
+                currentPrice = Math.max(currentPrice, 1);
+
+                // Monatliche Investition
+                shares += monthlyAmount / currentPrice;
+
+                // Dividenden: 4x pro Jahr, ~2-3% dividend yield
+                let dividend = 0;
+                if (i % 3 === 0) {
+                    dividend = (shares * currentPrice) * 0.02 / 4;
+                    shares += dividend / currentPrice;
+                    cumulativeDividend += dividend;
+                }
+
+                const portfolioValue = shares * currentPrice;
+                const investedAmount = monthlyAmount * (i + 1);
+
+                data.months.push(date.toISOString().split('T')[0]);
+                data.portfolioValues.push(Math.round(portfolioValue * 100) / 100);
+                data.investedAmounts.push(Math.round(investedAmount * 100) / 100);
+                data.cumulativeDividends.push(Math.round(cumulativeDividend * 100) / 100);
+                data.prices.push(Math.round(currentPrice * 100) / 100);
+            }
+
+            return data;
+        }
+
+        function updateChart() {
+            if (!portfolioData) return;
+
+            const startIdx = Math.max(0, portfolioData.months.length - (currentPeriod * 12));
+            const months = portfolioData.months.slice(startIdx);
+            const portfolioValues = portfolioData.portfolioValues.slice(startIdx);
+            const investedAmounts = portfolioData.investedAmounts.slice(startIdx);
+            const cumulativeDividends = portfolioData.cumulativeDividends.slice(startIdx);
+
+            // Berechne Statistiken
+            const invested = investedAmounts[investedAmounts.length - 1] || 0;
+            const current = portfolioValues[portfolioValues.length - 1] || 0;
+            const totalDividends = cumulativeDividends[cumulativeDividends.length - 1] || 0;
+            const gainLoss = current - invested;
+            const returnPercent = invested > 0 ? (gainLoss / invested * 100).toFixed(2) : 0;
+
+            document.getElementById('portfolioValue').innerText = '€ ' + current.toLocaleString('de-DE', { maximumFractionDigits: 2 });
+            document.getElementById('investedAmount').innerText = '€ ' + invested.toLocaleString('de-DE', { maximumFractionDigits: 2 });
+            document.getElementById('gainLoss').innerText = (gainLoss >= 0 ? '+ €' : '- €') + Math.abs(gainLoss).toLocaleString('de-DE', { maximumFractionDigits: 2 });
+            document.getElementById('returnPercent').innerText = (returnPercent >= 0 ? '+' : '') + returnPercent + '%';
+
+            // Farbe anpassen
+            const gainLossElement = document.getElementById('gainLoss');
+            gainLossElement.style.color = gainLoss >= 0 ? '#2ecc71' : '#e74c3c';
+
+            // Erstelle Chart
+            const ctx = document.getElementById('portfolioChart').getContext('2d');
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Portfolio Wert (€)',
+                            data: portfolioValues,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.05)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 5,
+                            pointBackgroundColor: '#e74c3c'
+                        },
+                        {
+                            label: 'Investierte Summe (€)',
+                            data: investedAmounts,
+                            borderColor: '#c0392b',
+                            backgroundColor: 'rgba(192, 57, 43, 0.02)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0,
+                            pointRadius: 0,
+                            pointBackgroundColor: '#c0392b',
+                            borderDash: [5, 5]
+                        },
+                        {
+                            label: 'Kumulierte Dividenden (€)',
+                            data: cumulativeDividends,
+                            borderColor: '#27ae60',
+                            backgroundColor: 'rgba(39, 174, 96, 0.05)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointBackgroundColor: '#27ae60'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white',
+                                font: { size: 14 },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: 'white',
+                            bodyColor: 'white',
+                            borderColor: '#00a8ff',
+                            borderWidth: 1,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed.y;
+                                    return context.dataset.label + ': €' + value.toLocaleString('de-DE', { maximumFractionDigits: 2 });
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'white',
+                                callback: function(value) {
+                                    return '€ ' + value.toLocaleString('de-DE');
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white',
+                                maxTicksLimit: 12
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initial laden
+        window.addEventListener('load', () => {
+            loadData();
+        });
+    </script>
+</body>
+</html>
