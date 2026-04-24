@@ -126,16 +126,7 @@
         }
     </style>
 </head>
-<body class="locked">
-    <div class="password-overlay" id="passwordOverlay">
-        <div class="password-box">
-            <h2>Zugang geschützt</h2>
-            <p>Gib den Zugangscode ein, um die Seite zu öffnen.</p>
-            <input type="password" id="passwordInput" placeholder="Passwort eingeben" autocomplete="off">
-            <button type="button" onclick="checkPassword()">Entsperren</button>
-            <div class="password-error" id="passwordError"></div>
-        </div>
-    </div>
+<body>
     <div class="container">
         <h1>Willkommen bei der BlopperBold AG.</h1>
         <div class="links">
@@ -147,43 +138,4 @@
     <footer>
         <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
     </footer>
-    <script>
-        const PAGE_PASSWORD = '2330375721851477';
-
-        function unlockPage() {
-            document.body.classList.remove('locked');
-            document.getElementById('passwordOverlay').style.display = 'none';
-            sessionStorage.setItem('blopperbold_access_granted', 'true');
-        }
-
-        function checkPassword() {
-            const input = document.getElementById('passwordInput');
-            const error = document.getElementById('passwordError');
-
-            if (input.value === PAGE_PASSWORD) {
-                error.textContent = '';
-                unlockPage();
-            } else {
-                error.textContent = 'Falscher Code. Versuch es nochmal.';
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        window.addEventListener('load', () => {
-            const input = document.getElementById('passwordInput');
-
-            if (sessionStorage.getItem('blopperbold_access_granted') === 'true') {
-                unlockPage();
-            } else {
-                input.focus();
-            }
-
-            input.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    checkPassword();
-                }
-            });
-        });
-    </script>
 </html>
