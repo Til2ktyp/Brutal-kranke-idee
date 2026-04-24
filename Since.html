@@ -392,6 +392,7 @@
         let zoomEnabled = false;
         let lastTouchX = null;
         let datasetVisibility = [true, true, true, true];
+        let periodChangeTimeout = null;
         const TWELVE_DATA_API_KEY = 'e4cfbe247e62449c999d101f5fc4dc6a';
         const TWELVE_DATA_URL = 'https://api.twelvedata.com/time_series';
         const ALPHA_VANTAGE_DIVIDEND_KEYS = [
@@ -537,9 +538,15 @@
             zoomEnabled = currentPeriod >= 5;
             updatePeriodDisplay();
             updateZoomControls();
+
+            if (periodChangeTimeout) {
+                clearTimeout(periodChangeTimeout);
+            }
             
             if (portfolioData) {
-                loadData();
+                periodChangeTimeout = setTimeout(() => {
+                    loadData();
+                }, 5000);
             }
         }
 
