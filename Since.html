@@ -239,6 +239,55 @@
             border-radius: 999px;
             margin: 0;
             box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .period-selector {
+            position: relative;
+        }
+
+        .period-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 140px;
+            background: rgba(15, 23, 42, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 12px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+            padding: 8px;
+            display: none;
+            z-index: 1200;
+            backdrop-filter: blur(10px);
+        }
+
+        .period-dropdown.show {
+            display: grid;
+        }
+
+        .period-option {
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .period-option:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .period-option.active {
+            background: #fbc531;
+            color: #1e272e;
         }
 
         .zoom-controls {
@@ -666,7 +715,21 @@
 
             <div class="period-buttons">
                 <button class="period-btn" type="button" onclick="changePeriod(1)">+</button>
-                <div class="period-display" id="periodDisplay">40 Jahre</div>
+                <div class="period-selector">
+                    <div class="period-display" id="periodDisplay" onclick="togglePeriodDropdown()">40 Jahre</div>
+                    <div class="period-dropdown" id="periodDropdown">
+                        <button class="period-option" type="button" data-years="1" onclick="selectPeriodOption(1)">1 Jahr</button>
+                        <button class="period-option" type="button" data-years="2" onclick="selectPeriodOption(2)">2 Jahre</button>
+                        <button class="period-option" type="button" data-years="5" onclick="selectPeriodOption(5)">5 Jahre</button>
+                        <button class="period-option" type="button" data-years="10" onclick="selectPeriodOption(10)">10 Jahre</button>
+                        <button class="period-option" type="button" data-years="15" onclick="selectPeriodOption(15)">15 Jahre</button>
+                        <button class="period-option" type="button" data-years="20" onclick="selectPeriodOption(20)">20 Jahre</button>
+                        <button class="period-option" type="button" data-years="25" onclick="selectPeriodOption(25)">25 Jahre</button>
+                        <button class="period-option" type="button" data-years="30" onclick="selectPeriodOption(30)">30 Jahre</button>
+                        <button class="period-option" type="button" data-years="35" onclick="selectPeriodOption(35)">35 Jahre</button>
+                        <button class="period-option" type="button" data-years="40" onclick="selectPeriodOption(40)">40 Jahre</button>
+                    </div>
+                </div>
                 <button class="period-btn" type="button" onclick="changePeriod(-1)">−</button>
             </div>
         </div>
@@ -1187,6 +1250,11 @@
             if (graphPanel && graphButton && !graphPanel.contains(e.target) && !graphButton.contains(e.target)) {
                 graphPanel.classList.remove('show');
             }
+
+            const periodSelector = document.querySelector('.period-selector');
+            if (periodSelector && !periodSelector.contains(e.target)) {
+                closePeriodDropdown();
+            }
         });
 
         function updatePeriodDisplay() {
@@ -1196,10 +1264,36 @@
             }
         }
 
+        function syncPeriodDropdownSelection() {
+            document.querySelectorAll('.period-option').forEach(option => {
+                option.classList.toggle('active', Number(option.dataset.years) === currentPeriod);
+            });
+        }
+
+        function togglePeriodDropdown() {
+            const dropdown = document.getElementById('periodDropdown');
+            if (!dropdown) return;
+            syncPeriodDropdownSelection();
+            dropdown.classList.toggle('show');
+        }
+
+        function closePeriodDropdown() {
+            const dropdown = document.getElementById('periodDropdown');
+            if (!dropdown) return;
+            dropdown.classList.remove('show');
+        }
+
+        function selectPeriodOption(years) {
+            setPeriod(years);
+            syncPeriodDropdownSelection();
+            closePeriodDropdown();
+        }
+
         function setPeriod(years) {
             currentPeriod = Math.max(MIN_PERIOD_YEARS, Math.min(MAX_PERIOD_YEARS, years));
             zoomEnabled = currentPeriod >= 5;
             updatePeriodDisplay();
+            syncPeriodDropdownSelection();
             updateZoomControls();
 
             if (periodChangeTimeout) {
@@ -1674,14 +1768,11 @@
                                         updateLiveDragSelectionPopup(absoluteX, absoluteY);
                                     }
                                 },
-                                onZoomComplete: function({ chart }) {
+                                onZoomComplete: function() {
                                     isDragSelecting = false;
                                     dragSelectionStartIndex = null;
+                                    hideSelectionPopup();
                                     updateVisibleStats();
-                                    const xScale = chart.scales.x;
-                                    if (xScale && Number.isFinite(xScale.min) && Number.isFinite(xScale.max)) {
-                                        updateSelectionPopupForRange(Math.floor(xScale.min), Math.ceil(xScale.max));
-                                    }
                                 }
                             },
                             limits: {
@@ -1765,6 +1856,7 @@
             syncDatasetCheckboxes();
             zoomEnabled = currentPeriod >= 5;
             updatePeriodDisplay();
+            syncPeriodDropdownSelection();
             updateZoomControls();
             loadData();
             updateQuickAmountButtons();
@@ -1790,6 +1882,7 @@
             canvas.addEventListener('mouseup', () => {
                 isDragSelecting = false;
                 dragSelectionStartIndex = null;
+                hideSelectionPopup();
             });
 
             canvas.addEventListener('mouseleave', () => {
@@ -1845,6 +1938,11 @@
             canvas.addEventListener('touchcancel', () => {
                 lastTouchX = null;
             }, { passive: true });
+            window.addEventListener('mouseup', () => {
+                isDragSelecting = false;
+                dragSelectionStartIndex = null;
+                hideSelectionPopup();
+            });
             window.addEventListener('resize', () => {
                 hideSelectionPopup();
             });
