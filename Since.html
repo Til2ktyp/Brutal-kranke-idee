@@ -18,7 +18,7 @@
 
         .container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 28px auto 0 auto;
             background: rgba(0, 0, 0, 0.3);
             padding: 30px;
             border-radius: 15px;
@@ -37,6 +37,120 @@
             margin-bottom: 30px;
         }
 
+        .top-action-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin: 0 0 24px 0;
+        }
+
+        .quick-amounts {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0;
+        }
+
+        .quick-amount-btn {
+            width: 80px;
+            height: 37px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            box-sizing: border-box;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+        }
+
+        .quick-amount-btn.active {
+            background: #fbc531;
+            color: #1e272e;
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .info-pill {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+        .info-pill-label {
+            font-size: 12px;
+            opacity: 0.75;
+            margin-bottom: 6px;
+        }
+
+        .info-pill-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fbc531;
+        }
+
+        .reality-check {
+            margin-top: 18px;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px 18px;
+            line-height: 1.5;
+        }
+
+        .reality-check-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #fbc531;
+            margin-bottom: 8px;
+        }
+
+        .reality-check-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .reality-mode-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .reality-mode-btn {
+            padding: 9px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .reality-mode-btn.active {
+            background: #fbc531;
+            color: #1e272e;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
         .control-group {
             display: flex;
             gap: 10px;
@@ -50,7 +164,7 @@
         }
 
         input, select, button {
-            padding: 10px 15px;
+            padding: 10px 25px;
             border-radius: 5px;
             border: none;
             background: #00a8ff;
@@ -73,41 +187,58 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            gap: 10px;
+            margin: 0;
         }
 
         .period-btn {
-            padding: 10px 18px;
-            background: #00a8ff;
-            border: 2px solid transparent;
+            width: 80px;
+            height: 37px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
             transition: all 0.3s;
-            font-size: 20px;
-            min-width: 54px;
+            box-sizing: border-box;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
         }
 
         .period-btn.active {
             background: #fbc531;
             color: #1e272e;
-            border-color: white;
+            border-color: rgba(255, 255, 255, 0.35);
         }
 
         .period-btn:hover {
-            background: #0097e6;
+            background: rgba(255, 255, 255, 0.24);
         }
 
         .period-btn.active:hover {
             background: #fda502;
         }
         .period-display {
-            min-width: 150px;
+            width: 100px;
+            height: 37px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             font-weight: bold;
-            font-size: 22px;
-            color: #fbc531;
-            background: rgba(0, 0, 0, 0.35);
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin: 0 12px;
+            font-size: 14px;
+            color: white;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            padding: 0 16px;
+            border-radius: 999px;
+            margin: 0;
+            box-sizing: border-box;
         }
 
         .zoom-controls {
@@ -149,6 +280,55 @@
             border-radius: 10px;
             overflow: hidden;
             touch-action: pan-x pan-y;
+    }
+
+        .selection-popup {
+            position: fixed;
+            z-index: 2000;
+            min-width: 260px;
+            max-width: 320px;
+            background: rgba(15, 23, 42, 0.96);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 12px;
+            padding: 14px 16px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .selection-popup.show {
+            display: block;
+        }
+
+        .selection-popup-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fbc531;
+            margin-bottom: 10px;
+        }
+
+        .selection-popup-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 7px;
+            font-size: 13px;
+        }
+
+        .selection-popup-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .selection-popup-label {
+            opacity: 0.78;
+        }
+
+        .selection-popup-value {
+            font-weight: bold;
+            text-align: right;
         }
 
         .stats {
@@ -187,6 +367,32 @@
             text-align: center;
             padding: 20px;
             font-size: 16px;
+        }
+
+        .status-banner {
+            display: none;
+            margin: 0 auto 20px auto;
+            max-width: 1200px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: white;
+            font-size: 14px;
+        }
+
+        .status-banner.show {
+            display: block;
+        }
+
+        .status-banner.error {
+            border-color: rgba(231, 76, 60, 0.6);
+            color: #ffb3b3;
+        }
+
+        .status-banner.success {
+            border-color: rgba(46, 204, 113, 0.6);
+            color: #b8ffd1;
         }
 
         .autocomplete-container {
@@ -244,24 +450,56 @@
         .back-home-btn {
             position: fixed;
             top: 20px;
-            left: 20px;
+            left: -280px;
             z-index: 1002;
             background: #fbc531;
             color: #1e272e;
             border: none;
-            border-radius: 8px;
-            padding: 12px 16px;
+            border-radius: 0 14px 14px 0;
+            padding: 14px 18px;
             font-weight: bold;
             text-decoration: none;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 300px;
+            overflow: hidden;
+            transition: left 0.28s ease, background 0.28s ease;
         }
 
         .back-home-btn:hover {
+            left: 0;
             background: #fda502;
             color: #1e272e;
+        }
+
+        .back-home-btn-icon {
+            font-size: 22px;
+            line-height: 1;
+            min-width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-left: auto;
+            opacity: 1;
+            transition: opacity 0.18s ease;
+        }
+
+        .back-home-btn-text {
+            white-space: nowrap;
+            font-size: 16px;
+            opacity: 0;
+            transform: translateX(-12px);
+            transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        .back-home-btn:hover .back-home-btn-text {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .back-home-btn:hover .back-home-btn-icon {
+            opacity: 0;
         }
 
         .graph-settings-btn {
@@ -327,11 +565,51 @@
             height: 16px;
             cursor: pointer;
         }
+        @media (max-width: 900px) {
+            .container {
+                margin-top: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                margin-top: 20px;
+                padding: 22px;
+            }
+
+            .back-home-btn {
+                top: 86px;
+                left: -212px;
+                min-width: 250px;
+                padding: 12px 14px;
+            }
+
+            .back-home-btn-text {
+                font-size: 14px;
+            }
+
+            .top-action-row {
+                gap: 16px;
+            }
+
+            .info-row {
+                margin-top: 6px;
+            }
+        }
     </style>
 </head>
 <body>
-    <a class="back-home-btn" href="https://blopperbold.org">← Zurück zu BlopperBold</a>
+    <a class="back-home-btn" href="https://blopperbold.org" aria-label="Zurück zu BlopperBold">
+        <span class="back-home-btn-text">Zurück zu BlopperBold</span>
+        <span class="back-home-btn-icon">🏠</span>
+    </a>
     <button class="graph-settings-btn" onclick="toggleGraphSettingsPanel()">⚙️ Graphen</button>
+
+    <div class="status-banner" id="statusBanner"></div>
 
     <div class="graph-settings-panel" id="graphSettingsPanel">
         <div class="graph-settings-title">📋 Graphen auswählen</div>
@@ -355,6 +633,11 @@
         </div>
     </div>
 
+    <div class="selection-popup" id="selectionPopup">
+        <div class="selection-popup-title">Bereichsauswertung</div>
+        <div class="selection-popup-grid" id="selectionPopupContent"></div>
+    </div>
+
     <div class="container">
         <h1>📈 Investment Portfolio Rechner</h1>
 
@@ -372,15 +655,38 @@
             </div>
             <button onclick="loadData()">📊 Berechnen</button>
         </div>
+        <div class="top-action-row">
+            <div class="quick-amounts">
+                <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(25)">€ 25</button>
+                <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(50)">€ 50</button>
+                <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(100)">€ 100</button>
+                <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(250)">€ 250</button>
+                <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(500)">€ 500</button>
+            </div>
 
-        <div class="period-buttons">
-            <button class="period-btn" onclick="changePeriod(1)">+</button>
-            <div class="period-display" id="periodDisplay">40 Jahre</div>
-            <button class="period-btn" onclick="changePeriod(-1)">−</button>
+            <div class="period-buttons">
+                <button class="period-btn" type="button" onclick="changePeriod(1)">+</button>
+                <div class="period-display" id="periodDisplay">40 Jahre</div>
+                <button class="period-btn" type="button" onclick="changePeriod(-1)">−</button>
+            </div>
         </div>
         <div class="zoom-controls">
             <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">Zoom zurücksetzen</button>
             <div class="zoom-hint" id="zoomHint">Ab 5 Jahren: Mit dem Mausrad scrollen, mit Shift + Mausrad zoomen, mit zwei Fingern seitlich scrollen oder mit gedrückter Maustaste einen Bereich markieren.</div>
+        </div>
+        <div class="info-row">
+            <div class="info-pill">
+                <div class="info-pill-label">Aktiver Ticker</div>
+                <div class="info-pill-value" id="activeTickerInfo">–</div>
+            </div>
+            <div class="info-pill">
+                <div class="info-pill-label">Sichtbarer Zeitraum</div>
+                <div class="info-pill-value" id="visibleRangeInfo">–</div>
+            </div>
+            <div class="info-pill">
+                <div class="info-pill-label">Letzter Kurs</div>
+                <div class="info-pill-value" id="latestPriceInfo">€ 0</div>
+            </div>
         </div>
 
         <div id="loadingMsg" class="loading" style="display: none;">Laden...</div>
@@ -389,6 +695,11 @@
             <canvas id="portfolioChart"></canvas>
         </div>
 
+        <div class="reality-mode-row">
+            <button class="reality-mode-btn active" type="button" data-mode="LARP" onclick="setRealityMode('LARP')">LARP</button>
+            <button class="reality-mode-btn" type="button" data-mode="DERP" onclick="setRealityMode('DERP')">DERP</button>
+            <button class="reality-mode-btn" type="button" data-mode="BRUTAL" onclick="setRealityMode('BRUTAL')">BRUTAL</button>
+        </div>
         <div class="stats">
             <div class="stat-box">
                 <div class="stat-label">Aktueller Portfolio Wert</div>
@@ -408,6 +719,10 @@
                 <div class="stat-value" id="returnPercent">0%</div>
             </div>
         </div>
+        <div class="reality-check">
+            <div class="reality-check-title">Reality Check</div>
+            <div class="reality-check-text" id="realityCheckText">Lade Daten, dann gibt's hier die kleine finanzielle Respektschelle.</div>
+        </div>
     </div>
 
     <script>
@@ -420,7 +735,40 @@
         let periodChangeTimeout = null;
         let rawStockData = null;
         let currentLoadedStock = null;
+        let lastRequestedTicker = null;
+        let isLoadingData = false;
+        let latestLoadRequestId = 0;
+        let realityMode = 'LARP';
+        let currentRealityCheckMessage = 'Lade Daten, dann gibt\'s hier die kleine finanzielle Respektschelle.';
+        let lastPointerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        let isDragSelecting = false;
+        let dragSelectionStartIndex = null;
+        function getIndexFromCanvasX(chartInstance, clientX) {
+            if (!chartInstance || !chartInstance.scales || !chartInstance.scales.x) return null;
+
+            const rect = chartInstance.canvas.getBoundingClientRect();
+            const canvasX = clientX - rect.left;
+            const xValue = chartInstance.scales.x.getValueForPixel(canvasX);
+
+            if (!Number.isFinite(xValue)) return null;
+            return Math.max(0, Math.min(portfolioData.months.length - 1, Math.round(xValue)));
+        }
+
+        function updateLiveDragSelectionPopup(clientX, clientY) {
+            if (!isDragSelecting || dragSelectionStartIndex === null || !chart || !portfolioData) return;
+
+            const currentIndex = getIndexFromCanvasX(chart, clientX);
+            if (currentIndex === null) return;
+
+            const startIndex = Math.min(dragSelectionStartIndex, currentIndex);
+            const endIndex = Math.max(dragSelectionStartIndex, currentIndex);
+
+            lastPointerPosition = { x: clientX, y: clientY };
+            updateSelectionPopupForRange(startIndex, endIndex);
+        }
         const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+        const MAX_PERIOD_YEARS = 40;
+        const MIN_PERIOD_YEARS = 1;
         function getCacheKey(stock) {
             return `portfolioDataCache_${stock}`;
         }
@@ -456,10 +804,242 @@
             return Date.now() - cacheEntry.timestamp < CACHE_MAX_AGE_MS;
         }
 
+        function showStatus(message, type = 'success') {
+            const banner = document.getElementById('statusBanner');
+            if (!banner) return;
+
+            banner.textContent = message;
+            banner.className = `status-banner show ${type}`;
+        }
+
+        function clearStatus() {
+            const banner = document.getElementById('statusBanner');
+            if (!banner) return;
+
+            banner.textContent = '';
+            banner.className = 'status-banner';
+        }
+
+        function normalizeTickerInput(value) {
+            return String(value || '').toUpperCase().trim();
+        }
+
+        function parseMonthlyAmount() {
+            return parseInt(document.getElementById('monthlyAmount').value, 10);
+        }
+
+        function formatCurrency(value) {
+            return '€ ' + Number(value || 0).toLocaleString('de-DE', { maximumFractionDigits: 2 });
+        }
+
+        const realityCheckTemplates = {
+            LARP: [
+                ({ invested, current, multiple }) => `In diesem sichtbaren Zeitraum wären aus ${formatCurrency(invested)} einfach ${formatCurrency(current)} geworden. Faktor ${multiple}. Gar nicht mal so uncharmant.`,
+                ({ invested, current, multiple }) => `${formatCurrency(invested)} eingezahlt, ${formatCurrency(current)} rausbekommen. Faktor ${multiple}. Das ist schon ein ziemlich stabiler Rückblick.`,
+                ({ invested, current, multiple }) => `Hättest du in diesem Abschnitt ${formatCurrency(invested)} investiert, läge das jetzt bei ${formatCurrency(current)}. Faktor ${multiple}. Das sieht schon sauber aus.`,
+                ({ invested, current, multiple }) => `Aus ${formatCurrency(invested)} wären hier ${formatCurrency(current)} geworden. Faktor ${multiple}. Ruhig, sachlich, trotzdem aua.`,
+                ({ invested, current, multiple }) => `Dieser sichtbare Bereich sagt ganz trocken: ${formatCurrency(invested)} rein, ${formatCurrency(current)} heute. Faktor ${multiple}. Nicht übel.`,
+                ({ invested, current, multiple }) => `Wenn man es runterbricht: ${formatCurrency(invested)} investiert, ${formatCurrency(current)} Wert. Faktor ${multiple}. Kann man mitnehmen.`,
+                ({ invested, current, multiple }) => `Hier hättest du aus ${formatCurrency(invested)} einfach ${formatCurrency(current)} machen können. Faktor ${multiple}. Das ist schon ordentlich.`,
+                ({ invested, current, multiple }) => `Der Chart ist da recht eindeutig: ${formatCurrency(invested)} wären in diesem Zeitraum zu ${formatCurrency(current)} geworden. Faktor ${multiple}.`,
+                ({ invested, current, multiple }) => `In diesem Fenster reden wir von ${formatCurrency(invested)} Einsatz und ${formatCurrency(current)} Ergebnis. Faktor ${multiple}. Ganz entspannter Reality Check.`,
+                ({ invested, current, multiple }) => `Kurz gesagt: ${formatCurrency(invested)} hätten hier zu ${formatCurrency(current)} wachsen können. Faktor ${multiple}. Sieht gut aus.`
+            ],
+            DERP: [
+                ({ invested, current, multiple }) => `In diesem sichtbaren Zeitraum wären aus ${formatCurrency(invested)} einfach ${formatCurrency(current)} geworden. Faktor ${multiple}. Brutal, wenn man bedenkt, wie viel Geld sonst Monat für Monat einfach verdampft.`,
+                ({ invested, current, multiple }) => `${formatCurrency(invested)} eingezahlt, ${formatCurrency(current)} rausbekommen. Faktor ${multiple}. Das ist der Teil, wo man kurz still an die ganzen unnötigen Käufe denkt.`,
+                ({ invested, current, multiple }) => `Hättest du in diesem Abschnitt stumpf ${formatCurrency(invested)} hier reingeworfen, läge das jetzt bei ${formatCurrency(current)}. Faktor ${multiple}. Die Kippen hätten sich darüber safe nicht gefreut.`,
+                ({ invested, current, multiple }) => `Aus ${formatCurrency(invested)} wären hier ${formatCurrency(current)} geworden. Faktor ${multiple}. Finanzielle Ohrfeige, aber immerhin mit Stil.`,
+                ({ invested, current, multiple }) => `Dieser sichtbare Bereich sagt ganz trocken: ${formatCurrency(invested)} rein, ${formatCurrency(current)} heute. Faktor ${multiple}. Manche Ausgaben altern halt echt wie Milch.`,
+                ({ invested, current, multiple }) => `Wenn man es auf das Wesentliche runterbricht: ${formatCurrency(invested)} investiert, ${formatCurrency(current)} Wert. Faktor ${multiple}. Tut bisschen weh, sieht aber geil aus.`,
+                ({ invested, current, multiple }) => `Hier hättest du aus ${formatCurrency(invested)} einfach ${formatCurrency(current)} machen können. Faktor ${multiple}. Nicht jede Monatsausgabe hätte so geliefert.`,
+                ({ invested, current, multiple }) => `Der Chart macht keine Faxen: ${formatCurrency(invested)} wären in diesem Zeitraum zu ${formatCurrency(current)} geworden. Faktor ${multiple}. Das ist schon fast frech.`,
+                ({ invested, current, multiple }) => `In diesem Fenster reden wir von ${formatCurrency(invested)} Einsatz und ${formatCurrency(current)} Ergebnis. Faktor ${multiple}. Genau die Art von Rückblick, die kurz die Seele aus dem Körper zieht.`,
+                ({ invested, current, multiple }) => `Kurz gesagt: statt Kleingeld zu verbrennen, hätten ${formatCurrency(invested)} hier zu ${formatCurrency(current)} wachsen können. Faktor ${multiple}. Der Markt war gütiger als viele Konsumentscheidungen.`
+            ],
+            BRUTAL: [
+                ({ invested, current, multiple }) => `Bevor dein Leben überhaupt ernsthaft gestartet ist, hätte ${formatCurrency(invested)} hier schon zu ${formatCurrency(current)} werden können. Faktor ${multiple}. Stattdessen wurde Zeit offenbar lieber genutzt, um finanziell komplett am Punkt vorbeizuleben.`,
+                ({ invested, current, multiple }) => `${formatCurrency(invested)} hätten hier ${formatCurrency(current)} ergeben. Faktor ${multiple}. Das ist dieser seltene Moment, in dem selbst deine Vergangenheit dich mit enttäuschtem Blick anguckt.`,
+                ({ invested, current, multiple }) => `Aus ${formatCurrency(invested)} wären in diesem Abschnitt ${formatCurrency(current)} geworden. Faktor ${multiple}. Ehrlich, man hätte fast schon investieren sollen, bevor man überhaupt wusste, wie man Schuhe bindet.`,
+                ({ invested, current, multiple }) => `Hier reden wir über ${formatCurrency(invested)} Einsatz und ${formatCurrency(current)} Ergebnis. Faktor ${multiple}. Gegen diese Zahl sehen viele alte Entscheidungen aus wie ein Langzeitprojekt in finanzieller Selbstverarsche.`,
+                ({ invested, current, multiple }) => `${formatCurrency(invested)} investiert hätte hier ${formatCurrency(current)} gebracht. Faktor ${multiple}. Der Markt war bereit, aber deine Historie hatte anscheinend andere, deutlich dämlichere Pläne.`,
+                ({ invested, current, multiple }) => `In diesem Fenster wurden aus ${formatCurrency(invested)} theoretisch ${formatCurrency(current)}. Faktor ${multiple}. Statt Vermögen mitzunehmen, wurde offenbar lieber Kapital in belanglosen Quatsch zerlegt.`,
+                ({ invested, current, multiple }) => `Dieser Bereich zeigt gnadenlos: ${formatCurrency(invested)} rein, ${formatCurrency(current)} raus. Faktor ${multiple}. Wenn man das sieht, fragt man sich schon, wie kreativ Geld über die Jahre verbrannt wurde.`,
+                ({ invested, current, multiple }) => `${formatCurrency(invested)} hätten hier auf ${formatCurrency(current)} wachsen können. Faktor ${multiple}. Anders gesagt: Man hätte schon investieren sollen, als man noch nicht mal wusste, was Steuern überhaupt sind.`,
+                ({ invested, current, multiple }) => `Der Chart macht es peinlich eindeutig: ${formatCurrency(invested)} wären zu ${formatCurrency(current)} geworden. Faktor ${multiple}. Das ist nicht einfach nur verpasst, das ist fast schon kunstvoll an gutem Timing vorbeigelaufen.`,
+                ({ invested, current, multiple }) => `Kurz gesagt: ${formatCurrency(invested)} hätten hier ${formatCurrency(current)} werden können. Faktor ${multiple}. Stattdessen wurde das Geld wahrscheinlich mit voller Überzeugung in Dinge verwandelt, die heute weniger Wert haben als ein trauriger Kassenbon.`
+            ]
+        };
+
+        function setRealityMode(mode) {
+            realityMode = mode;
+            document.querySelectorAll('.reality-mode-btn').forEach(button => {
+                button.classList.toggle('active', button.dataset.mode === mode);
+            });
+
+            if (portfolioData) {
+                const xScale = chart && chart.scales && chart.scales.x ? chart.scales.x : null;
+                const startIndex = xScale && Number.isFinite(xScale.min) ? Math.max(0, Math.floor(xScale.min)) : 0;
+                const endIndex = xScale && Number.isFinite(xScale.max)
+                    ? Math.min(portfolioData.months.length - 1, Math.ceil(xScale.max))
+                    : portfolioData.months.length - 1;
+
+                const investedAmounts = portfolioData.investedAmounts;
+                const portfolioValues = portfolioData.portfolioValues;
+                const previousInvested = startIndex > 0 ? investedAmounts[startIndex - 1] : 0;
+                const currentInvestedTotal = investedAmounts[endIndex] || 0;
+                const investedInRange = currentInvestedTotal - previousInvested;
+                const currentPortfolio = portfolioValues[endIndex] || 0;
+                const opportunityMultiple = investedInRange > 0 ? currentPortfolio / investedInRange : 0;
+
+                if (investedInRange > 0) {
+                    currentRealityCheckMessage = getRandomRealityCheck(
+                        investedInRange,
+                        currentPortfolio,
+                        opportunityMultiple.toFixed(2)
+                    );
+                }
+            }
+
+            updateVisibleStats();
+        }
+
+        function getRandomRealityCheck(invested, current, multiple) {
+            const pool = realityCheckTemplates[realityMode] || realityCheckTemplates.LARP;
+            const template = pool[Math.floor(Math.random() * pool.length)];
+            return template({ invested, current, multiple });
+        }
+
+        function updateQuickAmountButtons() {
+            const currentAmount = parseMonthlyAmount();
+            document.querySelectorAll('.quick-amount-btn').forEach(button => {
+                const numericValue = parseInt(button.textContent.replace(/[^0-9]/g, ''), 10);
+                button.classList.toggle('active', numericValue === currentAmount);
+            });
+        }
+
+        function setMonthlyAmount(amount) {
+            document.getElementById('monthlyAmount').value = amount;
+            updateQuickAmountButtons();
+
+            if (rawStockData && currentLoadedStock) {
+                recalculatePortfolioFromRawData();
+            }
+        }
+
+        function setLoadingState(isLoading) {
+            isLoadingData = isLoading;
+            document.getElementById('loadingMsg').style.display = isLoading ? 'block' : 'none';
+        }
+
+        function getLatestPrice() {
+            if (!portfolioData || !Array.isArray(portfolioData.prices) || portfolioData.prices.length === 0) {
+                return 0;
+            }
+            return portfolioData.prices[portfolioData.prices.length - 1] || 0;
+        }
+
+        function hideSelectionPopup() {
+            const popup = document.getElementById('selectionPopup');
+            if (!popup) return;
+            popup.classList.remove('show');
+        }
+
+        function showSelectionPopupAt(x, y, html) {
+            const popup = document.getElementById('selectionPopup');
+            const content = document.getElementById('selectionPopupContent');
+            if (!popup || !content) return;
+
+            content.innerHTML = html;
+            popup.classList.add('show');
+
+            const popupWidth = popup.offsetWidth || 280;
+            const popupHeight = popup.offsetHeight || 180;
+            const offsetX = 18;
+            const offsetY = 18;
+
+            const left = Math.min(window.innerWidth - popupWidth - 12, x + offsetX);
+            const top = Math.min(window.innerHeight - popupHeight - 12, y + offsetY);
+
+            popup.style.left = `${Math.max(12, left)}px`;
+            popup.style.top = `${Math.max(12, top)}px`;
+        }
+
+        function simulateSelectedRange(startIndex, endIndex) {
+            if (!portfolioData || !rawStockData || !currentLoadedStock) return null;
+
+            const months = portfolioData.months;
+            const prices = portfolioData.prices;
+            const safeStart = Math.max(0, startIndex);
+            const safeEnd = Math.min(endIndex, months.length - 1);
+
+            if (safeEnd < safeStart) return null;
+
+            const selectedMonths = months.slice(safeStart, safeEnd + 1);
+            const selectedPrices = prices.slice(safeStart, safeEnd + 1);
+            const monthlyAmount = parseMonthlyAmount();
+            if (!monthlyAmount || monthlyAmount <= 0 || selectedMonths.length === 0) return null;
+
+            const dividendMap = buildDividendMap(rawStockData.dividends);
+            let shares = 0;
+            let cumulativeDividend = 0;
+
+            selectedMonths.forEach((date, index) => {
+                const price = selectedPrices[index];
+                const dividendPerShare = dividendMap.get(String(date).slice(0, 7)) || 0;
+
+                if (!Number.isFinite(price) || price <= 0) return;
+
+                let dividendCash = 0;
+                if (dividendPerShare > 0) {
+                    dividendCash = shares * dividendPerShare;
+                    shares += dividendCash / price;
+                    cumulativeDividend += dividendCash;
+                }
+
+                shares += monthlyAmount / price;
+            });
+
+            const invested = monthlyAmount * selectedMonths.length;
+            const finalPrice = selectedPrices[selectedPrices.length - 1] || 0;
+            const portfolioValue = shares * finalPrice;
+            const gainLoss = portfolioValue - invested;
+            const returnPercent = invested > 0 ? (gainLoss / invested * 100) : 0;
+
+            return {
+                startDate: selectedMonths[0],
+                endDate: selectedMonths[selectedMonths.length - 1],
+                invested,
+                portfolioValue,
+                gainLoss,
+                dividends: cumulativeDividend,
+                returnPercent
+            };
+        }
+
+        function updateSelectionPopupForRange(startIndex, endIndex) {
+            const result = simulateSelectedRange(startIndex, endIndex);
+            if (!result) {
+                hideSelectionPopup();
+                return;
+            }
+
+            const html = `
+                <div class="selection-popup-row"><span class="selection-popup-label">Zeitraum</span><span class="selection-popup-value">${result.startDate} → ${result.endDate}</span></div>
+                <div class="selection-popup-row"><span class="selection-popup-label">Eingezahlt</span><span class="selection-popup-value">${formatCurrency(result.invested)}</span></div>
+                <div class="selection-popup-row"><span class="selection-popup-label">Portfolio</span><span class="selection-popup-value">${formatCurrency(result.portfolioValue)}</span></div>
+                <div class="selection-popup-row"><span class="selection-popup-label">Gewinn / Verlust</span><span class="selection-popup-value">${result.gainLoss >= 0 ? '+' : '-'} ${formatCurrency(Math.abs(result.gainLoss)).replace('€ ', '€ ')}</span></div>
+                <div class="selection-popup-row"><span class="selection-popup-label">Dividenden</span><span class="selection-popup-value">${formatCurrency(result.dividends)}</span></div>
+                <div class="selection-popup-row"><span class="selection-popup-label">Rendite</span><span class="selection-popup-value">${result.returnPercent >= 0 ? '+' : ''}${result.returnPercent.toFixed(2)}%</span></div>
+            `;
+
+            showSelectionPopupAt(lastPointerPosition.x, lastPointerPosition.y, html);
+        }
+
         function recalculatePortfolioFromRawData() {
             if (!rawStockData || !currentLoadedStock) return false;
 
-            const monthlyAmount = parseInt(document.getElementById('monthlyAmount').value);
+            const monthlyAmount = parseMonthlyAmount();
             if (!monthlyAmount || monthlyAmount <= 0) return false;
 
             const dividendMap = buildDividendMap(rawStockData.dividends);
@@ -470,7 +1050,9 @@
                 rawStockData.values,
                 dividendMap
             );
+            updateQuickAmountButtons();
             updateChart();
+            showStatus(`Zeitraum lokal aktualisiert: ${currentPeriod} Jahre für ${currentLoadedStock}`, 'success');
             return true;
         }
         const TWELVE_DATA_API_KEY = 'e4cfbe247e62449c999d101f5fc4dc6a';
@@ -548,6 +1130,7 @@
         function selectStock(ticker, name) {
             stockInput.value = ticker;
             autocompleteList.classList.remove('show');
+            clearStatus();
         }
 
         function toggleGraphSettingsPanel() {
@@ -614,7 +1197,7 @@
         }
 
         function setPeriod(years) {
-            currentPeriod = Math.max(1, Math.min(40, years));
+            currentPeriod = Math.max(MIN_PERIOD_YEARS, Math.min(MAX_PERIOD_YEARS, years));
             zoomEnabled = currentPeriod >= 5;
             updatePeriodDisplay();
             updateZoomControls();
@@ -635,17 +1218,29 @@
         }
 
         async function loadData() {
-            const stock = document.getElementById('stock').value.toUpperCase().trim();
-            const monthlyAmount = parseInt(document.getElementById('monthlyAmount').value);
+            const requestId = ++latestLoadRequestId;
+            const stock = normalizeTickerInput(document.getElementById('stock').value);
+            const monthlyAmount = parseMonthlyAmount();
+            updateQuickAmountButtons();
 
             if (!stock || monthlyAmount <= 0) {
-                alert('Bitte gültige Werte eingeben');
+                showStatus('Bitte gültige Werte eingeben.', 'error');
                 return;
             }
 
-            document.getElementById('loadingMsg').style.display = 'block';
             zoomEnabled = currentPeriod >= 5;
             updateZoomControls();
+
+            // Only reload external data if ticker changed
+            if (currentLoadedStock === stock && rawStockData) {
+                recalculatePortfolioFromRawData();
+                showStatus(`Lokale Neuberechnung für ${stock} abgeschlossen.`, 'success');
+                return;
+            }
+
+            setLoadingState(true);
+            clearStatus();
+            lastRequestedTicker = stock;
 
             try {
                 const cached = loadStockDataFromCache(stock);
@@ -663,12 +1258,25 @@
                         rawStockData.values,
                         buildDividendMap(rawStockData.dividends)
                     );
+
+                    if (requestId !== latestLoadRequestId) return;
+                    const totalInvested = portfolioData.investedAmounts[portfolioData.investedAmounts.length - 1] || 0;
+                    const totalCurrent = portfolioData.portfolioValues[portfolioData.portfolioValues.length - 1] || 0;
+                    const totalMultiple = totalInvested > 0 ? (totalCurrent / totalInvested).toFixed(2) : '0.00';
+                    currentRealityCheckMessage = totalInvested > 0
+                        ? getRandomRealityCheck(totalInvested, totalCurrent, totalMultiple)
+                        : 'Zoome oder lade Daten, dann gibt es hier den kleinen finanziellen Realitätscheck für genau diesen Abschnitt.';
                     updateChart();
+                    showStatus(`Daten aus dem Cache geladen: ${stock}`, 'success');
                 } else {
+                    showStatus(`Lade neue Marktdaten für ${stock}...`, 'success');
+
                     const [values, dividends] = await Promise.all([
                         fetchTwelveDataMonthly(stock, 40),
                         fetchAlphaVantageDividends(stock)
                     ]);
+
+                    if (requestId !== latestLoadRequestId) return;
 
                     rawStockData = { values, dividends };
                     currentLoadedStock = stock;
@@ -681,12 +1289,21 @@
                         values,
                         buildDividendMap(dividends)
                     );
+                    const totalInvested = portfolioData.investedAmounts[portfolioData.investedAmounts.length - 1] || 0;
+                    const totalCurrent = portfolioData.portfolioValues[portfolioData.portfolioValues.length - 1] || 0;
+                    const totalMultiple = totalInvested > 0 ? (totalCurrent / totalInvested).toFixed(2) : '0.00';
+                    currentRealityCheckMessage = totalInvested > 0
+                        ? getRandomRealityCheck(totalInvested, totalCurrent, totalMultiple)
+                        : 'Zoome oder lade Daten, dann gibt es hier den kleinen finanziellen Realitätscheck für genau diesen Abschnitt.';
                     updateChart();
+                    showStatus(`Neue Daten erfolgreich geladen: ${stock}`, 'success');
                 }
             } catch (error) {
-                alert('Fehler beim Laden: ' + error.message);
+                showStatus('Fehler beim Laden: ' + error.message, 'error');
             } finally {
-                document.getElementById('loadingMsg').style.display = 'none';
+                if (requestId === latestLoadRequestId) {
+                    setLoadingState(false);
+                }
             }
         }
         function updateZoomControls() {
@@ -706,6 +1323,7 @@
             if (chart) {
                 chart.resetZoom();
                 updateVisibleStats();
+                hideSelectionPopup();
             }
         }
 
@@ -878,6 +1496,22 @@
             const baseCapital = previousPortfolio + investedInRange;
             const returnPercent = baseCapital > 0 ? (gainLoss / baseCapital * 100).toFixed(2) : 0;
 
+            const rangeStart = portfolioData.months[safeStart] || '–';
+            const rangeEnd = portfolioData.months[safeEnd] || '–';
+            const latestPrice = portfolioData.prices[safeEnd] || getLatestPrice();
+            const opportunityMultiple = investedInRange > 0 ? currentPortfolio / investedInRange : 0;
+            const realityCheckText = document.getElementById('realityCheckText');
+
+            document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
+            document.getElementById('visibleRangeInfo').innerText = `${rangeStart} → ${rangeEnd}`;
+            document.getElementById('latestPriceInfo').innerText = formatCurrency(latestPrice);
+
+            if (realityCheckText) {
+                realityCheckText.innerText = investedInRange > 0
+                    ? currentRealityCheckMessage
+                    : 'Zoome oder lade Daten, dann gibt es hier den kleinen finanziellen Realitätscheck für genau diesen Abschnitt.';
+            }
+
             document.getElementById('portfolioValue').innerText = '€ ' + currentPortfolio.toLocaleString('de-DE', { maximumFractionDigits: 2 });
             document.getElementById('investedAmount').innerText = '€ ' + investedInRange.toLocaleString('de-DE', { maximumFractionDigits: 2 });
             document.getElementById('gainLoss').innerText = (gainLoss >= 0 ? '+ €' : '- €') + Math.abs(gainLoss).toLocaleString('de-DE', { maximumFractionDigits: 2 });
@@ -892,6 +1526,8 @@
             if (!portfolioData) return;
 
             if (!chart || !chart.scales || !chart.scales.x) {
+                document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
+                document.getElementById('latestPriceInfo').innerText = formatCurrency(getLatestPrice());
                 applyStatsFromRange(0, portfolioData.months.length - 1);
                 return;
             }
@@ -900,6 +1536,7 @@
             const startIndex = Number.isFinite(xScale.min) ? Math.max(0, Math.floor(xScale.min)) : 0;
             const endIndex = Number.isFinite(xScale.max) ? Math.min(portfolioData.months.length - 1, Math.ceil(xScale.max)) : portfolioData.months.length - 1;
 
+            document.title = `Investment Portfolio Rechner – ${currentLoadedStock || 'Aktie'} – ${currentPeriod} Jahre – Kurs € ${getLatestPrice().toLocaleString('de-DE', { maximumFractionDigits: 2 })}`;
             applyStatsFromRange(startIndex, endIndex);
         }
 
@@ -997,6 +1634,7 @@
                                 threshold: 2,
                                 onPanComplete: function() {
                                     updateVisibleStats();
+                                    hideSelectionPopup();
                                 }
                             },
                             zoom: {
@@ -1016,8 +1654,34 @@
                                     borderWidth: 1
                                 },
                                 mode: 'x',
-                                onZoomComplete: function() {
+                                onZoomStart: function({ chart, event, point }) {
+                                    isDragSelecting = true;
+
+                                    if (point) {
+                                        lastPointerPosition = {
+                                            x: point.x + chart.canvas.getBoundingClientRect().left,
+                                            y: point.y + chart.canvas.getBoundingClientRect().top
+                                        };
+                                    }
+
+                                    if (event && Number.isFinite(event.clientX)) {
+                                        dragSelectionStartIndex = getIndexFromCanvasX(chart, event.clientX);
+                                        updateLiveDragSelectionPopup(event.clientX, event.clientY);
+                                    } else if (point) {
+                                        const absoluteX = point.x + chart.canvas.getBoundingClientRect().left;
+                                        const absoluteY = point.y + chart.canvas.getBoundingClientRect().top;
+                                        dragSelectionStartIndex = getIndexFromCanvasX(chart, absoluteX);
+                                        updateLiveDragSelectionPopup(absoluteX, absoluteY);
+                                    }
+                                },
+                                onZoomComplete: function({ chart }) {
+                                    isDragSelecting = false;
+                                    dragSelectionStartIndex = null;
                                     updateVisibleStats();
+                                    const xScale = chart.scales.x;
+                                    if (xScale && Number.isFinite(xScale.min) && Number.isFinite(xScale.max)) {
+                                        updateSelectionPopupForRange(Math.floor(xScale.min), Math.ceil(xScale.max));
+                                    }
                                 }
                             },
                             limits: {
@@ -1103,8 +1767,36 @@
             updatePeriodDisplay();
             updateZoomControls();
             loadData();
+            updateQuickAmountButtons();
+
+            document.getElementById('monthlyAmount').addEventListener('change', () => {
+                if (rawStockData && currentLoadedStock) {
+                    recalculatePortfolioFromRawData();
+                }
+            });
+
+            document.getElementById('stock').addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    loadData();
+                }
+            });
 
             const canvas = document.getElementById('portfolioChart');
+
+            canvas.addEventListener('mousemove', (e) => {
+                lastPointerPosition = { x: e.clientX, y: e.clientY };
+                updateLiveDragSelectionPopup(e.clientX, e.clientY);
+            });
+            canvas.addEventListener('mouseup', () => {
+                isDragSelecting = false;
+                dragSelectionStartIndex = null;
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                if (isDragSelecting) {
+                    hideSelectionPopup();
+                }
+            });
 
             canvas.addEventListener('wheel', (e) => {
                 if (!zoomEnabled || !chart) return;
@@ -1112,6 +1804,7 @@
                 if (!e.shiftKey) {
                     e.preventDefault();
                     chart.pan({ x: e.deltaY * 1.2 }, undefined, 'default');
+                    hideSelectionPopup();
                     updateVisibleStats();
                 }
             }, { passive: false });
@@ -1121,6 +1814,8 @@
 
                 if (e.touches.length === 2) {
                     lastTouchX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    isDragSelecting = false;
+                    dragSelectionStartIndex = null;
                 }
             }, { passive: true });
 
@@ -1134,6 +1829,7 @@
                         const deltaX = currentTouchX - lastTouchX;
                         if (Math.abs(deltaX) > 1) {
                             chart.pan({ x: deltaX * -1 }, undefined, 'default');
+                            hideSelectionPopup();
                             updateVisibleStats();
                         }
                     }
@@ -1149,6 +1845,9 @@
             canvas.addEventListener('touchcancel', () => {
                 lastTouchX = null;
             }, { passive: true });
+            window.addEventListener('resize', () => {
+                hideSelectionPopup();
+            });
         });
     </script>
 </body>
