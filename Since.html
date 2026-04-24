@@ -418,6 +418,61 @@
         let lastTouchX = null;
         let datasetVisibility = [true, true, true, true];
         let periodChangeTimeout = null;
+        let rawStockData = null;
+        let currentLoadedStock = null;
+        const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+        function getCacheKey(stock) {
+            return `portfolioDataCache_${stock}`;
+        }
+
+        function saveStockDataToCache(stock, values, dividends) {
+            const payload = {
+                stock,
+                timestamp: Date.now(),
+                values,
+                dividends
+            };
+            localStorage.setItem(getCacheKey(stock), JSON.stringify(payload));
+        }
+
+        function loadStockDataFromCache(stock) {
+            const raw = localStorage.getItem(getCacheKey(stock));
+            if (!raw) return null;
+
+            try {
+                const parsed = JSON.parse(raw);
+                if (!parsed || !Array.isArray(parsed.values) || !Array.isArray(parsed.dividends) || !parsed.timestamp) {
+                    return null;
+                }
+                return parsed;
+            } catch (error) {
+                console.error('Fehler beim Lesen des Aktien-Caches:', error);
+                return null;
+            }
+        }
+
+        function isCacheFresh(cacheEntry) {
+            if (!cacheEntry || !cacheEntry.timestamp) return false;
+            return Date.now() - cacheEntry.timestamp < CACHE_MAX_AGE_MS;
+        }
+
+        function recalculatePortfolioFromRawData() {
+            if (!rawStockData || !currentLoadedStock) return false;
+
+            const monthlyAmount = parseInt(document.getElementById('monthlyAmount').value);
+            if (!monthlyAmount || monthlyAmount <= 0) return false;
+
+            const dividendMap = buildDividendMap(rawStockData.dividends);
+            portfolioData = buildPortfolioFromMonthlyData(
+                currentLoadedStock,
+                monthlyAmount,
+                currentPeriod,
+                rawStockData.values,
+                dividendMap
+            );
+            updateChart();
+            return true;
+        }
         const TWELVE_DATA_API_KEY = 'e4cfbe247e62449c999d101f5fc4dc6a';
         const TWELVE_DATA_URL = 'https://api.twelvedata.com/time_series';
         const ALPHA_VANTAGE_DIVIDEND_KEYS = [
@@ -570,8 +625,8 @@
             
             if (portfolioData) {
                 periodChangeTimeout = setTimeout(() => {
-                    loadData();
-                }, 3000);
+                    recalculatePortfolioFromRawData();
+                }, 500);
             }
         }
 
@@ -580,7 +635,7 @@
         }
 
         async function loadData() {
-            const stock = document.getElementById('stock').value.toUpperCase();
+            const stock = document.getElementById('stock').value.toUpperCase().trim();
             const monthlyAmount = parseInt(document.getElementById('monthlyAmount').value);
 
             if (!stock || monthlyAmount <= 0) {
@@ -593,8 +648,41 @@
             updateZoomControls();
 
             try {
-                portfolioData = await getPortfolioData(stock, monthlyAmount, currentPeriod);
-                updateChart();
+                const cached = loadStockDataFromCache(stock);
+
+                if (cached && isCacheFresh(cached)) {
+                    rawStockData = {
+                        values: cached.values,
+                        dividends: cached.dividends
+                    };
+                    currentLoadedStock = stock;
+                    portfolioData = buildPortfolioFromMonthlyData(
+                        stock,
+                        monthlyAmount,
+                        currentPeriod,
+                        rawStockData.values,
+                        buildDividendMap(rawStockData.dividends)
+                    );
+                    updateChart();
+                } else {
+                    const [values, dividends] = await Promise.all([
+                        fetchTwelveDataMonthly(stock, 40),
+                        fetchAlphaVantageDividends(stock)
+                    ]);
+
+                    rawStockData = { values, dividends };
+                    currentLoadedStock = stock;
+                    saveStockDataToCache(stock, values, dividends);
+
+                    portfolioData = buildPortfolioFromMonthlyData(
+                        stock,
+                        monthlyAmount,
+                        currentPeriod,
+                        values,
+                        buildDividendMap(dividends)
+                    );
+                    updateChart();
+                }
             } catch (error) {
                 alert('Fehler beim Laden: ' + error.message);
             } finally {
@@ -765,15 +853,6 @@
             return data;
         }
 
-        async function getPortfolioData(stock, monthlyAmount, years) {
-            const [values, dividends] = await Promise.all([
-                fetchTwelveDataMonthly(stock, years),
-                fetchAlphaVantageDividends(stock)
-            ]);
-
-            const dividendMap = buildDividendMap(dividends);
-            return buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values, dividendMap);
-        }
 
         function applyStatsFromRange(startIndex, endIndex) {
             if (!portfolioData) return;
