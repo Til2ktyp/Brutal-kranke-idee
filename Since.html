@@ -70,18 +70,18 @@
 
         .period-buttons {
             display: flex;
-            gap: 10px;
             justify-content: center;
-            flex-wrap: wrap;
             align-items: center;
             margin-bottom: 10px;
         }
 
         .period-btn {
-            padding: 10px 15px;
+            padding: 10px 18px;
             background: #00a8ff;
             border: 2px solid transparent;
             transition: all 0.3s;
+            font-size: 20px;
+            min-width: 54px;
         }
 
         .period-btn.active {
@@ -96,6 +96,17 @@
 
         .period-btn.active:hover {
             background: #fda502;
+        }
+        .period-display {
+            min-width: 150px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 22px;
+            color: #fbc531;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: 0 12px;
         }
 
         .zoom-controls {
@@ -338,14 +349,9 @@
         </div>
 
         <div class="period-buttons">
-            <button class="period-btn" onclick="setPeriod(1)">1 Jahr</button>
-            <button class="period-btn" onclick="setPeriod(5)">5 Jahre</button>
-            <button class="period-btn" onclick="setPeriod(10)">10 Jahre</button>
-            <button class="period-btn" onclick="setPeriod(15)">15 Jahre</button>
-            <button class="period-btn" onclick="setPeriod(20)">20 Jahre</button>
-            <button class="period-btn" onclick="setPeriod(25)">25 Jahre</button>
-            <button class="period-btn" onclick="setPeriod(30)">30 Jahre</button>
-            <button class="period-btn active" onclick="setPeriod(40)">40 Jahre</button>
+            <button class="period-btn" onclick="changePeriod(1)">+</button>
+            <div class="period-display" id="periodDisplay">40 Jahre</div>
+            <button class="period-btn" onclick="changePeriod(-1)">−</button>
         </div>
         <div class="zoom-controls">
             <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">Zoom zurücksetzen</button>
@@ -519,21 +525,26 @@
             }
         });
 
+        function updatePeriodDisplay() {
+            const periodDisplay = document.getElementById('periodDisplay');
+            if (periodDisplay) {
+                periodDisplay.innerText = currentPeriod === 1 ? '1 Jahr' : `${currentPeriod} Jahre`;
+            }
+        }
+
         function setPeriod(years) {
-            currentPeriod = years;
-            zoomEnabled = years >= 5;
-            
-            // Update active button
-            document.querySelectorAll('.period-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            currentPeriod = Math.max(1, Math.min(40, years));
+            zoomEnabled = currentPeriod >= 5;
+            updatePeriodDisplay();
             updateZoomControls();
             
-            // Regeneriere Daten für diese Periode
             if (portfolioData) {
                 loadData();
             }
+        }
+
+        function changePeriod(delta) {
+            setPeriod(currentPeriod + delta);
         }
 
         async function loadData() {
@@ -978,6 +989,7 @@
             loadDatasetVisibility();
             syncDatasetCheckboxes();
             zoomEnabled = currentPeriod >= 5;
+            updatePeriodDisplay();
             updateZoomControls();
             loadData();
 
