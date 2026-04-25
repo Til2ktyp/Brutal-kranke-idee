@@ -32,7 +32,28 @@
         }
         function setLoadingState(isLoading) {
             isLoadingData = isLoading;
-            document.getElementById('loadingMsg').style.display = isLoading ? 'block' : 'none';
+
+            const loadingMessage = document.getElementById('loadingMsg');
+            const chartContainer = document.querySelector('.chart-container');
+
+            if (loadingMessage) {
+                loadingMessage.style.display = isLoading ? 'block' : 'none';
+            }
+
+            if (!chartContainer) return;
+
+            if (isLoading) {
+                chartContainer.classList.remove('chart-data-enter');
+                chartContainer.classList.add('chart-data-loading');
+                return;
+            }
+
+            chartContainer.classList.remove('chart-data-loading');
+            chartContainer.classList.add('chart-data-enter');
+
+            window.setTimeout(() => {
+                chartContainer.classList.remove('chart-data-enter');
+            }, 520);
         }
         
         function hideSelectionPopup() {

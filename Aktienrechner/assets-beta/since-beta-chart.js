@@ -199,14 +199,15 @@
             const investedAmounts = portfolioData.investedAmounts;
             const cumulativeDividends = portfolioData.cumulativeDividends;
             const prices = portfolioData.prices;
-            const validPrices = prices.filter(price => Number.isFinite(price));
-            const maxStockPrice = Math.max(...validPrices);
-            const minStockPrice = Math.min(...validPrices);
+            const validPrices = prices.filter(price => Number.isFinite(price) && price > 0);
+            const hasValidPrices = validPrices.length > 0;
+            const maxStockPrice = hasValidPrices ? Math.max(...validPrices) : 1;
+            const minStockPrice = hasValidPrices ? Math.min(...validPrices) : 0;
             const stockPriceRange = maxStockPrice - minStockPrice;
 
             const stockPricePadding = Number.isFinite(stockPriceRange) && stockPriceRange > 0
                 ? stockPriceRange * 0.12
-                : maxStockPrice * 0.08;
+                : Math.max(maxStockPrice * 0.08, 0.01);
 
             const stockPriceAxisMin = Number.isFinite(minStockPrice)
                 ? Math.max(0, minStockPrice - stockPricePadding)
@@ -235,7 +236,7 @@
                             backgroundColor: 'rgba(249, 115, 22, 0.08)',
                             borderWidth: 3,
                             fill: true,
-                            tension: 0.3,
+                            tension: 0.22,
                             pointRadius: 0,
                             pointHoverRadius: 5,
                             pointHitRadius: 20,
@@ -261,7 +262,7 @@
                             backgroundColor: 'rgba(34, 197, 94, 0.08)',
                             borderWidth: 2,
                             fill: true,
-                            tension: 0.3,
+                            tension: 0.22,
                             pointRadius: 0,
                             pointHitRadius: 20,
                             pointBackgroundColor: '#22c55e'
@@ -273,7 +274,7 @@
                             backgroundColor: 'rgba(56, 189, 248, 0.06)',
                             borderWidth: 2,
                             fill: false,
-                            tension: 0.3,
+                            tension: 0.18,
                             pointRadius: 0,
                             pointHitRadius: 20,
                             pointBackgroundColor: '#38bdf8',
@@ -285,8 +286,40 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: {
-                        duration: 929,
+                        duration: 620,
                         easing: 'easeOutQuart'
+                    },
+                    transitions: {
+                        active: {
+                            animation: {
+                                duration: 180
+                            }
+                        },
+                        resize: {
+                            animation: {
+                                duration: 0
+                            }
+                        },
+                        show: {
+                            animations: {
+                                x: {
+                                    from: 0,
+                                    duration: 520,
+                                    easing: 'easeOutQuart'
+                                },
+                                y: {
+                                    from: 0,
+                                    duration: 520,
+                                    easing: 'easeOutQuart'
+                                }
+                            }
+                        },
+                        hide: {
+                            animation: {
+                                duration: 180,
+                                easing: 'easeOutCubic'
+                            }
+                        }
                     },
                     interaction: {
                         mode: 'index',
@@ -302,8 +335,9 @@
                                 enabled: zoomEnabled,
                                 mode: 'x',
                                 threshold: 2,
-                                onPanComplete: function() {
+                                onPanComplete: function({ chart }) {
                                     updateVisibleStats();
+                                    chart.update('none');
                                     hideSelectionPopup();
                                 }
                             },
@@ -344,11 +378,12 @@
                                         updateLiveDragSelectionPopup(absoluteX, absoluteY);
                                     }
                                 },
-                                onZoomComplete: function() {
+                                onZoomComplete: function({ chart }) {
                                     isDragSelecting = false;
                                     dragSelectionStartIndex = null;
                                     hideSelectionPopup();
                                     updateVisibleStats();
+                                    chart.update('none');
                                 }
                             },
                             limits: {
@@ -408,8 +443,17 @@
                             ticks: {
                                 color: '#38bdf8',
                                 callback: function(value) {
-                                    return '€ ' + Number(value).toLocaleString('de-DE', {
-                                        maximumFractionDigits: 0
+                                    const numericValue = Number(value);
+
+                                    if (!Number.isFinite(numericValue)) {
+                                        return '€ 0';
+                                    }
+
+                                    const maximumFractionDigits = Math.abs(numericValue) < 1 ? 4 : 0;
+
+                                    return '€ ' + numericValue.toLocaleString('de-DE', {
+                                        minimumFractionDigits: Math.abs(numericValue) < 1 ? 2 : 0,
+                                        maximumFractionDigits
                                     });
                                 }
                             },

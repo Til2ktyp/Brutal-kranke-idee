@@ -37,6 +37,78 @@
             ]
         };
 
+        function getRealityCheckElement() {
+            const selectors = [
+                '#realityCheckText',
+                '#realityCheckMessage',
+                '.reality-check-text',
+                '.reality-check-message',
+                '[data-reality-check]'
+            ];
+
+            for (const selector of selectors) {
+                const element = document.querySelector(selector);
+                if (element) return element;
+            }
+
+            return null;
+        }
+
+        function animateRealityCheckUpdate(updateCallback) {
+            const element = getRealityCheckElement();
+
+            if (!element || typeof element.animate !== 'function') {
+                updateCallback();
+                return;
+            }
+
+            element.getAnimations().forEach(animation => animation.cancel());
+
+            const exitAnimation = element.animate(
+                [
+                    {
+                        opacity: 1,
+                        transform: 'translateY(0) scale(1)',
+                        filter: 'blur(0)'
+                    },
+                    {
+                        opacity: 0,
+                        transform: 'translateY(-5px) scale(0.992)',
+                        filter: 'blur(2px)'
+                    }
+                ],
+                {
+                    duration: 130,
+                    easing: 'ease-out',
+                    fill: 'forwards'
+                }
+            );
+
+            exitAnimation.onfinish = () => {
+                updateCallback();
+
+                element.animate(
+                    [
+                        {
+                            opacity: 0,
+                            transform: 'translateY(8px) scale(0.992)',
+                            filter: 'blur(2px)'
+                        },
+                        {
+                            opacity: 1,
+                            transform: 'translateY(0) scale(1)',
+                            filter: 'blur(0)'
+                        }
+                    ],
+                    {
+                        duration: 280,
+                        easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+                        fill: 'forwards'
+                    }
+                );
+            };
+        }
+
         function setRealityMode(mode) {
             realityMode = mode;
             document.querySelectorAll('.reality-mode-btn').forEach(button => {
@@ -67,7 +139,9 @@
                 }
             }
 
-            updateVisibleStats();
+            animateRealityCheckUpdate(() => {
+                updateVisibleStats();
+            });
         }
 
         function getRandomRealityCheck(invested, current, multiple) {

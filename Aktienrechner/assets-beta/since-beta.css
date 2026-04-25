@@ -836,3 +836,73 @@
                 text-align: center;
             }
         }
+
+        .chart-container canvas {
+            transition: opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease;
+            transform-origin: center center;
+        }
+
+        .chart-container.chart-data-loading canvas {
+            opacity: 0.52;
+            transform: scale(0.992) translateY(4px);
+            filter: blur(1.5px) saturate(0.86);
+        }
+
+        .chart-container.chart-data-enter canvas {
+            animation: chartDataEnter 0.58s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes chartDataEnter {
+            from {
+                opacity: 0.38;
+                transform: scale(0.992) translateY(9px);
+                filter: blur(2px) saturate(0.86);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0) saturate(1);
+            }
+        }
+
+        .reality-check-text {
+            will-change: opacity, transform, filter;
+        }
+
+        .reality-text-exit {
+            opacity: 0;
+            transform: translateY(-4px) scale(0.992);
+            filter: blur(2px);
+            transition: opacity 0.13s ease, transform 0.13s ease, filter 0.13s ease;
+        }
+
+        .reality-text-enter {
+            animation: realityTextEnter 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes realityTextEnter {
+            from {
+                opacity: 0;
+                transform: translateY(7px) scale(0.992);
+                filter: blur(2px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .chart-container canvas,
+            .chart-container.chart-data-enter canvas,
+            .reality-text-exit,
+            .reality-text-enter {
+                animation: none;
+                transition: none;
+                transform: none;
+                filter: none;
+            }
+        }
