@@ -16,6 +16,9 @@
             --danger: #eb3b5a;
             --blue: #2d98da;
             --shadow: 0 24px 70px rgba(23, 33, 47, 0.22);
+            --bg-1: #0f172a;
+            --bg-2: #312e81;
+            --bg-3: #7c3aed;
         }
 
         * {
@@ -32,21 +35,25 @@
             padding: 88px 18px 34px;
             color: var(--ink);
             background:
-                linear-gradient(135deg, rgba(45, 152, 218, 0.14), transparent 34%),
-                linear-gradient(315deg, rgba(247, 183, 49, 0.24), transparent 38%),
-                repeating-linear-gradient(90deg, rgba(23, 33, 47, 0.035) 0 1px, transparent 1px 72px),
-                #f5f7fb;
+                radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.34), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(251, 197, 49, 0.25), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.33), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+            overflow-x: hidden;
         }
 
         body::before {
             content: "";
             position: fixed;
             inset: 0;
+            z-index: 0;
             pointer-events: none;
-            background:
-                linear-gradient(rgba(255, 255, 255, 0.52), transparent 38%),
-                linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.46), transparent);
-            opacity: 0.78;
+            opacity: 0.13;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: radial-gradient(circle at center, black, transparent 78%);
         }
 
         .back-home-btn {
