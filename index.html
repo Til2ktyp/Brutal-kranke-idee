@@ -27,6 +27,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            touch-action: manipulation;
+        }
+
         body {
             min-height: 100vh;
             margin: 0;
@@ -798,6 +802,18 @@
                 event.preventDefault();
             }
         });
+
+        let lastTouchEnd = 0;
+
+        document.addEventListener('touchend', function(event) {
+            const now = Date.now();
+
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+
+            lastTouchEnd = now;
+        }, { passive: false });
     </script>
 </body>
 </html>
