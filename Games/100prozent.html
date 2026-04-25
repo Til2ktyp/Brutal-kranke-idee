@@ -3,126 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klick-Balken mit Risiko & Rekorden</title>
+    <title>100 Prozent Risiko</title>
     <style>
+        :root {
+            --ink: #17212f;
+            --muted: #657184;
+            --paper: rgba(255, 255, 255, 0.9);
+            --paper-strong: #ffffff;
+            --line: rgba(23, 33, 47, 0.12);
+            --accent: #f7b731;
+            --accent-2: #20bf6b;
+            --danger: #eb3b5a;
+            --blue: #2d98da;
+            --shadow: 0 24px 70px rgba(23, 33, 47, 0.22);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: sans-serif;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f0f0;
             margin: 0;
+            padding: 88px 18px 34px;
+            color: var(--ink);
+            background:
+                linear-gradient(135deg, rgba(45, 152, 218, 0.14), transparent 34%),
+                linear-gradient(315deg, rgba(247, 183, 49, 0.24), transparent 38%),
+                repeating-linear-gradient(90deg, rgba(23, 33, 47, 0.035) 0 1px, transparent 1px 72px),
+                #f5f7fb;
         }
-        
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.52), transparent 38%),
+                linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.46), transparent);
+            opacity: 0.78;
+        }
+
         .back-home-btn {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 18px;
+            left: 18px;
             z-index: 1001;
-            background: #fbc531;
-            color: #1e272e;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-weight: bold;
+            background: var(--paper-strong);
+            color: var(--ink);
+            padding: 11px 15px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-weight: 800;
             text-decoration: none;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 12px 28px rgba(23, 33, 47, 0.14);
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
         }
-        
+
         .back-home-btn:hover {
-            background: #fda502;
-            color: #1e272e;    
+            background: #fff8e1;
+            color: var(--ink);
+            transform: translateX(-2px);
+            box-shadow: 0 16px 34px rgba(23, 33, 47, 0.18);
         }
+
         .container {
+            position: relative;
+            z-index: 1;
+            width: min(680px, 100%);
             text-align: center;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.78));
+            padding: clamp(24px, 6vw, 44px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "100";
+            position: absolute;
+            top: -56px;
+            right: -8px;
+            z-index: -1;
+            color: rgba(45, 152, 218, 0.08);
+            font-size: clamp(7rem, 22vw, 13rem);
+            font-weight: 950;
+            line-height: 1;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(247, 183, 49, 0.16);
+            color: #9a6500;
+            font-size: 0.82rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2.25rem, 8vw, 4.8rem);
+            line-height: 0.94;
+            font-weight: 950;
+        }
+
+        .subtitle {
+            max-width: 520px;
+            margin: 16px auto 0;
+            color: var(--muted);
+            font-size: clamp(1rem, 2.4vw, 1.12rem);
+            line-height: 1.55;
+        }
+
+        .game-panel {
+            margin-top: 30px;
+            padding: clamp(16px, 4vw, 24px);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.68);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
         }
 
         .progress-bar-container {
-            width: 300px;
-            height: 30px;
-            background-color: #e0e0e0;
-            border-radius: 15px;
+            width: 100%;
+            height: clamp(46px, 9vw, 58px);
+            background:
+                linear-gradient(180deg, rgba(23, 33, 47, 0.08), rgba(23, 33, 47, 0.03)),
+                #e8edf4;
+            border-radius: 999px;
             overflow: hidden;
-            margin-top: 20px;
-            border: 1px solid #ccc;
+            margin-top: 0;
+            border: 1px solid rgba(23, 33, 47, 0.1);
             cursor: pointer;
+            box-shadow: inset 0 3px 10px rgba(23, 33, 47, 0.12);
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+
+        .progress-bar-container:hover {
+            transform: translateY(-1px);
+            box-shadow: inset 0 3px 10px rgba(23, 33, 47, 0.12), 0 12px 24px rgba(45, 152, 218, 0.16);
+        }
+
+        .progress-bar-container:focus-visible {
+            outline: 4px solid rgba(45, 152, 218, 0.32);
+            outline-offset: 5px;
+        }
+
+        .progress-bar-container:active {
+            transform: scale(0.99);
         }
 
         .progress-bar {
             width: 0%;
             height: 100%;
-            background-color: #4CAF50; /* Grüne Farbe für den Fortschritt */
-            border-radius: 15px;
-            transition: width 0.1s ease-in-out;
+            background:
+                linear-gradient(90deg, var(--accent-2), #26de81 58%, var(--accent));
+            border-radius: inherit;
+            box-shadow: 0 0 28px rgba(32, 191, 107, 0.36);
+            transition: width 0.14s ease-in-out;
         }
 
-        #clickCount {
-            margin-top: 15px;
-            font-size: 1.2em;
-            color: #333;
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
         }
 
+        .status-card {
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .status-label {
+            margin: 0 0 5px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+
+        #clickCount,
         #resetChance {
-            margin-top: 10px;
-            font-size: 1em;
-            color: #666;
+            margin: 0;
+            font-size: clamp(1.25rem, 4vw, 1.7rem);
+            color: var(--ink);
+            font-weight: 950;
         }
 
         .records-container {
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px dashed #ccc;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
         }
 
         .records-container p {
-            margin: 5px 0;
-            font-size: 0.95em;
-            color: #555;
+            margin: 0;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.55);
+            font-size: 0.95rem;
+            color: var(--muted);
         }
 
         .records-container span {
-            font-weight: bold;
-            color: #007BFF;
+            display: block;
+            margin-top: 4px;
+            font-size: 1.35rem;
+            font-weight: 950;
+            color: var(--blue);
         }
 
         #message {
-            margin-top: 20px;
-            font-size: 1.3em;
-            color: #007BFF;
-            font-weight: bold;
+            min-height: 32px;
+            margin: 20px 0 0;
+            font-size: clamp(1rem, 3vw, 1.22rem);
+            color: var(--blue);
+            font-weight: 900;
         }
 
         .reset-message {
-            color: #D9534F; /* Rot für die Reset-Nachricht */
-            font-weight: bold;
+            color: var(--danger);
+        }
+
+        .win-message {
+            color: var(--accent-2);
+        }
+
+        @media (max-width: 560px) {
+            body {
+                align-items: flex-start;
+            }
+
+            .back-home-btn {
+                max-width: calc(100% - 36px);
+            }
+
+            .status-grid,
+            .records-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Klick den Balken 100 Mal!</h1>
-        <div class="progress-bar-container" id="progressBarContainer">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <p id="clickCount">Klicks: 0 / 100</p>
-        <p id="resetChance">Chance auf Reset: 0%</p>
+    <a class="back-home-btn" href="https://blopperbold.org" aria-label="Zurück zu BlopperBold">← BlopperBold</a>
 
-        <div class="records-container">
-            <p>Niedrigster Reset-Rekord: <span id="minResetRecord">N/A</span> Klicks</p>
-            <p>Höchster Reset-Rekord: <span id="maxResetRecord">N/A</span> Klicks</p>
-        </div>
+    <main class="container">
+        <div class="eyebrow">Risiko steigt mit jedem Klick</div>
+        <h1>100 Prozent</h1>
+        <p class="subtitle">Bring den Balken auf 100. Jeder Klick macht Fortschritt, aber die Reset-Chance zieht gnadenlos mit.</p>
 
-        <a class="back-home-btn" href="https://blopperbold.org">← Zurück zu BlopperBold</a>
+        <section class="game-panel" aria-label="Klick-Spiel">
+            <div class="progress-bar-container" id="progressBarContainer" role="button" tabindex="0" aria-label="Balken klicken">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
 
-        <p id="message"></p>
-    </div>
+            <div class="status-grid">
+                <div class="status-card">
+                    <p class="status-label">Fortschritt</p>
+                    <p id="clickCount">0 / 100</p>
+                </div>
+                <div class="status-card">
+                    <p class="status-label">Reset-Chance</p>
+                    <p id="resetChance">0%</p>
+                </div>
+            </div>
+
+            <div class="records-container">
+                <p>Niedrigster Reset<span id="minResetRecord">N/A</span></p>
+                <p>Höchster Reset<span id="maxResetRecord">N/A</span></p>
+            </div>
+
+            <p id="message" aria-live="polite"></p>
+        </section>
+    </main>
 
     <script>
         const progressBar = document.getElementById('progressBar');
@@ -150,7 +327,7 @@
         // Rekorde beim Start der Seite laden und anzeigen
         updateRecordDisplays();
 
-        progressBarContainer.addEventListener('click', () => {
+        function playRound() {
             // Nur klicken, wenn das Spiel noch läuft (nicht schon 100 Klicks erreicht)
             if (clicks < totalClicks) {
                 const currentClicksBeforeAttempt = clicks; // Klicks vor dem aktuellen Versuch speichern
@@ -163,6 +340,7 @@
                     // Reset!
                     messageDisplay.textContent = `Oh nein! Der Balken wurde bei ${currentClicksBeforeAttempt} Klicks zurückgesetzt!`;
                     messageDisplay.classList.add('reset-message');
+                    messageDisplay.classList.remove('win-message');
 
                     // Rekorde aktualisieren
                     if (currentClicksBeforeAttempt < minResetRecord) {
@@ -189,17 +367,29 @@
                     const percentage = (clicks / totalClicks) * 100;
                     progressBar.style.width = percentage + '%';
                     messageDisplay.textContent = ''; // Alte Nachricht löschen
+                    messageDisplay.classList.remove('reset-message', 'win-message');
                 }
 
                 // Immer die Klickzahl und Reset-Chance aktualisieren
-                clickCountDisplay.textContent = `Klicks: ${clicks} / ${totalClicks}`;
-                resetChanceDisplay.textContent = `Chance auf Reset: ${clicks * resetChanceIncrement}%`;
+                clickCountDisplay.textContent = `${clicks} / ${totalClicks}`;
+                resetChanceDisplay.textContent = `${clicks * resetChanceIncrement}%`;
+                progressBarContainer.setAttribute('aria-label', `Balken klicken. ${clicks} von ${totalClicks} Klicks erreicht.`);
 
                 if (clicks === totalClicks) {
                     messageDisplay.textContent = 'Geschafft! Du hast den Balken 100 Mal geklickt!';
-                    messageDisplay.classList.remove('reset-message'); // Sicherstellen, dass keine Reset-Nachrichten-Klasse aktiv ist
+                    messageDisplay.classList.remove('reset-message');
+                    messageDisplay.classList.add('win-message');
                     // Wenn man 100 Klicks erreicht, gibt es keinen Reset, daher keine Rekordaktualisierung hier.
                 }
+            }
+        }
+
+        progressBarContainer.addEventListener('click', playRound);
+
+        progressBarContainer.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                playRound();
             }
         });
     </script>

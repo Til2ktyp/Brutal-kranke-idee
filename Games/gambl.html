@@ -2,88 +2,269 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Glücksspiel Simulation – Aufklärung</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881" crossorigin="anonymous"></script>
 <style>
-    body {
-        font-family: Arial;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-        color: white;
-        text-align: center;
+    :root {
+        --bg-1: #0f172a;
+        --bg-2: #312e81;
+        --bg-3: #7c3aed;
+        --panel: rgba(255, 255, 255, 0.13);
+        --panel-strong: rgba(255, 255, 255, 0.19);
+        --border: rgba(255, 255, 255, 0.18);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.72);
+        --accent: #fbc531;
+        --accent-2: #38bdf8;
+        --danger: #ef4444;
+        --good: #26de81;
+        --dark: #1e272e;
     }
-    h1 { color: #fbc531; }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        min-height: 100vh;
+        margin: 0;
+        padding: 96px 18px 54px;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        background:
+            radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.34), transparent 28%),
+            radial-gradient(circle at 88% 14%, rgba(251, 197, 49, 0.25), transparent 24%),
+            radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.33), transparent 33%),
+            linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+        color: var(--text);
+        text-align: center;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.13;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 46px 46px;
+        mask-image: radial-gradient(circle at center, black, transparent 78%);
+    }
+
+    h1 {
+        max-width: 1100px;
+        margin: 0 auto 14px;
+        color: var(--accent);
+        font-size: clamp(2rem, 4.6vw, 4.2rem);
+        line-height: 1;
+        font-weight: 950;
+        white-space: nowrap;
+    }
+
+    h3 {
+        margin: 0 0 16px;
+        color: var(--accent);
+        font-size: 1.2rem;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    .page-shell {
+        position: relative;
+        z-index: 1;
+        width: min(1280px, 100%);
+        margin: 0 auto;
+    }
+
+    .hero {
+        margin-bottom: 28px;
+    }
+
+    .subtitle {
+        max-width: 700px;
+        margin: 0 auto;
+        color: var(--muted);
+        font-size: clamp(1rem, 2.6vw, 1.2rem);
+        line-height: 1.55;
+    }
 
     .container {
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(240px, 0.95fr) minmax(250px, 1fr) minmax(280px, 1.15fr) minmax(280px, 1.15fr);
         justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
+        gap: 18px;
         align-items: flex-start;
     }
 
-    .left {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+    .box {
+        width: 100%;
+        padding: 22px;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(18px);
     }
 
-    .box {
-        background: #1e272e;
-        padding: 20px;
-        width: 300px;
-        border-radius: 10px;
-        box-shadow: 0 0 15px black;
+    .log-box {
+        grid-column: 1;
+    }
+
+    .game-box {
+        background:
+            linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08)),
+            linear-gradient(135deg, rgba(251, 197, 49, 0.1), rgba(56, 189, 248, 0.08));
+    }
+
+    .money-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin: 16px 0;
+    }
+
+    .money-stat {
+        min-width: 0;
+        padding: 13px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        text-align: left;
+    }
+
+    .money-stat strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0;
+    }
+
+    .money-stat span {
+        color: var(--text);
+        font-size: 1.35rem;
+        font-weight: 900;
+    }
+
+    .bet-row {
+        display: grid;
+        grid-template-columns: 48px 1fr 48px;
+        gap: 10px;
+        align-items: center;
+        margin: 18px 0 10px;
+    }
+
+    .action-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 10px;
     }
 
     button {
-        padding: 10px;
-        margin: 5px;
+        min-height: 44px;
+        padding: 11px 16px;
+        margin: 0;
         border: none;
-        border-radius: 5px;
-        background: #00a8ff;
-        color: white;
+        border-radius: 13px;
+        background: linear-gradient(135deg, var(--accent-2), #2563eb);
+        color: #07111f;
         cursor: pointer;
+        font-weight: 900;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.26);
+        transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
     }
-    button:hover { background: #0097e6; }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(37, 99, 235, 0.34);
+        filter: brightness(1.04);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+        outline: 3px solid rgba(251, 197, 49, 0.45);
+        outline-offset: 4px;
+    }
 
     #log {
-        height: 200px;
-        overflow-y: scroll;
-        background: black;
-        padding: 10px;
+        height: 360px;
+        overflow-y: auto;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        background: rgba(5, 10, 20, 0.72);
+        padding: 14px;
         text-align: left;
         font-size: 14px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.86);
     }
 
     .info {
         font-size: 14px;
         text-align: left;
-        color: #dcdde1;
+        color: var(--muted);
+        line-height: 1.55;
+    }
+
+    .info ul {
+        padding-left: 20px;
+    }
+
+    .info b {
+        color: var(--text);
     }
 
     .edit-geld-btn {
         position: fixed;
         top: 20px;
         right: 20px;
-        background: #fbc531;
-        color: #1e272e;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-        border: none;
-        z-index: 1000;
+        z-index: 1001;
+        background: var(--accent);
+        color: var(--dark);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
+
     .edit-geld-btn:hover {
-        background: #fda502;
+        box-shadow: 0 12px 28px rgba(251, 197, 49, 0.3);
     }
 
     #sliderContainer {
         display: none;
-        background: rgba(0, 0, 0, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 10px;
+        position: fixed;
+        z-index: 1200;
+        width: min(260px, calc(100vw - 28px));
+        padding: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 16px;
+        background: rgba(45, 40, 91, 0.95);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.38);
+        backdrop-filter: blur(18px);
+        text-align: center;
+    }
+
+    #sliderContainer::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 24px;
+        width: 16px;
+        height: 16px;
+        border-left: 1px solid rgba(255, 255, 255, 0.12);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(45, 40, 91, 0.95);
+        transform: rotate(45deg);
     }
 
     #sliderContainer input[type="range"] {
@@ -95,18 +276,17 @@
     .slider-amount {
         font-size: 18px;
         font-weight: bold;
-        color: #fbc531;
+        color: var(--accent);
         margin: 10px 0;
     }
 
     .slider-btn {
-        background: #00a8ff !important;
-        padding: 10px 20px !important;
-        margin-top: 10px !important;
+        margin-top: 10px;
     }
 
-    .slider-btn:hover {
-        background: #0097e6 !important;
+    .cancel-btn {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
     }
 
     .back-home-btn {
@@ -114,95 +294,152 @@
         top: 20px;
         left: 20px;
         z-index: 1001;
-        background: #fbc531;
-        color: #1e272e;
-        padding: 10px 15px;
-        border-radius: 5px;
+        background: var(--accent);
+        color: var(--dark);
+        padding: 12px 18px;
+        border-radius: 12px;
         font-weight: bold;
         text-decoration: none;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
+
     .back-home-btn:hover {
         background: #fda502;
-        color: #1e272e;
+        color: var(--dark);
+        transform: translateX(2px);
     }
+
     .reset-btn {
         position: fixed;
-        top: 20px;
-        left: 20px;
-        background: #d63031;
+        top: 76px;
+        right: 20px;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
         color: white;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-        border: none;
-        z-index: 1000;
+        z-index: 1001;
+        box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25);
     }
+
     .reset-btn:hover {
-        background: #e74c3c;
+        box-shadow: 0 12px 28px rgba(220, 38, 38, 0.32);
+    }
+
+    @media (max-width: 760px) {
+        body {
+            padding-top: 150px;
+        }
+
+        .back-home-btn {
+            top: 14px;
+            left: 14px;
+            right: 14px;
+            justify-content: center;
+        }
+
+        h1 {
+            white-space: normal;
+        }
+
+        .edit-geld-btn,
+        .reset-btn {
+            top: 72px;
+            width: calc(50% - 21px);
+            min-height: 46px;
+            padding: 10px;
+            font-size: 0.86rem;
+        }
+
+        .edit-geld-btn {
+            right: 14px;
+        }
+
+        .reset-btn {
+            left: 14px;
+            right: auto;
+        }
+
+        .container {
+            grid-template-columns: 1fr;
+        }
+
+        .box {
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 761px) and (max-width: 1160px) {
+        .container {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .log-box {
+            grid-column: auto;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .money-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 </head>
 <body>
 
-<a class="back-home-btn" href="https://blopperbold.org">← Zurück zu BlopperBold</a>
+<a class="back-home-btn" href="https://blopperbold.org" aria-label="Zurück zu BlopperBold">← Zurück zu BlopperBold</a>
 <button class="reset-btn" onclick="handleReset()">🔄 Reset</button>
 <button class="edit-geld-btn" onclick="editGeld()">💰 Geld bearbeiten</button>
 
-<h1>🎰 Glücksspiel Simulation (Aufklärung)</h1>
+<main class="page-shell">
+<section class="hero">
+    <h1>🎰 Glücksspiel Simulation</h1>
+    <p class="subtitle">Ein kleines Risiko-Spiel im BlopperBold-Style: Du kannst gewinnen, auszahlen oder alles wieder reinwerfen. Genau da wird es interessant.</p>
+</section>
 
 <div class="container">
 
-    <div class="left">
+    <div class="box log-box">
+        <h3>📜 Verlauf</h3>
+        <div id="log"></div>
+    </div>
 
-        <div class="box">
-            <h3>Spiel</h3>
-            <p>Startgeld: 100€</p>
-            <p>Kontostand: <span id="geld">100</span>€</p>
-            <p>Bank: <span id="bank">0</span>€</p>
-            <p>Gesamt: <span id="gesamt">100</span>€</p>
-            <p>Bilanz: <span id="bilanz">0</span>€</p>
+    <div class="box game-box">
+        <h3>Spiel</h3>
+        <div class="money-grid">
+            <div class="money-stat"><strong>Kontostand</strong><span id="geld">100</span>€</div>
+            <div class="money-stat"><strong>Bank</strong><span id="bank">0</span>€</div>
+            <div class="money-stat"><strong>Gesamt</strong><span id="gesamt">100</span>€</div>
+            <div class="money-stat"><strong>Bilanz</strong><span id="bilanz">0</span>€</div>
+        </div>
 
-            <div style="display: flex; align-items: center; justify-content: center; gap: 1px;">
-                <button onclick="minus()">-</button>
-                <button onclick="spielen()" id="einsatzBtn">5€</button>
-                <button onclick="plus()">+</button>
-            </div>
+        <div class="bet-row" aria-label="Einsatz wählen">
+            <button onclick="minus()">-</button>
+            <button onclick="spielen()" id="einsatzBtn">5€</button>
+            <button onclick="plus()">+</button>
+        </div>
 
-            <button onclick="auszahlen()">💳 Auszahlen</button>
-            <button onclick="toggleSlider()">🔄 Bank → Spielen</button>
-            <div id="sliderContainer">
-                <input type="range" id="bankSlider" min="0" max="0" value="0" oninput="updateSliderAmount()">
-                <div class="slider-amount"><span id="sliderValue">0</span>€</div>
-                <button class="slider-btn" onclick="zurueckholen()">✅ Bestätigen</button>
-                <button class="slider-btn" onclick="toggleSlider()" style="background: #d63031 !important;">❌ Abbrechen</button>
-            </div>
+        <div class="action-row">
+            <button onclick="auszahlen()">💳 Einzahlen</button>
+            <button data-bank-popover onclick="toggleSlider(event)">💸 Auszahlen</button>
             <button onclick="autoSpielen()">100 Runden</button>
         </div>
-
-        <div class="box">
-            <h3>📜 Verlauf</h3>
-            <div id="log"></div>
-        </div>
-
     </div>
 
     <div class="box">
         <h3>📊 Chancen</h3>
         <div class="info">
-            <p>Gewinnchance: <b>15%</b></p>
+            <p>Gewinnchance: <b>18%</b></p>
             <ul>
-                <li>0.1% → 🌌 Mega weltraum??? (150x)</li>
-                <li>0.5% → 🔥 Super Jackpot (55x)</li>
-                <li>1.3% → 💰 Jackpot (12x)</li>
-                <li>2% → ✨ Großer Gewinn (5x)</li>
-                <li>11.5% → ✅ Kleiner Gewinn (2.5x)</li>
+                <li>0.14% → 🌌 Mega weltraum??? (150x)</li>
+                <li>0.46% → 🔥 Super Jackpot (55x)</li>
+                <li>1.2% → 💰 Jackpot (12x)</li>
+                <li>2.5% → ✨ Großer Gewinn (5x)</li>
+                <li>13.7% → ✅ Kleiner Gewinn (2.5x)</li>
             </ul>
-            <p>Verlustchance: <b>85%</b></p>
+            <p>Verlustchance: <b>82%</b></p>
             <p>➡️ Vorteil liegt beim Spiel</p>
         </div>
     </div>
@@ -217,6 +454,14 @@
         </div>
     </div>
 
+</div>
+</main>
+
+<div id="sliderContainer">
+    <input type="range" id="bankSlider" min="0" max="0" value="0" oninput="updateSliderAmount()">
+    <div class="slider-amount"><span id="sliderValue">0</span>€</div>
+    <button class="slider-btn" onclick="zurueckholen()">✅ Bestätigen</button>
+    <button class="slider-btn cancel-btn" onclick="closeSlider()">❌ Abbrechen</button>
 </div>
 
 
@@ -320,27 +565,27 @@ function spielen() {
 
     let r = Math.random();
 
-    if (r < 0.001) {
+    if (r < 0.0014) {
         let gewinn = einsatz * 150;
         geld += gewinn;
         log("🌌 Mega weltraum??? +" + gewinn + "€");
     }
-    else if (r < 0.005) {
+    else if (r < 0.006) {
         let gewinn = einsatz * 55;
         geld += gewinn;
         log("🔥 SUPER JACKPOT!!! +" + gewinn + "€");
     }
-    else if (r < 0.015) {
+    else if (r < 0.018) {
         let gewinn = einsatz * 12;
         geld += gewinn;
         log("💰 JACKPOT! +" + gewinn + "€");
     } 
-    else if (r < 0.035) {
+    else if (r < 0.043) {
         let gewinn = einsatz * 5;
         geld += gewinn;
         log("✨ Großer Gewinn +" + gewinn + "€");
     } 
-    else if (r < 0.15) {
+    else if (r < 0.18) {
         let gewinn = einsatz * 2.5;
         geld += gewinn;
         log("✅ Kleiner Gewinn +" + gewinn + "€");
@@ -355,31 +600,62 @@ function spielen() {
 
 function auszahlen() {
     if (geld <= 0) {
-        log("⚠️ Nichts zum Auszahlen!");
+        log("⚠️ Nichts zum Einzahlen!");
         return;
     }
 
     bank += geld;
-    log("💳 Ausgezahlt: " + geld + "€");
+    log("💳 Eingezahlt: " + geld + "€");
 
     geld = 0;
     update();
     saveGame();
 }
 
-function toggleSlider() {
+function positionSliderPopover(event) {
     let container = document.getElementById("sliderContainer");
-    if (container.style.display === "none") {
+    let offset = 14;
+    let horizontalNudge = 40;
+    let sourceX = event ? event.clientX : window.innerWidth / 2;
+    let sourceY = event ? event.clientY : window.innerHeight / 2;
+
+    container.style.display = "block";
+
+    let rect = container.getBoundingClientRect();
+    let maxLeft = window.innerWidth - rect.width - 14;
+    let maxTop = window.innerHeight - rect.height - 14;
+    let x = sourceX + offset - horizontalNudge;
+    let y = sourceY + offset;
+
+    if (x > maxLeft) {
+        x = sourceX - rect.width - offset;
+    }
+
+    if (y > maxTop) {
+        y = sourceY - rect.height - offset;
+    }
+
+    container.style.left = Math.max(14, Math.min(x, maxLeft)) + "px";
+    container.style.top = Math.max(14, Math.min(y, maxTop)) + "px";
+}
+
+function closeSlider() {
+    document.getElementById("sliderContainer").style.display = "none";
+}
+
+function toggleSlider(event) {
+    let container = document.getElementById("sliderContainer");
+    if (window.getComputedStyle(container).display === "none") {
         if (bank <= 0) {
-            log("⚠️ Keine Bankguthaben!");
+            log("⚠️ Kein Guthaben auf der Bank!");
             return;
         }
-        container.style.display = "block";
         document.getElementById("bankSlider").max = bank;
         document.getElementById("bankSlider").value = bank;
         updateSliderAmount();
+        positionSliderPopover(event);
     } else {
-        container.style.display = "none";
+        closeSlider();
     }
 }
 
@@ -398,9 +674,9 @@ function zurueckholen() {
 
     geld += amount;
     bank -= amount;
-    log("🔄 " + amount + "€ zurück ins Spiel geholt");
+    log("💸 Ausgezahlt: " + amount + "€");
 
-    document.getElementById("sliderContainer").style.display = "none";
+    closeSlider();
     update();
     saveGame();
 }
@@ -423,6 +699,21 @@ function log(text) {
     div.innerHTML += text + "<br>";
     div.scrollTop = div.scrollHeight;
 }
+
+document.addEventListener("click", (event) => {
+    let container = document.getElementById("sliderContainer");
+    let trigger = event.target.closest("[data-bank-popover]");
+
+    if (window.getComputedStyle(container).display !== "none" && !container.contains(event.target) && !trigger) {
+        closeSlider();
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeSlider();
+    }
+});
 
 // Spiel beim Laden der Seite wiederherstellen
 window.addEventListener('load', loadGame);

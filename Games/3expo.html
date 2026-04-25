@@ -7,151 +7,229 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <style>
+        :root {
+            --bg-1: #0f172a;
+            --bg-2: #312e81;
+            --bg-3: #7c3aed;
+            --border: rgba(255, 255, 255, 0.18);
+            --text: #ffffff;
+            --muted: rgba(255, 255, 255, 0.72);
+            --accent: #fbc531;
+            --accent-2: #38bdf8;
+            --danger: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            margin: 0;
+            padding: 36px 18px 72px;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-            color: #333;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.34), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(251, 197, 49, 0.25), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.33), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+            overflow-x: hidden;
         }
-        
+
+        .noise-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.13;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: radial-gradient(circle at center, black, transparent 78%);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: min(780px, 100%);
+            padding: 34px;
+            border-radius: 28px;
+            border: 1px solid var(--border);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+            backdrop-filter: blur(18px);
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            line-height: 1.05;
+            font-weight: 900;
+            text-align: center;
+            color: var(--accent);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .controls label {
+            font-size: 1rem;
+            color: var(--muted);
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.92);
+            color: #1e272e;
+            font-size: 1rem;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        button {
+            padding: 16px 28px;
+            border-radius: 14px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, var(--accent-2), #2563eb);
+            color: #1e272e;
+            box-shadow: 0 10px 28px rgba(37, 99, 235, 0.34);
+        }
+
+        button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(37, 99, 235, 0.42);
+        }
+
+        button.primary:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.34);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #1e272e;
+            box-shadow: 0 10px 28px rgba(220, 38, 38, 0.34);
+        }
+
+        button.danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(220, 38, 38, 0.42);
+        }
+
+        button.danger:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 18px rgba(220, 38, 38, 0.34);
+        }
+
+        #currentValue {
+            font-size: clamp(2.2rem, 6vw, 3.4rem);
+            font-weight: 900;
+            text-align: center;
+            color: var(--accent-2);
+            margin: 0;
+        }
+
+        #totalReturn {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 700;
+            text-align: center;
+            color: var(--accent);
+            margin: 6px 0 0;
+        }
+
+        #chartContainer {
+            width: 100%;
+            max-width: 680px;
+            margin: 28px auto 0;
+            padding: 24px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 18px 40px rgba(0, 0, 0, 0.22);
+            backdrop-filter: blur(10px);
+            height: 450px;
+        }
+
+        #chartContainer canvas {
+            height: 100% !important;
+        }
+
         .back-home-btn {
             position: fixed;
             top: 20px;
             left: 20px;
-            z-index: 1001;
+            z-index: 1002;
             background: #fbc531;
             color: #1e272e;
-            padding: 10px 15px;
-            border-radius: 5px;
+            padding: 12px 18px;
+            border-radius: 12px;
             font-weight: bold;
             text-decoration: none;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            transition: background 0.18s ease, transform 0.18s ease;
         }
-        
+
         .back-home-btn:hover {
             background: #fda502;
-            color: #1e272e;    
-        }
-
-        h1 {
-            color: #0056b3;
-            margin-bottom: 20px;
-        }
-
-        .controls {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        label {
-            font-size: 1.1em;
-            margin-right: 10px;
-        }
-
-        input[type="number"] {
-            padding: 8px;
-            font-size: 1em;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 80px;
-            text-align: right;
-        }
-
-        #clickButton {
-            padding: 15px 30px;
-            font-size: 1.5em;
-            cursor: pointer;
-            background-color: #28a745; /* Green button */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s ease, transform 0.1s ease;
-        }
-
-        #clickButton:hover {
-            background-color: #218838;
-            transform: translateY(-2px);
-        }
-
-        #clickButton:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        #currentValue {
-            margin-top: 30px;
-            font-size: 3em;
-            font-weight: bold;
-            color: #007bff;
-            white-space: nowrap; /* Prevents wrapping */
-        }
-
-        #totalReturn {
-            margin-top: 10px;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #e67e22; /* Orange for emphasis */
-        }
-
-        #resetButton {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1em;
-            cursor: pointer;
-            background-color: #dc3545; /* Red button */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        #resetButton:hover {
-            background-color: #c82333;
-        }
-
-        /* Styling für den Chart-Container */
-        #chartContainer {
-            width: 80%; /* Breite des Diagramms */
-            max-width: 700px;
-            margin-top: 40px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            height: 450px; /* Höhe des Diagramm-Containers */
+            transform: translateX(2px);
         }
     </style>
 </head>
 <body>
+    <div class="noise-layer" aria-hidden="true"></div>
 
-    <h1>Exponentieller Klick-Zähler</h1>
+    <main class="container">
+        <h1>Exponentieller Klick‑Zähler</h1>
 
-    <div class="controls">
-        <label for="increasePercentage">Steigerung pro Klick (%):</label>
-        <input type="number" id="increasePercentage" value="10" min="0.1" step="0.1">
-    </div>
+        <div class="controls">
+            <label for="increasePercentage">Steigerung pro Klick (%)</label>
+            <input type="number" id="increasePercentage" value="10" min="0.1" step="0.1">
+        </div>
+
+        <div class="buttons">
+            <button id="clickButton" class="primary">Klicke mich!</button>
+            <button id="resetButton" class="danger">Zurücksetzen</button>
+        </div>
+
+        <p id="currentValue">1,00 €</p>
+        <p id="totalReturn">Gesamtrendite: 0,00 %</p>
+
+        <div id="chartContainer">
+            <canvas id="valueChart"></canvas>
+        </div>
+    </main>
 
     <a class="back-home-btn" href="https://blopperbold.org">← Zurück zu BlopperBold</a>
-
-    <button id="clickButton">Klicke mich!</button>
-
-    <p id="currentValue">1.00 €</p>
-    <p id="totalReturn">Gesamtrendite: 0.00 %</p>
-
-    <button id="resetButton">Zurücksetzen</button>
-
-    <div id="chartContainer">
-        <canvas id="valueChart"></canvas>
-    </div>
 
     <script>
         const clickButton = document.getElementById('clickButton');
@@ -161,25 +239,20 @@
         const increasePercentageInput = document.getElementById('increasePercentage');
         const valueChartCanvas = document.getElementById('valueChart');
 
-        const initialValue = 1.00; // Dein fester Startwert
+        const initialValue = 1.00;
         let currentValue;
         let clickCount;
         let chartLabels;
         let chartData;
-        let increasePercentage;
 
-        // --- Speichern und Laden der Daten ---
-
-        // Funktion zum Speichern der Daten
         function saveData() {
             localStorage.setItem('currentValue', currentValue);
             localStorage.setItem('clickCount', clickCount);
-            localStorage.setItem('chartLabels', JSON.stringify(chartLabels)); // Arrays müssen als String gespeichert werden
-            localStorage.setItem('chartData', JSON.stringify(chartData));     // Arrays müssen als String gespeichert werden
-            localStorage.setItem('increasePercentage', increasePercentageInput.value); // Speichert den Wert aus dem Input-Feld
+            localStorage.setItem('chartLabels', JSON.stringify(chartLabels));
+            localStorage.setItem('chartData', JSON.stringify(chartData));
+            localStorage.setItem('increasePercentage', increasePercentageInput.value);
         }
 
-        // Funktion zum Laden der Daten
         function loadData() {
             const savedValue = localStorage.getItem('currentValue');
             const savedClickCount = localStorage.getItem('clickCount');
@@ -194,55 +267,68 @@
                 chartData = JSON.parse(savedChartData);
                 increasePercentageInput.value = parseFloat(savedIncreasePercentage);
             } else {
-                // Wenn keine Daten gespeichert sind, initialisiere mit Standardwerten
                 currentValue = initialValue;
                 clickCount = 0;
                 chartLabels = [0];
                 chartData = [currentValue];
-                increasePercentageInput.value = 10; // Standardwert für die Steigerung
+                increasePercentageInput.value = 10;
             }
         }
 
-        // Lade Daten beim Start der Seite
         loadData();
 
-        // --- Diagramm-Initialisierung (nach dem Laden der Daten) ---
         const valueChart = new Chart(valueChartCanvas, {
             type: 'line',
             data: {
                 labels: chartLabels,
-                datasets: [{
-                    label: 'Wert in €',
-                    data: chartData,
-                    borderColor: '#007bff',
-                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                    fill: true,
-                    tension: 0.1
-                }]
+                datasets: [
+                    {
+                        label: 'Wert in €',
+                        data: chartData,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                        fill: true,
+                        tension: 0.1
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                     x: {
+                        ticks: {
+                            color: '#E6EAF1'      // helle Farbe für die X‑Achsen‑Beschriftung
+                        },
                         title: {
                             display: true,
-                            text: 'Anzahl der Klicks'
+                            text: 'Anzahl der Klicks',
+                            color: '#E6EAF1'  // Titel der X‑Achse ebenfalls hell
                         }
                     },
                     y: {
+                        ticks: {
+                            color: '#E6EAF1'      // helle Farbe für die Y‑Achsen‑Beschriftung
+                        },
                         title: {
                             display: true,
-                            text: 'Wert (€)'
+                            text: 'Wert (€)',
+                            color: '#E6EAF1'  // Titel der Y‑Achse hell
                         },
                         beginAtZero: true
                     }
                 },
                 plugins: {
+                    legend: {
+                        labels: {
+                            color: '#E6EAF1'  // helle Schrift für die Legende
+                        }
+                    },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + ' €';
+                            label: function (context) {
+                                return context.dataset.label + ': ' +
+                                    context.parsed.y.toFixed(2) + ' €';
                             }
                         }
                     }
@@ -250,11 +336,10 @@
             }
         });
 
-        // --- Funktionen für die Anzeige und Diagramm-Updates ---
         function updateDisplay() {
-            currentValueDisplay.textContent = currentValue.toFixed(2) + ' €';
+            currentValueDisplay.textContent = currentValue.toFixed(2) + ' €';
             const totalReturnPercentage = ((currentValue - initialValue) / initialValue) * 100;
-            totalReturnDisplay.textContent = `Gesamtrendite: ${totalReturnPercentage.toFixed(2)} %`;
+            totalReturnDisplay.textContent = `Gesamtrendite: ${totalReturnPercentage.toFixed(2)} %`;
         }
 
         function addDataToChart() {
@@ -263,41 +348,34 @@
             valueChart.update();
         }
 
-        // --- Event Listener ---
         clickButton.addEventListener('click', () => {
             const increasePercent = parseFloat(increasePercentageInput.value);
             if (isNaN(increasePercent) || increasePercent < 0) {
                 alert('Bitte geben Sie einen gültigen positiven Prozentsatz ein.');
                 return;
             }
-
             const multiplier = 1 + (increasePercent / 100);
             currentValue *= multiplier;
             clickCount++;
-            
             updateDisplay();
             addDataToChart();
-            saveData(); // Speichern nach jedem Klick
+            saveData();
         });
 
         resetButton.addEventListener('click', () => {
             currentValue = initialValue;
             clickCount = 0;
-
             chartLabels = [0];
             chartData = [currentValue];
             valueChart.data.labels = chartLabels;
             valueChart.data.datasets[0].data = chartData;
             valueChart.update();
-
             updateDisplay();
-            saveData(); // Speichern nach dem Reset
+            saveData();
         });
 
-        // Initialisierung der Anzeige und des Diagramms
         updateDisplay();
         valueChart.update();
     </script>
-
 </body>
 </html>
