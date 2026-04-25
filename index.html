@@ -265,6 +265,17 @@
             transform: translateY(-2px) scale(0.995);
         }
 
+        .app-card.beta-hold-active {
+            border-color: rgba(251, 197, 49, 0.58);
+            box-shadow: 0 28px 70px rgba(251, 197, 49, 0.18), 0 0 0 1px rgba(251, 197, 49, 0.24);
+        }
+
+        #portfolioLink {
+            -webkit-touch-callout: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
         .card-icon {
             flex: 0 0 auto;
             width: 58px;
@@ -307,6 +318,7 @@
             position: absolute;
             top: 14px;
             right: 14px;
+            overflow: hidden;
             padding: 5px 9px;
             border-radius: 999px;
             background: rgba(251, 197, 49, 0.18);
@@ -314,6 +326,20 @@
             border: 1px solid rgba(251, 197, 49, 0.22);
             font-size: 0.72rem;
             font-weight: 900;
+        }
+
+        .card-badge::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: rgba(251, 197, 49, 0.28);
+            transform: scaleX(0);
+            transform-origin: left center;
+        }
+
+        .app-card.beta-hold-active .card-badge::before {
+            animation: betaHoldFill 1.4s linear forwards;
         }
 
         .quick-hint {
@@ -521,6 +547,12 @@
             }
         }
 
+        @keyframes betaHoldFill {
+            to {
+                transform: scaleX(1);
+            }
+        }
+
         @media (max-width: 760px) {
             body {
                 align-items: flex-start;
@@ -558,6 +590,28 @@
                 position: static;
                 width: fit-content;
                 margin-top: 8px;
+            }
+
+            #portfolioLink .card-badge {
+                font-size: 0;
+            }
+
+            #portfolioLink .card-badge::after {
+                content: "Gedrückt halten = Beta";
+                font-size: 0.72rem;
+            }
+
+            .quick-hint .keycap {
+                display: none;
+            }
+
+            .quick-hint span:last-child {
+                font-size: 0;
+            }
+
+            .quick-hint span:last-child::after {
+                content: "Auf Mobil: Portfolio-Rechner kurz gedrückt halten, um die Beta-Version zu öffnen.";
+                font-size: 0.9rem;
             }
         }
 
@@ -655,11 +709,84 @@
 
     <script>
         const portfolioLink = document.getElementById('portfolioLink');
+        let betaHoldTimer = null;
+        let betaHoldTriggered = false;
+        let betaHoldActive = false;
+        let betaHoldMoved = false;
+        let betaHoldStartX = 0;
+        let betaHoldStartY = 0;
+
+        function clearBetaHold() {
+            window.clearTimeout(betaHoldTimer);
+            betaHoldTimer = null;
+            betaHoldActive = false;
+            portfolioLink.classList.remove('beta-hold-active');
+        }
 
         portfolioLink.addEventListener('click', function(event) {
             if (event.shiftKey) {
                 event.preventDefault();
                 window.location.href = 'Aktienrechner/Since BETA.html';
+            }
+
+            if (betaHoldTriggered) {
+                event.preventDefault();
+                betaHoldTriggered = false;
+            }
+        });
+
+        portfolioLink.addEventListener('pointerdown', function(event) {
+            if (event.pointerType === 'mouse') return;
+
+            event.preventDefault();
+            betaHoldTriggered = false;
+            betaHoldMoved = false;
+            betaHoldActive = true;
+            betaHoldStartX = event.clientX;
+            betaHoldStartY = event.clientY;
+            portfolioLink.classList.add('beta-hold-active');
+
+            try {
+                portfolioLink.setPointerCapture(event.pointerId);
+            } catch (error) {
+                // Pointer capture is not available in every mobile browser.
+            }
+
+            betaHoldTimer = window.setTimeout(() => {
+                betaHoldTriggered = true;
+                betaHoldActive = false;
+                window.location.href = 'Aktienrechner/Since BETA.html';
+            }, 1400);
+        });
+
+        portfolioLink.addEventListener('pointermove', function(event) {
+            if (!betaHoldActive || event.pointerType === 'mouse') return;
+
+            const movedX = Math.abs(event.clientX - betaHoldStartX);
+            const movedY = Math.abs(event.clientY - betaHoldStartY);
+
+            if (movedX > 14 || movedY > 14) {
+                betaHoldMoved = true;
+                clearBetaHold();
+            }
+        });
+
+        portfolioLink.addEventListener('pointerup', function(event) {
+            if (event.pointerType === 'mouse') return;
+
+            event.preventDefault();
+            const shouldOpenNormal = betaHoldActive && !betaHoldTriggered && !betaHoldMoved;
+            clearBetaHold();
+
+            if (shouldOpenNormal) {
+                window.location.href = portfolioLink.href;
+            }
+        });
+
+        portfolioLink.addEventListener('pointercancel', clearBetaHold);
+        portfolioLink.addEventListener('contextmenu', function(event) {
+            if (betaHoldActive || betaHoldTriggered) {
+                event.preventDefault();
             }
         });
     </script>
