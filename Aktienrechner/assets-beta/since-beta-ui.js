@@ -81,10 +81,16 @@
             popup.style.left = `${Math.max(12, left)}px`;
             popup.style.top = `${Math.max(12, top)}px`;
         }
-        function selectStock(ticker, name) {
+        function selectStock(ticker, name, shouldLoad = false) {
             stockInput.value = ticker;
-            autocompleteList.classList.remove('show');
+            if (autocompleteList) {
+                autocompleteList.classList.remove('show');
+            }
             clearStatus();
+
+            if (shouldLoad) {
+                loadData();
+            }
         }
 
         function toggleGraphSettingsPanel() {
@@ -185,13 +191,24 @@
         function updateZoomControls() {
             const resetBtn = document.getElementById('resetZoomBtn');
             const zoomHint = document.getElementById('zoomHint');
+            const mobileZoomControls = document.getElementById('mobileZoomControls');
+            const isMobileViewport = window.matchMedia('(max-width: 640px)').matches;
 
             if (zoomEnabled) {
                 resetBtn.style.display = 'inline-flex';
                 zoomHint.style.display = 'block';
+                zoomHint.textContent = isMobileViewport
+                    ? 'Mit + und − zoomst du den Zeitraum, mit ← und → verschiebst du den sichtbaren Bereich.'
+                    : 'Ab 5 Jahren: Mit dem Mausrad scrollen, mit Shift + Mausrad zoomen, mit zwei Fingern seitlich scrollen oder mit gedrückter Maustaste einen Bereich markieren.';
+                if (mobileZoomControls) {
+                    mobileZoomControls.classList.add('show');
+                }
             } else {
                 resetBtn.style.display = 'none';
                 zoomHint.style.display = 'none';
+                if (mobileZoomControls) {
+                    mobileZoomControls.classList.remove('show');
+                }
             }
         }
 
@@ -203,45 +220,97 @@
             }
         }
 
+        function getVisibleXRange() {
+            if (!chart || !portfolioData || !chart.scales || !chart.scales.x) return null;
+
+            const xScale = chart.scales.x;
+            const maxIndex = portfolioData.months.length - 1;
+            const min = Number.isFinite(xScale.min) ? xScale.min : 0;
+            const max = Number.isFinite(xScale.max) ? xScale.max : maxIndex;
+
+            return {
+                min: Math.max(0, min),
+                max: Math.min(maxIndex, max),
+                maxIndex
+            };
+        }
+
+        function applyMobileXRange(min, max) {
+            if (!chart || !portfolioData || !chart.options || !chart.options.scales || !chart.options.scales.x) return;
+
+            const maxIndex = portfolioData.months.length - 1;
+            const minimumRange = Math.min(12, maxIndex);
+            let nextMin = Math.max(0, min);
+            let nextMax = Math.min(maxIndex, max);
+
+            if (nextMax - nextMin < minimumRange) {
+                const center = (nextMin + nextMax) / 2;
+                nextMin = center - minimumRange / 2;
+                nextMax = center + minimumRange / 2;
+            }
+
+            if (nextMin < 0) {
+                nextMax -= nextMin;
+                nextMin = 0;
+            }
+
+            if (nextMax > maxIndex) {
+                nextMin -= nextMax - maxIndex;
+                nextMax = maxIndex;
+            }
+
+            chart.options.scales.x.min = Math.max(0, nextMin);
+            chart.options.scales.x.max = Math.min(maxIndex, nextMax);
+            triggerMobileChartMotion();
+            chart.update();
+            updateVisibleStats();
+            hideSelectionPopup();
+        }
+
+        function triggerMobileChartMotion() {
+            const chartContainer = document.querySelector('.chart-container');
+            if (!chartContainer) return;
+
+            chartContainer.classList.remove('mobile-chart-motion');
+            void chartContainer.offsetWidth;
+            chartContainer.classList.add('mobile-chart-motion');
+
+            window.setTimeout(() => {
+                chartContainer.classList.remove('mobile-chart-motion');
+            }, 360);
+        }
+
+        function zoomMobileChart(direction) {
+            if (!zoomEnabled) return;
+
+            const range = getVisibleXRange();
+            if (!range) return;
+
+            const currentWidth = range.max - range.min;
+            const factor = direction > 0 ? 0.72 : 1.34;
+            const nextWidth = currentWidth * factor;
+            const center = (range.min + range.max) / 2;
+
+            applyMobileXRange(center - nextWidth / 2, center + nextWidth / 2);
+        }
+
+        function panMobileChart(direction) {
+            if (!zoomEnabled) return;
+
+            const range = getVisibleXRange();
+            if (!range) return;
+
+            const currentWidth = range.max - range.min;
+            const offset = currentWidth * 0.28 * direction;
+
+            applyMobileXRange(range.min + offset, range.max + offset);
+        }
+
         const stockInput = document.getElementById('stock');
         const autocompleteList = document.getElementById('autocompleteList');
 
-        stockInput.addEventListener('input', function() {
-            const value = this.value.toLowerCase().trim();
-            
-            if (value.length === 0) {
-                autocompleteList.classList.remove('show');
-                return;
-            }
-
-            const filtered = stocks.filter(stock =>
-                stock.name.toLowerCase().includes(value) ||
-                stock.ticker.toLowerCase().includes(value)
-            );
-
-            if (filtered.length === 0) {
-                autocompleteList.classList.remove('show');
-                return;
-            }
-
-            autocompleteList.innerHTML = filtered.map(stock =>
-                `<div class="autocomplete-item" onclick="selectStock('${stock.ticker}', '${stock.name}')">
-                    <span class="autocomplete-item-ticker">${stock.ticker}</span>
-                    <span class="autocomplete-item-name">${stock.name}</span>
-                </div>`
-            ).join('');
-
-            autocompleteList.classList.add('show');
-        });
-
-        stockInput.addEventListener('focus', function() {
-            if (this.value.length > 0) {
-                this.dispatchEvent(new Event('input'));
-            }
-        });
-
         document.addEventListener('click', function(e) {
-            if (e.target !== stockInput) {
+            if (autocompleteList && e.target !== stockInput) {
                 autocompleteList.classList.remove('show');
             }
 
@@ -257,3 +326,5 @@
                 closePeriodDropdown();
             }
         });
+
+        window.addEventListener('resize', updateZoomControls);

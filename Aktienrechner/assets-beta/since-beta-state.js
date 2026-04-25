@@ -1,5 +1,5 @@
         let chart = null;
-        let currentPeriod = 40;
+        let currentPeriod = 10;
         let portfolioData = null;
         let zoomEnabled = false;
         let lastTouchX = null;

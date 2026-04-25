@@ -99,7 +99,78 @@
             showSelectionPopupAt(lastPointerPosition.x, lastPointerPosition.y, html);
         }
 
-                function applyStatsFromRange(startIndex, endIndex) {
+        function setAnimatedStatText(elementId, nextText) {
+            const element = document.getElementById(elementId);
+
+            if (!element) return;
+            const previousText = element.dataset.statRawValue || element.innerText;
+            if (previousText === nextText) return;
+
+            element.dataset.statRawValue = nextText;
+            element.setAttribute('aria-label', nextText);
+
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                element.innerText = nextText;
+                return;
+            }
+
+            const previousCharacters = alignStatCharacters(previousText, nextText);
+
+            element.innerHTML = Array.from(nextText).map((char, index) => {
+                const previousChar = previousCharacters[index] || '';
+                const safeChar = escapeStatCharacter(char);
+                const safePreviousChar = escapeStatCharacter(previousChar || char);
+
+                if (char === previousChar) {
+                    const numberClass = /\d/.test(char) ? ' stat-char-number' : '';
+                    return `<span class="stat-char stat-char-static${numberClass}">${safeChar}</span>`;
+                }
+
+                if (/\d/.test(char) && /\d/.test(previousChar)) {
+                    return `<span class="stat-char stat-char-roller"><span class="stat-char-old">${safePreviousChar}</span><span class="stat-char-new">${safeChar}</span></span>`;
+                }
+
+                return `<span class="stat-char stat-char-static stat-char-fade">${safeChar}</span>`;
+            }).join('');
+        }
+
+        function escapeStatCharacter(char) {
+            if (char === ' ') return '&nbsp;';
+            return char
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function alignStatCharacters(previousText, nextText) {
+            const previousChars = Array.from(previousText);
+            const nextChars = Array.from(nextText);
+            const aligned = new Array(nextChars.length).fill('');
+            let previousIndex = previousChars.length - 1;
+
+            for (let nextIndex = nextChars.length - 1; nextIndex >= 0; nextIndex--) {
+                const nextChar = nextChars[nextIndex];
+
+                if (/\d/.test(nextChar)) {
+                    while (previousIndex >= 0 && !/\d/.test(previousChars[previousIndex])) {
+                        previousIndex--;
+                    }
+
+                    if (previousIndex >= 0) {
+                        aligned[nextIndex] = previousChars[previousIndex];
+                        previousIndex--;
+                    }
+                } else {
+                    aligned[nextIndex] = previousChars[nextIndex] === nextChar ? previousChars[nextIndex] : '';
+                }
+            }
+
+            return aligned;
+        }
+
+        function applyStatsFromRange(startIndex, endIndex) {
             if (!portfolioData) return;
 
             const portfolioValues = portfolioData.portfolioValues;
@@ -130,8 +201,8 @@
             const realityCheckText = document.getElementById('realityCheckText');
 
             document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
-            document.getElementById('visibleRangeInfo').innerText = `${rangeStart} → ${rangeEnd}`;
-            document.getElementById('latestPriceInfo').innerText = formatCurrency(latestPrice);
+            setAnimatedStatText('visibleRangeInfo', `${rangeStart} → ${rangeEnd}`);
+            setAnimatedStatText('latestPriceInfo', formatCurrency(latestPrice));
 
             if (realityCheckText) {
                 realityCheckText.innerText = investedInRange > 0
@@ -139,11 +210,11 @@
                     : 'Zoome oder lade Daten, dann gibt es hier den kleinen finanziellen Realitätscheck für genau diesen Abschnitt.';
             }
 
-            document.getElementById('portfolioValue').innerText = '€ ' + currentPortfolio.toLocaleString('de-DE', { maximumFractionDigits: 2 });
-            document.getElementById('investedAmount').innerText = '€ ' + investedInRange.toLocaleString('de-DE', { maximumFractionDigits: 2 });
-            document.getElementById('gainLoss').innerText = (gainLoss >= 0 ? '+ €' : '- €') + Math.abs(gainLoss).toLocaleString('de-DE', { maximumFractionDigits: 2 });
-            document.getElementById('dividendText').innerText = '+ € ' + dividendsInRange.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' Dividenden';
-            document.getElementById('returnPercent').innerText = (returnPercent >= 0 ? '+' : '') + returnPercent + '%';
+            setAnimatedStatText('portfolioValue', '€ ' + currentPortfolio.toLocaleString('de-DE', { maximumFractionDigits: 2 }));
+            setAnimatedStatText('investedAmount', '€ ' + investedInRange.toLocaleString('de-DE', { maximumFractionDigits: 2 }));
+            setAnimatedStatText('gainLoss', (gainLoss >= 0 ? '+ €' : '- €') + Math.abs(gainLoss).toLocaleString('de-DE', { maximumFractionDigits: 2 }));
+            setAnimatedStatText('dividendText', '+ € ' + dividendsInRange.toLocaleString('de-DE', { maximumFractionDigits: 2 }) + ' Dividenden');
+            setAnimatedStatText('returnPercent', (returnPercent >= 0 ? '+' : '') + returnPercent + '%');
 
             const gainLossElement = document.getElementById('gainLoss');
             gainLossElement.style.color = gainLoss >= 0 ? '#2ecc71' : '#e74c3c';
@@ -223,6 +294,10 @@
             if (chart) {
                 chart.destroy();
             }
+
+            const isMobileChart = window.matchMedia('(max-width: 640px)').matches;
+            const chartTickColor = isMobileChart ? 'rgba(226, 232, 240, 0.58)' : 'white';
+            const priceTickColor = isMobileChart ? 'rgba(226, 232, 240, 0.58)' : '#38bdf8';
 
             chart = new Chart(ctx, {
                 type: 'line',
@@ -418,7 +493,8 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                color: 'white',
+                                color: chartTickColor,
+                                padding: isMobileChart ? 4 : 3,
                                 callback: function(value) {
                                     return '€ ' + value.toLocaleString('de-DE');
                                 }
@@ -429,8 +505,9 @@
                         },
                         x: {
                             ticks: {
-                                color: 'white',
-                                maxTicksLimit: 12
+                                color: chartTickColor,
+                                maxTicksLimit: isMobileChart ? 4 : 12,
+                                padding: isMobileChart ? 6 : 3
                             },
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.1)'
@@ -441,7 +518,8 @@
                             min: stockPriceAxisMin,
                             max: stockPriceAxisMax,
                             ticks: {
-                                color: '#38bdf8',
+                                color: priceTickColor,
+                                padding: isMobileChart ? 4 : 3,
                                 callback: function(value) {
                                     const numericValue = Number(value);
 
@@ -461,6 +539,11 @@
                                 drawOnChartArea: false
                             }
                         }
+                    },
+                    layout: {
+                        padding: isMobileChart
+                            ? { left: 0, right: 0, top: 6, bottom: 0 }
+                            : 0
                     }
                 }
             });

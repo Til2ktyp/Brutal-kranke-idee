@@ -51,10 +51,18 @@
     <div class="container">
         <h1>(CANARY) Investment Portfolio Rechner</h1>
         <p class="subtitle">Teste historische Investments mit Kursverlauf, Dividenden, Zoom-Auswertung und einem Reality Check, der nicht komplett auf Kuschelkurs fährt. Das ist eine Betaversion, also kannst du hier gucken was das nächste Update werden kann.</p>
-        <div class="hero-badges" aria-label="Funktionen">
-            <div class="hero-badge">⚡ Cache für schnelle Neuberechnung</div>
-            <div class="hero-badge">📊 Kurs + Portfolio + Dividenden</div>
-            <div class="hero-badge">🧠 Bereichsauswertung per Drag</div>
+        <div class="market-strip" aria-label="Aktuelle Aktien">
+            <div class="market-strip-label">Aktuelle Aktien</div>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('NVDA', 'Nvidia', true)">NVDA</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('AAPL', 'Apple', true)">AAPL</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('MSFT', 'Microsoft', true)">MSFT</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('AMZN', 'Amazon', true)">AMZN</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('GOOGL', 'Google', true)">GOOGL</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('META', 'Meta', true)">META</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('TSLA', 'Tesla', true)">TSLA</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('AMD', 'AMD', true)">AMD</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('NFLX', 'Netflix', true)">NFLX</button>
+            <button class="market-ticker-btn" type="button" onclick="selectStock('MCD', 'McDonalds', true)">MCD</button>
         </div>
 
         <div class="controls">
@@ -62,14 +70,13 @@
                 <label for="stock">Aktie (Ticker/Name):</label>
                 <div class="autocomplete-container">
                     <input type="text" id="stock" class="stock-input" value="NVDA" placeholder="z.B. Nvidia, Apple, Tesla..." autocomplete="off">
-                    <div class="autocomplete-list" id="autocompleteList"></div>
                 </div>
             </div>
             <div class="control-group">
                 <label for="monthlyAmount">Monatliche Investition (€):</label>
                 <input type="number" id="monthlyAmount" value="10" min="1">
             </div>
-            <button class="primary-btn" onclick="loadData()">📊 Berechnen</button>
+            <button class="primary-btn" onclick="loadData()">Berechnen</button>
         </div>
         <div class="top-action-row">
             <div class="quick-amounts">
@@ -84,7 +91,7 @@
                 <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">Zoom zurücksetzen</button>
                 <button class="period-btn" type="button" onclick="changePeriod(1)">+</button>
                 <div class="period-selector">
-                    <div class="period-display" id="periodDisplay" onclick="togglePeriodDropdown()">40 Jahre</div>
+                    <div class="period-display" id="periodDisplay" onclick="togglePeriodDropdown()">10 Jahre</div>
                     <div class="period-dropdown" id="periodDropdown">
                         <button class="period-option" type="button" data-years="1" onclick="selectPeriodOption(1)">1 Jahr</button>
                         <button class="period-option" type="button" data-years="2" onclick="selectPeriodOption(2)">2 Jahre</button>
@@ -117,6 +124,12 @@
                 <div class="info-pill-label">Letzter Kurs</div>
                 <div class="info-pill-value" id="latestPriceInfo">€ 0</div>
             </div>
+        </div>
+        <div class="mobile-zoom-controls" id="mobileZoomControls" aria-label="Mobile Zoom-Steuerung">
+            <button class="mobile-zoom-btn" type="button" onclick="panMobileChart(-1)" aria-label="Nach links verschieben">←</button>
+            <button class="mobile-zoom-btn" type="button" onclick="zoomMobileChart(1)" aria-label="Hineinzoomen">+</button>
+            <button class="mobile-zoom-btn" type="button" onclick="zoomMobileChart(-1)" aria-label="Herauszoomen">−</button>
+            <button class="mobile-zoom-btn" type="button" onclick="panMobileChart(1)" aria-label="Nach rechts verschieben">→</button>
         </div>
 
         <div id="loadingMsg" class="loading" style="display: none;">Marktdaten werden geladen...</div>

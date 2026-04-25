@@ -36,6 +36,7 @@
                 ({ invested, current, multiple }) => `Kurz gesagt: ${formatCurrency(invested)} hätten hier ${formatCurrency(current)} werden können. Faktor ${multiple}. Stattdessen wurde das Geld wahrscheinlich mit voller Überzeugung in Dinge verwandelt, die heute weniger Wert haben als ein trauriger Kassenbon.`
             ]
         };
+        let realityAnimationTimeouts = [];
 
         function getRealityCheckElement() {
             const selectors = [
@@ -57,56 +58,32 @@
         function animateRealityCheckUpdate(updateCallback) {
             const element = getRealityCheckElement();
 
-            if (!element || typeof element.animate !== 'function') {
+            if (!element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                 updateCallback();
                 return;
             }
 
-            element.getAnimations().forEach(animation => animation.cancel());
+            realityAnimationTimeouts.forEach(timeoutId => window.clearTimeout(timeoutId));
+            realityAnimationTimeouts = [];
+            element.classList.remove('reality-text-enter');
+            element.classList.add('reality-text-exit');
 
-            const exitAnimation = element.animate(
-                [
-                    {
-                        opacity: 1,
-                        transform: 'translateY(0) scale(1)',
-                        filter: 'blur(0)'
-                    },
-                    {
-                        opacity: 0,
-                        transform: 'translateY(-5px) scale(0.992)',
-                        filter: 'blur(2px)'
-                    }
-                ],
-                {
-                    duration: 130,
-                    easing: 'ease-out',
-                    fill: 'forwards'
-                }
-            );
-
-            exitAnimation.onfinish = () => {
+            const updateTimeout = window.setTimeout(() => {
                 updateCallback();
 
-                element.animate(
-                    [
-                        {
-                            opacity: 0,
-                            transform: 'translateY(8px) scale(0.992)',
-                            filter: 'blur(2px)'
-                        },
-                        {
-                            opacity: 1,
-                            transform: 'translateY(0) scale(1)',
-                            filter: 'blur(0)'
-                        }
-                    ],
-                    {
-                        duration: 280,
-                        easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-                        fill: 'forwards'
-                    }
-                );
-            };
+                element.classList.remove('reality-text-exit');
+                void element.offsetWidth;
+                element.classList.add('reality-text-enter');
+
+                const cleanupTimeout = window.setTimeout(() => {
+                    element.classList.remove('reality-text-enter');
+                    realityAnimationTimeouts = realityAnimationTimeouts.filter(timeoutId => timeoutId !== cleanupTimeout);
+                }, 460);
+
+                realityAnimationTimeouts.push(cleanupTimeout);
+            }, 165);
+
+            realityAnimationTimeouts.push(updateTimeout);
         }
 
         function setRealityMode(mode) {
