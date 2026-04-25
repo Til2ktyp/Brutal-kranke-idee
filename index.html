@@ -339,7 +339,7 @@
         }
 
         .app-card.beta-hold-active .card-badge::before {
-            animation: betaHoldFill 1.4s linear forwards;
+            animation: betaHoldFill 0.9s linear forwards;
         }
 
         .quick-hint {
@@ -709,15 +709,19 @@
 
     <script>
         const portfolioLink = document.getElementById('portfolioLink');
+        let betaThresholdTimer = null;
         let betaHoldTimer = null;
         let betaHoldTriggered = false;
         let betaHoldActive = false;
+        let betaHoldArmed = false;
         let betaHoldMoved = false;
         let betaHoldStartX = 0;
         let betaHoldStartY = 0;
 
         function clearBetaHold() {
+            window.clearTimeout(betaThresholdTimer);
             window.clearTimeout(betaHoldTimer);
+            betaThresholdTimer = null;
             betaHoldTimer = null;
             betaHoldActive = false;
             portfolioLink.classList.remove('beta-hold-active');
@@ -740,11 +744,11 @@
 
             event.preventDefault();
             betaHoldTriggered = false;
+            betaHoldArmed = false;
             betaHoldMoved = false;
             betaHoldActive = true;
             betaHoldStartX = event.clientX;
             betaHoldStartY = event.clientY;
-            portfolioLink.classList.add('beta-hold-active');
 
             try {
                 portfolioLink.setPointerCapture(event.pointerId);
@@ -752,11 +756,16 @@
                 // Pointer capture is not available in every mobile browser.
             }
 
-            betaHoldTimer = window.setTimeout(() => {
-                betaHoldTriggered = true;
-                betaHoldActive = false;
-                window.location.href = 'Aktienrechner/Since BETA.html';
-            }, 1400);
+            betaThresholdTimer = window.setTimeout(() => {
+                betaHoldArmed = true;
+                portfolioLink.classList.add('beta-hold-active');
+
+                betaHoldTimer = window.setTimeout(() => {
+                    betaHoldTriggered = true;
+                    betaHoldActive = false;
+                    window.location.href = 'Aktienrechner/Since BETA.html';
+                }, 900);
+            }, 1000);
         });
 
         portfolioLink.addEventListener('pointermove', function(event) {
@@ -775,7 +784,7 @@
             if (event.pointerType === 'mouse') return;
 
             event.preventDefault();
-            const shouldOpenNormal = betaHoldActive && !betaHoldTriggered && !betaHoldMoved;
+            const shouldOpenNormal = betaHoldActive && !betaHoldArmed && !betaHoldTriggered && !betaHoldMoved;
             clearBetaHold();
 
             if (shouldOpenNormal) {
