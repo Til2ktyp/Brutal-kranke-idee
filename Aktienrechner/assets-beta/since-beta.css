@@ -1145,6 +1145,11 @@
                 border-left: 1px solid var(--border);
                 border-right: 1px solid var(--border);
                 border-radius: 16px;
+                touch-action: none;
+            }
+
+            .chart-container canvas {
+                touch-action: none;
             }
 
             .info-pill {

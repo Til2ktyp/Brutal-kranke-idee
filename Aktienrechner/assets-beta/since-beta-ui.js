@@ -340,3 +340,9 @@
 
             lastTouchEnd = now;
         }, { passive: false });
+
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach(eventName => {
+            document.addEventListener(eventName, function(event) {
+                event.preventDefault();
+            }, { passive: false });
+        });
