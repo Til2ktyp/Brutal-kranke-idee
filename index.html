@@ -133,9 +133,17 @@
             <a href="3expo.html">Zur 3. Expo</a>
             <a href="100prozent.html">Zur 100% Seite</a>
             <a href="gambl.html">Zur Glücksspiel Simulation</a>            
-            <a href="Since.html">Investment Portfolio Rechner</a>
+            <a href="Since.html" id="portfolioLink">Investment Portfolio Rechner</a>
     </div>
     <footer>
         <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
     </footer>
+    <script>
+        document.getElementById('portfolioLink').addEventListener('click', function(event) {
+            if (event.shiftKey) {
+                event.preventDefault();
+                window.location.href = 'Since BETA.html';
+            }
+        });
+    </script>
 </html>
