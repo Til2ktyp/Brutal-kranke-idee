@@ -305,6 +305,7 @@
             flex-direction: column;
             gap: 8px;
             min-width: 0;
+            color: #abc7fff5;
         }
 
         label {
@@ -330,7 +331,7 @@
         }
 
         input[type="number"], select {
-            background: rgba(255, 255, 255, 0.96);
+            background: #abc7fff5;
             color: #111827;
             cursor: text;
             border-color: rgba(255, 255, 255, 0.18);
@@ -807,7 +808,7 @@
 
         .stock-input {
             width: 100% !important;
-            background: rgba(255, 255, 255, 0.96) !important;
+            background: #abc7fff5 !important;
             color: #111827 !important;
             border-color: rgba(255, 255, 255, 0.18) !important;
         }
@@ -1068,17 +1069,26 @@
 
             .quick-amounts {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: repeat(6, minmax(0, 1fr));
                 width: 100%;
                 gap: 10px;
             }
 
             .quick-amount-btn {
+                grid-column: span 2;
                 min-width: 0;
                 width: 100%;
                 height: 38px;
                 padding: 0 10px;
                 font-size: 13px;
+            }
+
+            .quick-amount-btn:nth-child(4) {
+                grid-column: 1 / 4;
+            }
+
+            .quick-amount-btn:nth-child(5) {
+                grid-column: 4 / 7;
             }
 
             .period-buttons {

@@ -168,7 +168,7 @@
 
         function setPeriod(years) {
             currentPeriod = Math.max(MIN_PERIOD_YEARS, Math.min(MAX_PERIOD_YEARS, years));
-            zoomEnabled = currentPeriod >= 5;
+            zoomEnabled = currentPeriod >= 1;
             updatePeriodDisplay();
             syncPeriodDropdownSelection();
             updateZoomControls();
