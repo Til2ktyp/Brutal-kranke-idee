@@ -341,8 +341,41 @@
             lastTouchEnd = now;
         }, { passive: false });
 
+        let lastInteractiveTouchEnd = 0;
+
+        document.addEventListener('touchend', function(event) {
+            const target = event.target.closest('button, a, input, .period-display');
+            if (!target) return;
+
+            const now = Date.now();
+
+            if (now - lastInteractiveTouchEnd <= 420) {
+                event.preventDefault();
+
+                if (!target.matches('input, select, textarea')) {
+                    window.requestAnimationFrame(() => {
+                        target.click();
+                    });
+                }
+            }
+
+            lastInteractiveTouchEnd = now;
+        }, { passive: false, capture: true });
+
         ['gesturestart', 'gesturechange', 'gestureend'].forEach(eventName => {
             document.addEventListener(eventName, function(event) {
                 event.preventDefault();
             }, { passive: false });
         });
+
+        const chartContainer = document.querySelector('.chart-container');
+
+        if (chartContainer) {
+            chartContainer.addEventListener('selectstart', event => {
+                event.preventDefault();
+            });
+
+            chartContainer.addEventListener('contextmenu', event => {
+                event.preventDefault();
+            });
+        }
