@@ -44,8 +44,11 @@
             if (!monthlyAmount || monthlyAmount <= 0 || selectedMonths.length === 0) return null;
 
             const dividendMap = buildDividendMap(rawStockData.dividends);
+            const shouldReinvestDividends = dividendMode === 'reinvest';
             let shares = 0;
             let cumulativeDividend = 0;
+            let paidOutDividendCash = 0;
+            let reinvestedDividendCapital = 0;
 
             selectedMonths.forEach((date, index) => {
                 const price = selectedPrices[index];
@@ -56,16 +59,26 @@
                 let dividendCash = 0;
                 if (dividendPerShare > 0) {
                     dividendCash = shares * dividendPerShare;
-                    shares += dividendCash / price;
+                    if (shouldReinvestDividends) {
+                        shares += dividendCash / price;
+                        reinvestedDividendCapital += dividendCash;
+                    } else {
+                        paidOutDividendCash += dividendCash;
+                    }
                     cumulativeDividend += dividendCash;
                 }
 
                 shares += monthlyAmount / price;
             });
 
-            const invested = monthlyAmount * selectedMonths.length;
+            const monthlyInvested = monthlyAmount * selectedMonths.length;
+            const invested = shouldReinvestDividends
+                ? monthlyInvested + reinvestedDividendCapital
+                : monthlyInvested;
             const finalPrice = selectedPrices[selectedPrices.length - 1] || 0;
-            const portfolioValue = shares * finalPrice;
+            const portfolioValue = shouldReinvestDividends
+                ? shares * finalPrice
+                : shares * finalPrice + paidOutDividendCash;
             const gainLoss = portfolioValue - invested;
             const returnPercent = invested > 0 ? (gainLoss / invested * 100) : 0;
 
@@ -89,7 +102,7 @@
 
             const html = `
                 <div class="selection-popup-row"><span class="selection-popup-label">Zeitraum</span><span class="selection-popup-value">${result.startDate} → ${result.endDate}</span></div>
-                <div class="selection-popup-row"><span class="selection-popup-label">Eingezahlt</span><span class="selection-popup-value">${formatCurrency(result.invested)}</span></div>
+                <div class="selection-popup-row"><span class="selection-popup-label">${dividendMode === 'reinvest' ? 'Investiert inkl. Dividenden' : 'Eingezahlt'}</span><span class="selection-popup-value">${formatCurrency(result.invested)}</span></div>
                 <div class="selection-popup-row"><span class="selection-popup-label">Portfolio</span><span class="selection-popup-value">${formatCurrency(result.portfolioValue)}</span></div>
                 <div class="selection-popup-row"><span class="selection-popup-label">Gewinn / Verlust</span><span class="selection-popup-value">${result.gainLoss >= 0 ? '+' : '-'} ${formatCurrency(Math.abs(result.gainLoss)).replace('€ ', '€ ')}</span></div>
                 <div class="selection-popup-row"><span class="selection-popup-label">Dividenden</span><span class="selection-popup-value">${formatCurrency(result.dividends)}</span></div>
@@ -318,7 +331,7 @@
                             pointBackgroundColor: '#f97316'
                         },
                         {
-                            label: 'Investierte Summe (€)',
+                            label: dividendMode === 'reinvest' ? 'Investiert inkl. Dividenden (€)' : 'Eingezahlte Summe (€)',
                             data: investedAmounts,
                             borderColor: '#fbc531',
                             backgroundColor: 'rgba(251, 197, 49, 0.04)',

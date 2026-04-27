@@ -130,9 +130,11 @@
         }
 
         function buildPortfolioFromMonthlyData(stock, monthlyAmount, years, values, dividendMap) {
+            const shouldReinvestDividends = dividendMode === 'reinvest';
             const data = {
                 stock: stock,
                 monthlyAmount: monthlyAmount,
+                dividendMode: dividendMode,
                 months: [],
                 portfolioValues: [],
                 investedAmounts: [],
@@ -162,6 +164,8 @@
 
             let shares = 0;
             let cumulativeDividend = 0;
+            let paidOutDividendCash = 0;
+            let reinvestedDividendCapital = 0;
 
             filteredEntries.forEach((entry, index) => {
                 const price = entry.close;
@@ -170,14 +174,24 @@
                 let dividendCash = 0;
                 if (dividendPerShare > 0) {
                     dividendCash = shares * dividendPerShare;
-                    shares += dividendCash / price;
+                    if (shouldReinvestDividends) {
+                        shares += dividendCash / price;
+                        reinvestedDividendCapital += dividendCash;
+                    } else {
+                        paidOutDividendCash += dividendCash;
+                    }
                     cumulativeDividend += dividendCash;
                 }
 
                 shares += monthlyAmount / price;
 
-                const investedAmount = monthlyAmount * (index + 1);
-                const portfolioValue = shares * price;
+                const monthlyInvested = monthlyAmount * (index + 1);
+                const investedAmount = shouldReinvestDividends
+                    ? monthlyInvested + reinvestedDividendCapital
+                    : monthlyInvested;
+                const portfolioValue = shouldReinvestDividends
+                    ? shares * price
+                    : shares * price + paidOutDividendCash;
 
                 data.months.push(entry.date);
                 data.portfolioValues.push(Math.round(portfolioValue * 100) / 100);
@@ -188,26 +202,6 @@
 
             return data;
         }
-        function recalculatePortfolioFromRawData() {
-            if (!rawStockData || !currentLoadedStock) return false;
-
-            const monthlyAmount = parseMonthlyAmount();
-            if (!monthlyAmount || monthlyAmount <= 0) return false;
-
-            const dividendMap = buildDividendMap(rawStockData.dividends);
-            portfolioData = buildPortfolioFromMonthlyData(
-                currentLoadedStock,
-                monthlyAmount,
-                currentPeriod,
-                rawStockData.values,
-                dividendMap
-            );
-            updateQuickAmountButtons();
-            updateChart();
-            showStatus(`Zeitraum lokal aktualisiert: ${currentPeriod} Jahre für ${currentLoadedStock}`, 'success');
-            return true;
-        }
-        
         function recalculatePortfolioFromRawData() {
             if (!rawStockData || !currentLoadedStock) return false;
 

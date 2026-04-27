@@ -30,7 +30,7 @@
             </label>
             <label class="graph-toggle-item">
                 <input type="checkbox" data-dataset-index="1" checked onchange="toggleDatasetVisibility(this)">
-                <span>Investierte Summe</span>
+                <span id="investedGraphToggleLabel">Investiert inkl. Dividenden</span>
             </label>
             <label class="graph-toggle-item">
                 <input type="checkbox" data-dataset-index="2" checked onchange="toggleDatasetVisibility(this)">
@@ -110,6 +110,11 @@
                 <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(500)">€ 500</button>
             </div>
 
+            <div class="dividend-mode-row" aria-label="Dividendenmodus">
+                <button class="dividend-mode-btn active" type="button" data-dividend-mode="reinvest" onclick="setDividendMode('reinvest')">Reinvestieren</button>
+                <button class="dividend-mode-btn" type="button" data-dividend-mode="payout" onclick="setDividendMode('payout')">Auszahlen</button>
+            </div>
+
             <div class="period-buttons">
                 <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">Zoom zurücksetzen</button>
                 <button class="period-btn" type="button" onclick="changePeriod(1)">+</button>
@@ -167,7 +172,7 @@
                 <div class="stat-value" id="portfolioValue">€ 0</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">Eingezahlte Summe</div>
+                <div class="stat-label" id="investedAmountLabel">Investiert inkl. Dividenden</div>
                 <div class="stat-value" id="investedAmount">€ 0</div>
             </div>
             <div class="stat-box">

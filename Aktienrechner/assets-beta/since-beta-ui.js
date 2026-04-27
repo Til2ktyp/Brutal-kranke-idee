@@ -30,6 +30,39 @@
                 recalculatePortfolioFromRawData();
             }
         }
+
+        function updateDividendModeControls() {
+            document.querySelectorAll('.dividend-mode-btn').forEach(button => {
+                button.classList.toggle('active', button.dataset.dividendMode === dividendMode);
+            });
+
+            const investedLabelText = dividendMode === 'reinvest'
+                ? 'Investiert inkl. Dividenden'
+                : 'Eingezahlte Summe';
+            const investedAmountLabel = document.getElementById('investedAmountLabel');
+            const investedGraphToggleLabel = document.getElementById('investedGraphToggleLabel');
+
+            if (investedAmountLabel) investedAmountLabel.innerText = investedLabelText;
+            if (investedGraphToggleLabel) investedGraphToggleLabel.innerText = investedLabelText;
+        }
+
+        function setDividendMode(nextMode) {
+            if (!['reinvest', 'payout'].includes(nextMode) || dividendMode === nextMode) return;
+
+            dividendMode = nextMode;
+            localStorage.setItem('dividendMode', dividendMode);
+            updateDividendModeControls();
+
+            if (rawStockData && currentLoadedStock) {
+                recalculatePortfolioFromRawData();
+                showStatus(
+                    dividendMode === 'reinvest'
+                        ? 'Dividenden werden jetzt wieder investiert und in der gelben Linie mitgezählt.'
+                        : 'Dividenden werden jetzt ausgezahlt und nicht in der gelben Linie mitgezählt.',
+                    'success'
+                );
+            }
+        }
         function setLoadingState(isLoading) {
             isLoadingData = isLoading;
 

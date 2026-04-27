@@ -11,6 +11,7 @@
         let isLoadingData = false;
         let latestLoadRequestId = 0;
         let realityMode = 'LARP';
+        let dividendMode = localStorage.getItem('dividendMode') === 'payout' ? 'payout' : 'reinvest';
         let currentRealityCheckMessage = 'Lade Daten, dann gibt\'s hier die kleine finanzielle Respektschelle.';
         let lastPointerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         let isDragSelecting = false;

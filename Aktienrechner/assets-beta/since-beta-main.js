@@ -95,6 +95,7 @@
             updatePeriodDisplay();
             syncPeriodDropdownSelection();
             updateZoomControls();
+            updateDividendModeControls();
             loadData();
             updateQuickAmountButtons();
 
