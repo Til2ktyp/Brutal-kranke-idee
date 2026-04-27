@@ -254,8 +254,9 @@
             chart.options.scales.yPrice.max = maxPrice + padding;
         }
 
-        function updateVisibleStats() {
+        function updateVisibleStats(options = {}) {
             if (!portfolioData) return;
+            const shouldUpdatePriceAxis = options.updatePriceAxis !== false;
 
             if (!chart || !chart.scales || !chart.scales.x) {
                 document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
@@ -268,10 +269,52 @@
             const startIndex = Number.isFinite(xScale.min) ? Math.max(0, Math.floor(xScale.min)) : 0;
             const endIndex = Number.isFinite(xScale.max) ? Math.min(portfolioData.months.length - 1, Math.ceil(xScale.max)) : portfolioData.months.length - 1;
 
-            updateVisiblePriceAxis(startIndex, endIndex);
+            if (shouldUpdatePriceAxis) {
+                updateVisiblePriceAxis(startIndex, endIndex);
+            }
 
             document.title = `Investment Portfolio Rechner – ${currentLoadedStock || 'Aktie'} – ${currentPeriod} Jahre – Kurs € ${getLatestPrice().toLocaleString('de-DE', { maximumFractionDigits: 2 })}`;
             applyStatsFromRange(startIndex, endIndex);
+        }
+
+        function scheduleVisibleStatsUpdate(delay = 35, shouldUpdateChart = false) {
+            visibleStatsShouldUpdateChart = visibleStatsShouldUpdateChart || shouldUpdateChart;
+
+            if (visibleStatsUpdateTimeout || visibleStatsUpdateFrame) return;
+
+            visibleStatsUpdateTimeout = window.setTimeout(() => {
+                visibleStatsUpdateTimeout = null;
+                visibleStatsUpdateFrame = window.requestAnimationFrame(() => {
+                    const shouldRefreshChart = visibleStatsShouldUpdateChart;
+                    visibleStatsShouldUpdateChart = false;
+                    visibleStatsUpdateFrame = null;
+                    updateVisibleStats({ updatePriceAxis: shouldRefreshChart });
+
+                    if (shouldRefreshChart && chart) {
+                        chart.update();
+                    }
+                });
+            }, delay);
+        }
+
+        function scheduleChartRefresh(delay = 75) {
+            if (chartRefreshTimeout) {
+                window.clearTimeout(chartRefreshTimeout);
+            }
+
+            chartRefreshTimeout = window.setTimeout(() => {
+                chartRefreshTimeout = null;
+
+                if (chart) {
+                    updateVisibleStats({ updatePriceAxis: true });
+                    chart.update();
+                }
+            }, delay);
+        }
+
+        function getChartDevicePixelRatio() {
+            const ratio = window.devicePixelRatio || 1;
+            return Math.min(ratio, 1.75);
         }
 
         function updateChart() {
@@ -373,10 +416,12 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    devicePixelRatio: getChartDevicePixelRatio(),
                     animation: {
                         duration: 620,
                         easing: 'easeOutQuart'
                     },
+                    normalized: true,
                     transitions: {
                         active: {
                             animation: {
@@ -411,7 +456,8 @@
                     },
                     interaction: {
                         mode: 'index',
-                        intersect: false
+                        intersect: false,
+                        axis: 'x'
                     },
                     hover: {
                         mode: 'index',
@@ -423,9 +469,9 @@
                                 enabled: zoomEnabled,
                                 mode: 'x',
                                 threshold: 2,
-                                onPanComplete: function({ chart }) {
-                                    updateVisibleStats();
-                                    chart.update('none');
+                                onPanComplete: function() {
+                                    scheduleVisibleStatsUpdate(35, false);
+                                    scheduleChartRefresh(75);
                                     hideSelectionPopup();
                                 }
                             },
@@ -433,7 +479,7 @@
                                 wheel: {
                                     enabled: zoomEnabled,
                                     modifierKey: 'shift',
-                                    speed: 0.0025
+                                    speed: 0.006
                                 },
                                 pinch: {
                                     enabled: zoomEnabled,
@@ -470,8 +516,7 @@
                                     isDragSelecting = false;
                                     dragSelectionStartIndex = null;
                                     hideSelectionPopup();
-                                    updateVisibleStats();
-                                    chart.update('none');
+                                    scheduleVisibleStatsUpdate(60, true);
                                 }
                             },
                             limits: {
@@ -507,6 +552,7 @@
                             beginAtZero: true,
                             ticks: {
                                 color: chartTickColor,
+                                sampleSize: 8,
                                 padding: isMobileChart ? 4 : 3,
                                 callback: function(value) {
                                     return '€ ' + value.toLocaleString('de-DE');
@@ -519,6 +565,7 @@
                         x: {
                             ticks: {
                                 color: chartTickColor,
+                                sampleSize: 8,
                                 maxTicksLimit: isMobileChart ? 4 : 12,
                                 padding: isMobileChart ? 6 : 3
                             },
@@ -532,6 +579,7 @@
                             max: stockPriceAxisMax,
                             ticks: {
                                 color: priceTickColor,
+                                sampleSize: 8,
                                 padding: isMobileChart ? 4 : 3,
                                 callback: function(value) {
                                     const numericValue = Number(value);

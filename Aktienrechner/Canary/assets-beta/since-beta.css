@@ -726,21 +726,21 @@
 
             to {
                 opacity: 0;
-                transform: translateY(105%) scale(0.96);
-                filter: blur(7px);
+                transform: translateY(105%) scale(0.98);
+                filter: blur(2px);
             }
         }
 
         @keyframes statDigitNew {
             from {
                 opacity: 0;
-                transform: translateY(-105%) scale(0.94);
-                filter: blur(7px);
+                transform: translateY(-105%) scale(0.98);
+                filter: blur(2px);
             }
 
             55% {
                 opacity: 1;
-                transform: translateY(9%) scale(1.035);
+                transform: translateY(9%) scale(1.015);
                 filter: blur(0);
             }
 
@@ -754,13 +754,13 @@
         @keyframes statValueChange {
             from {
                 opacity: 0.45;
-                transform: translateY(9px) scale(0.955);
-                filter: blur(6px);
+                transform: translateY(9px) scale(0.98);
+                filter: blur(1.5px);
             }
 
             55% {
                 opacity: 1;
-                transform: translateY(-2px) scale(1.035);
+                transform: translateY(-2px) scale(1.015);
                 filter: blur(0);
             }
 
