@@ -18,6 +18,7 @@
         <span class="back-home-btn-icon">🏠</span>
     </a>
     <button class="graph-settings-btn" onclick="toggleGraphSettingsPanel()">⚙️ Graphen</button>
+    <button class="app-settings-btn" onclick="toggleAppSettingsPanel()">⚙️ Einstellungen</button>
 
     <div class="status-banner" id="statusBanner"></div>
 
@@ -48,8 +49,53 @@
         <div class="selection-popup-grid" id="selectionPopupContent"></div>
     </div>
 
+    <div class="app-settings-panel" id="appSettingsPanel">
+        <div class="app-settings-header">
+            <div class="app-settings-title">Canary Einstellungen</div>
+            <button class="app-settings-close" type="button" onclick="toggleAppSettingsPanel()">×</button>
+        </div>
+
+        <div class="settings-section">
+            <label class="settings-label" for="marketDataProviderSelect">Marktdaten-Quelle</label>
+            <select id="marketDataProviderSelect" onchange="setMarketDataProvider(this.value)">
+                <option value="twelve">Twelve Data</option>
+                <option value="yahoo">Yahoo Finance experimentell</option>
+                <option value="auto">Auto mit Fallback</option>
+            </select>
+            <div class="settings-hint">Yahoo kann im Browser je nach CORS blocken; Auto fällt dann auf Twelve Data zurück.</div>
+        </div>
+
+        <div class="settings-section">
+            <label class="settings-toggle">
+                <input type="checkbox" id="chartPerformanceModeToggle" onchange="setChartPerformanceMode(this.checked)">
+                <span>Performance-Modus</span>
+            </label>
+            <div class="settings-hint">Reduziert Renderlast auf High-DPI-Displays und hält Interaktionen ruhiger.</div>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-label">Cache</div>
+            <div class="cache-summary" id="cacheSummary">Cache wird gelesen...</div>
+            <div class="settings-button-row">
+                <button class="settings-action-btn" type="button" onclick="refreshCacheSummary()">Aktualisieren</button>
+                <button class="settings-action-btn danger" type="button" onclick="clearStockCache()">Cache leeren</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <label class="settings-label" for="cachePassword">Export/Import Passwort optional</label>
+            <input type="password" id="cachePassword" placeholder="leer = unverschlüsselt">
+            <div class="settings-button-row">
+                <button class="settings-action-btn" type="button" onclick="exportStockCache()">Cache exportieren</button>
+                <button class="settings-action-btn" type="button" onclick="triggerCacheImport()">Cache importieren</button>
+            </div>
+            <input type="file" id="cacheImportFile" accept="application/json,.json" hidden onchange="importStockCache(this.files[0])">
+            <div class="settings-hint">Mit Passwort wird AES-GCM im Browser genutzt. Ohne Passwort ist die Datei normales JSON.</div>
+        </div>
+    </div>
+
     <div class="container">
-        <h1>Investment Portfolio Rechner</h1>
+        <h1>(Canary) Investment Portfolio Rechner</h1>
         <p class="subtitle">Teste historische Investments mit Kursverlauf, Dividenden, Zoom-Auswertung und einem Reality Check, der nicht komplett auf Kuschelkurs fährt. Das ist eine Betaversion, also kannst du hier gucken was das nächste Update werden kann.</p>
         <div class="market-strip" aria-label="Aktuelle Aktien">
             <div class="market-strip-label">Aktuelle Aktien</div>
@@ -200,7 +246,7 @@
         </div>
     </div>
 
-    <footer class="app-footer">Gebaut für schnelle Was-wäre-wenn-Rechnungen. Historische Performance ist keine Garantie für die Zukunft. 26.2.1</footer>
+    <footer class="app-footer">Gebaut für schnelle Was-wäre-wenn-Rechnungen. Historische Performance ist keine Garantie für die Zukunft. C26.3 Beta 1.1 Preview</footer>
     <script src="assets-beta/since-beta-state.js"></script>
     <script src="assets-beta/since-beta-reality.js"></script>
     <script src="assets-beta/since-beta-data.js"></script>
