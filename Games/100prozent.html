@@ -219,6 +219,173 @@
             font-weight: 950;
         }
 
+        .chance-controls {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .chance-option {
+            min-height: 42px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.62);
+            color: var(--ink);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 900;
+        }
+
+        .chance-option.active {
+            background: var(--accent);
+            border-color: rgba(23, 33, 47, 0.18);
+        }
+
+        .reset-hold-button {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 44px;
+            margin-top: 14px;
+            border: 1px solid rgba(235, 59, 90, 0.24);
+            border-radius: 999px;
+            background: rgba(235, 59, 90, 0.08);
+            color: var(--danger);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 950;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .reset-hold-button::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: rgba(235, 59, 90, 0.18);
+            transform: scaleX(0);
+            transform-origin: left center;
+        }
+
+        .reset-hold-button.holding::before {
+            animation: resetHoldFill 5s linear forwards;
+        }
+
+        .reset-hold-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .reset-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-top: 14px;
+        }
+
+        .reset-row .reset-hold-button {
+            margin-top: 0;
+        }
+
+        .debug-quick-reset {
+            display: none;
+            min-width: 68px;
+            min-height: 44px;
+            border: 1px solid rgba(235, 59, 90, 0.24);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.62);
+            color: var(--danger);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 950;
+        }
+
+        .debug-quick-reset.show {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .debug-panel {
+            display: none;
+            margin-top: 14px;
+            padding: 14px;
+            border: 1px dashed rgba(45, 152, 218, 0.34);
+            border-radius: 16px;
+            background: rgba(45, 152, 218, 0.08);
+            text-align: left;
+        }
+
+        .debug-panel.show {
+            display: block;
+        }
+
+        .debug-panel-title {
+            margin: 0 0 10px;
+            color: var(--blue);
+            font-size: 0.82rem;
+            font-weight: 950;
+            text-transform: uppercase;
+        }
+
+        .debug-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--ink);
+            font-size: 0.95rem;
+            font-weight: 850;
+        }
+
+        .debug-toggle input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--blue);
+        }
+
+        .probability-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .probability-card {
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.58);
+        }
+
+        .probability-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .probability-card span {
+            display: block;
+            margin-top: 5px;
+            color: var(--blue);
+            font-size: 1.2rem;
+            font-weight: 950;
+        }
+
+        .probability-card small {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 0.82rem;
+            font-weight: 900;
+        }
+
         .records-container {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -244,6 +411,14 @@
             color: var(--blue);
         }
 
+        .record-source {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
         #message {
             min-height: 32px;
             margin: 20px 0 0;
@@ -260,6 +435,12 @@
             color: var(--accent-2);
         }
 
+        @keyframes resetHoldFill {
+            to {
+                transform: scaleX(1);
+            }
+        }
+
         @media (max-width: 560px) {
             body {
                 align-items: flex-start;
@@ -270,6 +451,8 @@
             }
 
             .status-grid,
+            .chance-controls,
+            .probability-grid,
             .records-container {
                 grid-template-columns: 1fr;
             }
@@ -300,9 +483,42 @@
                 </div>
             </div>
 
+            <div class="chance-controls" aria-label="Reset-Chance pro Klick">
+                <button class="chance-option" type="button" data-increment="1.5">1,5%</button>
+                <button class="chance-option active" type="button" data-increment="1">1%</button>
+                <button class="chance-option" type="button" data-increment="0.5">0,5%</button>
+                <button class="chance-option" type="button" data-increment="0.25">0,25%</button>
+            </div>
+
+            <div class="reset-row">
+                <button class="reset-hold-button" id="resetButton" type="button"><span>RESET 5s halten</span></button>
+                <button class="debug-quick-reset" id="debugQuickResetButton" type="button">0</button>
+            </div>
+
+            <div class="debug-panel" id="debugPanel" aria-hidden="true">
+                <p class="debug-panel-title">Debug</p>
+                <label class="debug-toggle">
+                    <input type="checkbox" id="disableResetChanceToggle">
+                    <span>Reset-Chance deaktivieren</span>
+                </label>
+            </div>
+
+            <div class="probability-grid">
+                <div class="probability-card">
+                    <p>Chance bis hier</p>
+                    <span id="currentProbability">100%</span>
+                    <small id="currentOdds">1/1</small>
+                </div>
+                <div class="probability-card">
+                    <p>Chance bis zur nächsten</p>
+                    <span id="nextProbability">100%</span>
+                    <small id="nextOdds">1/1</small>
+                </div>
+            </div>
+
             <div class="records-container">
-                <p>Niedrigster Reset<span id="minResetRecord">N/A</span></p>
-                <p>Höchster Reset<span id="maxResetRecord">N/A</span></p>
+                <p>Niedrigster Reset<span id="minResetRecord">N/A</span><small class="record-source" id="minResetRecordSource"></small></p>
+                <p>Höchster Reset<span id="maxResetRecord">N/A</span><small class="record-source" id="maxResetRecordSource"></small></p>
             </div>
 
             <p id="message" aria-live="polite"></p>
@@ -316,20 +532,187 @@
         const resetChanceDisplay = document.getElementById('resetChance');
         const minResetRecordDisplay = document.getElementById('minResetRecord');
         const maxResetRecordDisplay = document.getElementById('maxResetRecord');
+        const minResetRecordSourceDisplay = document.getElementById('minResetRecordSource');
+        const maxResetRecordSourceDisplay = document.getElementById('maxResetRecordSource');
         const messageDisplay = document.getElementById('message');
+        const currentProbabilityDisplay = document.getElementById('currentProbability');
+        const nextProbabilityDisplay = document.getElementById('nextProbability');
+        const currentOddsDisplay = document.getElementById('currentOdds');
+        const nextOddsDisplay = document.getElementById('nextOdds');
+        const chanceOptionButtons = document.querySelectorAll('.chance-option');
+        const resetButton = document.getElementById('resetButton');
+        const debugQuickResetButton = document.getElementById('debugQuickResetButton');
+        const debugPanel = document.getElementById('debugPanel');
+        const disableResetChanceToggle = document.getElementById('disableResetChanceToggle');
 
         let clicks = 0;
         const totalClicks = 100;
-        const resetChanceIncrement = 1; // Chance steigt um 1% pro Klick
+        let resetChanceIncrement = 1; // Chance steigt pro Klick um den gewählten Wert
+        let resetHoldTimer = null;
+        let isResetChanceDisabled = false;
 
         // Rekorde im Local Storage speichern, damit sie auch nach dem Neuladen der Seite erhalten bleiben
         let minResetRecord = localStorage.getItem('minResetRecord') ? parseInt(localStorage.getItem('minResetRecord')) : Infinity; // Infinity für den Anfang
         let maxResetRecord = localStorage.getItem('maxResetRecord') ? parseInt(localStorage.getItem('maxResetRecord')) : 0;
+        let minResetRecordIncrement = localStorage.getItem('minResetRecordIncrement') ? parseFloat(localStorage.getItem('minResetRecordIncrement')) : 1;
+        let maxResetRecordIncrement = localStorage.getItem('maxResetRecordIncrement') ? parseFloat(localStorage.getItem('maxResetRecordIncrement')) : 1;
 
         // Funktion zum Aktualisieren der Rekordanzeigen
         function updateRecordDisplays() {
-            minResetRecordDisplay.textContent = minResetRecord === Infinity ? 'N/A' : minResetRecord;
-            maxResetRecordDisplay.textContent = maxResetRecord === 0 ? 'N/A' : maxResetRecord;
+            if (minResetRecord === Infinity) {
+                minResetRecordDisplay.textContent = 'N/A';
+                minResetRecordSourceDisplay.textContent = '';
+            } else {
+                minResetRecordDisplay.textContent = formatRecordEquivalent(minResetRecord, minResetRecordIncrement);
+                minResetRecordSourceDisplay.textContent = `original ${minResetRecord} bei ${formatChance(minResetRecordIncrement)}`;
+            }
+
+            if (maxResetRecord === 0) {
+                maxResetRecordDisplay.textContent = 'N/A';
+                maxResetRecordSourceDisplay.textContent = '';
+            } else {
+                maxResetRecordDisplay.textContent = formatRecordEquivalent(maxResetRecord, maxResetRecordIncrement);
+                maxResetRecordSourceDisplay.textContent = `original ${maxResetRecord} bei ${formatChance(maxResetRecordIncrement)}`;
+            }
+        }
+
+        function formatPercent(value) {
+            if (value >= 1) {
+                return value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+            }
+
+            if (value <= 0 && value !== 0) {
+                return '< 0,000001%';
+            }
+
+            return value.toLocaleString('de-DE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) + '%';
+        }
+
+        function formatChance(value) {
+            return value.toLocaleString('de-DE', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }) + '%';
+        }
+
+        function formatOdds(probabilityPercent) {
+            if (probabilityPercent <= 0) return '1/unendlich';
+
+            const denominator = 100 / probabilityPercent;
+            const roundedDenominator = Math.max(1, Math.round(denominator));
+
+            return `1/${roundedDenominator.toLocaleString('de-DE')}`;
+        }
+
+        function getRiskLoad(clickCount, increment) {
+            return increment * clickCount * (clickCount + 1) / 2;
+        }
+
+        function getEquivalentClicks(clickCount, sourceIncrement, targetIncrement) {
+            if (!Number.isFinite(clickCount) || clickCount <= 0 || !targetIncrement) return 0;
+
+            const riskLoad = getRiskLoad(clickCount, sourceIncrement);
+            const equivalent = (Math.sqrt(1 + 8 * riskLoad / targetIncrement) - 1) / 2;
+
+            return Math.max(0, Math.floor(equivalent));
+        }
+
+        function formatRecordEquivalent(clickCount, sourceIncrement) {
+            const equivalentClicks = getEquivalentClicks(clickCount, sourceIncrement, resetChanceIncrement);
+
+            if (sourceIncrement === resetChanceIncrement) {
+                return String(clickCount);
+            }
+
+            return `${equivalentClicks} ≈`;
+        }
+
+        function getReachProbability(targetClicks) {
+            let probability = 1;
+
+            for (let clickIndex = 0; clickIndex < targetClicks; clickIndex++) {
+                const resetChance = Math.min(clickIndex * resetChanceIncrement / 100, 1);
+                probability *= 1 - resetChance;
+            }
+
+            return probability * 100;
+        }
+
+        function updateProbabilityDisplays() {
+            const nextClicks = Math.min(clicks + 1, totalClicks);
+            const currentProbability = getReachProbability(clicks);
+            const nextProbability = getReachProbability(nextClicks);
+
+            currentProbabilityDisplay.textContent = formatPercent(currentProbability);
+            currentOddsDisplay.textContent = formatOdds(currentProbability);
+
+            if (clicks >= totalClicks) {
+                nextProbabilityDisplay.textContent = 'Geschafft';
+                nextOddsDisplay.textContent = '1/1';
+            } else {
+                nextProbabilityDisplay.textContent = formatPercent(nextProbability);
+                nextOddsDisplay.textContent = formatOdds(nextProbability);
+            }
+        }
+
+        function updateChanceButtons() {
+            chanceOptionButtons.forEach(button => {
+                button.classList.toggle('active', Number(button.dataset.increment) === resetChanceIncrement);
+            });
+        }
+
+        function setResetChanceIncrement(value) {
+            resetChanceIncrement = value;
+            resetChanceDisplay.textContent = formatChance(clicks * resetChanceIncrement);
+            updateChanceButtons();
+            updateRecordDisplays();
+            updateProbabilityDisplays();
+        }
+
+        function clearCachedValues() {
+            localStorage.removeItem('minResetRecord');
+            localStorage.removeItem('maxResetRecord');
+            localStorage.removeItem('minResetRecordIncrement');
+            localStorage.removeItem('maxResetRecordIncrement');
+
+            minResetRecord = Infinity;
+            maxResetRecord = 0;
+            minResetRecordIncrement = resetChanceIncrement;
+            maxResetRecordIncrement = resetChanceIncrement;
+            updateRecordDisplays();
+        }
+
+        function resetGameProgress() {
+            clearCachedValues();
+            resetCurrentProgress('Reset ausgeführt. Cache geleert.');
+        }
+
+        function resetCurrentProgress(message = 'Fortschritt auf 0 gesetzt.') {
+            clicks = 0;
+            progressBar.style.width = '0%';
+            clickCountDisplay.textContent = `${clicks} / ${totalClicks}`;
+            resetChanceDisplay.textContent = formatChance(0);
+            progressBarContainer.setAttribute('aria-label', `Balken klicken. ${clicks} von ${totalClicks} Klicks erreicht.`);
+            messageDisplay.textContent = message;
+            messageDisplay.classList.remove('reset-message');
+            messageDisplay.classList.add('win-message');
+            updateProbabilityDisplays();
+
+            window.setTimeout(() => {
+                messageDisplay.textContent = '';
+                messageDisplay.classList.remove('win-message');
+            }, 1800);
+        }
+
+        function clearResetHold() {
+            window.clearTimeout(resetHoldTimer);
+            resetHoldTimer = null;
+            resetButton.classList.remove('holding');
+        }
+
+        function toggleDebugPanel() {
+            const isOpen = debugPanel.classList.toggle('show');
+            debugPanel.setAttribute('aria-hidden', String(!isOpen));
         }
 
         // Rekorde beim Start der Seite laden und anzeigen
@@ -344,7 +727,7 @@
                 const currentResetChance = clicks * resetChanceIncrement; // Chance ist Klickzahl * 1%
                 const randomNumber = Math.random() * 100; // Zufallszahl zwischen 0 und 100
 
-                if (randomNumber < currentResetChance && clicks > 0) { // Reset nur, wenn die Klickzahl > 0 ist, damit ein Reset bei 0 Klicks nicht zählt
+                if (!isResetChanceDisabled && randomNumber < currentResetChance && clicks > 0) { // Reset nur, wenn die Klickzahl > 0 ist, damit ein Reset bei 0 Klicks nicht zählt
                     // Reset!
                     messageDisplay.textContent = `Oh nein! Der Balken wurde bei ${currentClicksBeforeAttempt} Klicks zurückgesetzt!`;
                     messageDisplay.classList.add('reset-message');
@@ -353,11 +736,15 @@
                     // Rekorde aktualisieren
                     if (currentClicksBeforeAttempt < minResetRecord) {
                         minResetRecord = currentClicksBeforeAttempt;
+                        minResetRecordIncrement = resetChanceIncrement;
                         localStorage.setItem('minResetRecord', minResetRecord);
+                        localStorage.setItem('minResetRecordIncrement', minResetRecordIncrement);
                     }
                     if (currentClicksBeforeAttempt > maxResetRecord) {
                         maxResetRecord = currentClicksBeforeAttempt;
+                        maxResetRecordIncrement = resetChanceIncrement;
                         localStorage.setItem('maxResetRecord', maxResetRecord);
+                        localStorage.setItem('maxResetRecordIncrement', maxResetRecordIncrement);
                     }
                     updateRecordDisplays(); // Rekordanzeigen aktualisieren
 
@@ -380,7 +767,8 @@
 
                 // Immer die Klickzahl und Reset-Chance aktualisieren
                 clickCountDisplay.textContent = `${clicks} / ${totalClicks}`;
-                resetChanceDisplay.textContent = `${clicks * resetChanceIncrement}%`;
+                resetChanceDisplay.textContent = formatChance(clicks * resetChanceIncrement);
+                updateProbabilityDisplays();
                 progressBarContainer.setAttribute('aria-label', `Balken klicken. ${clicks} von ${totalClicks} Klicks erreicht.`);
 
                 if (clicks === totalClicks) {
@@ -394,12 +782,60 @@
 
         progressBarContainer.addEventListener('click', playRound);
 
+        chanceOptionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                setResetChanceIncrement(Number(button.dataset.increment));
+            });
+        });
+
+        resetButton.addEventListener('pointerdown', event => {
+            if (event.button && event.button !== 0) return;
+
+            event.preventDefault();
+            resetButton.classList.add('holding');
+            resetHoldTimer = window.setTimeout(() => {
+                clearResetHold();
+                resetGameProgress();
+            }, 5000);
+        });
+
+        resetButton.addEventListener('pointerup', clearResetHold);
+        resetButton.addEventListener('pointerleave', clearResetHold);
+        resetButton.addEventListener('pointercancel', clearResetHold);
+        resetButton.addEventListener('contextmenu', event => {
+            event.preventDefault();
+        });
+
+        disableResetChanceToggle.addEventListener('change', () => {
+            isResetChanceDisabled = disableResetChanceToggle.checked;
+            debugQuickResetButton.classList.toggle('show', isResetChanceDisabled);
+            messageDisplay.textContent = isResetChanceDisabled
+                ? 'Debug: Reset-Chance ist deaktiviert. Werte werden weiter angezeigt.'
+                : 'Debug: Reset-Chance ist wieder aktiv.';
+            messageDisplay.classList.remove('reset-message');
+            messageDisplay.classList.add('win-message');
+        });
+
+        debugQuickResetButton.addEventListener('click', () => {
+            resetCurrentProgress();
+        });
+
         progressBarContainer.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' || event.key === ' ') {
                 event.preventDefault();
                 playRound();
             }
         });
+
+        document.addEventListener('keydown', event => {
+            if (event.shiftKey && event.key.toLowerCase() === 'd') {
+                event.preventDefault();
+                toggleDebugPanel();
+            }
+        });
+
+        updateChanceButtons();
+        updateProbabilityDisplays();
     </script>
 </body>
 </html>
