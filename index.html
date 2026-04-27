@@ -270,13 +270,14 @@
             transform: translateY(-2px) scale(0.995);
         }
 
-        .app-card.beta-hold-active {
+        .app-card.version-hold-active {
             border-color: rgba(251, 197, 49, 0.58);
             box-shadow: 0 28px 70px rgba(251, 197, 49, 0.18), 0 0 0 1px rgba(251, 197, 49, 0.24);
         }
 
         #portfolioLink {
             -webkit-touch-callout: none;
+            -webkit-user-select: none;
             user-select: none;
             touch-action: manipulation;
         }
@@ -343,8 +344,88 @@
             transform-origin: left center;
         }
 
-        .app-card.beta-hold-active .card-badge::before {
-            animation: betaHoldFill 0.9s linear forwards;
+        .app-card.version-hold-active .card-badge::before {
+            animation: versionHoldFill 0.62s linear forwards;
+        }
+
+        .version-menu-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, 0.42);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease;
+        }
+
+        .version-menu-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .version-menu {
+            width: min(390px, 100%);
+            padding: 18px;
+            border-radius: 22px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(18px);
+            transform: translateY(10px) scale(0.98);
+            transition: transform 0.18s ease;
+        }
+
+        .version-menu-backdrop.show .version-menu {
+            transform: translateY(0) scale(1);
+        }
+
+        .version-menu-title {
+            margin: 0 0 12px 0;
+            font-size: 1rem;
+            font-weight: 900;
+            color: white;
+        }
+
+        .version-menu-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .version-menu-option {
+            width: 100%;
+            min-height: 52px;
+            padding: 0 14px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 900;
+            text-align: left;
+        }
+
+        .version-menu-option:hover,
+        .version-menu-option:focus-visible {
+            outline: none;
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(251, 197, 49, 0.42);
+        }
+
+        .version-menu-cancel {
+            margin-top: 12px;
+            width: 100%;
+            min-height: 44px;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--soft-blue-text);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 900;
         }
 
         .quick-hint {
@@ -552,7 +633,7 @@
             }
         }
 
-        @keyframes betaHoldFill {
+        @keyframes versionHoldFill {
             to {
                 transform: scaleX(1);
             }
@@ -602,7 +683,7 @@
             }
 
             #portfolioLink .card-badge::after {
-                content: "Gedrückt halten = Beta";
+                content: "Halten = Versionen";
                 font-size: 0.72rem;
             }
 
@@ -615,7 +696,7 @@
             }
 
             .quick-hint span:last-child::after {
-                content: "Auf Mobil: Portfolio-Rechner kurz gedrückt halten, um die Beta-Version zu öffnen.";
+                content: "Portfolio-Rechner halten, um Alt, Aktiv oder Canary zu öffnen.";
                 font-size: 0.9rem;
             }
         }
@@ -696,12 +777,24 @@
                     <span class="card-content">
                         <span class="card-title">Investment Portfolio Rechner</span>
                         <span class="card-desc">Historische Aktien-Performance, Dividenden und Was-wäre-wenn-Rechnungen.</span>
-                        <span class="card-badge">Das Beste im Feld</span>
+                        <span class="card-badge">Halten für Versionen</span>
                     </span>
                 </a>
             </nav>
         </section>
     </main>
+
+    <div class="version-menu-backdrop" id="versionMenuBackdrop" aria-hidden="true">
+        <div class="version-menu" role="dialog" aria-modal="true" aria-labelledby="versionMenuTitle">
+            <p class="version-menu-title" id="versionMenuTitle">Portfolio-Version öffnen</p>
+            <div class="version-menu-options">
+                <button class="version-menu-option" type="button" data-version-url="Aktienrechner/Alt/Since.html">Alt</button>
+                <button class="version-menu-option" type="button" data-version-url="Aktienrechner/Aktiv/Since.html">Aktiv</button>
+                <button class="version-menu-option" type="button" data-version-url="Aktienrechner/Canary/Since.html">Canary</button>
+            </div>
+            <button class="version-menu-cancel" type="button" id="versionMenuCancel">Abbrechen</button>
+        </div>
+    </div>
 
     <footer>
         <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
@@ -709,93 +802,121 @@
 
     <script>
         const portfolioLink = document.getElementById('portfolioLink');
-        let betaThresholdTimer = null;
-        let betaHoldTimer = null;
-        let betaHoldTriggered = false;
-        let betaHoldActive = false;
-        let betaHoldArmed = false;
-        let betaHoldMoved = false;
-        let betaHoldStartX = 0;
-        let betaHoldStartY = 0;
+        const versionMenuBackdrop = document.getElementById('versionMenuBackdrop');
+        const versionMenuCancel = document.getElementById('versionMenuCancel');
+        let versionHoldTimer = null;
+        let versionHoldTriggered = false;
+        let versionHoldActive = false;
+        let versionHoldMoved = false;
+        let versionHoldStartX = 0;
+        let versionHoldStartY = 0;
 
-        function clearBetaHold() {
-            window.clearTimeout(betaThresholdTimer);
-            window.clearTimeout(betaHoldTimer);
-            betaThresholdTimer = null;
-            betaHoldTimer = null;
-            betaHoldActive = false;
-            portfolioLink.classList.remove('beta-hold-active');
+        function clearVersionHold() {
+            window.clearTimeout(versionHoldTimer);
+            versionHoldTimer = null;
+            versionHoldActive = false;
+            portfolioLink.classList.remove('version-hold-active');
+        }
+
+        function openVersionMenu() {
+            versionHoldTriggered = true;
+            versionHoldActive = false;
+            portfolioLink.classList.remove('version-hold-active');
+            versionMenuBackdrop.classList.add('show');
+            versionMenuBackdrop.setAttribute('aria-hidden', 'false');
+            versionMenuBackdrop.querySelector('.version-menu-option').focus();
+        }
+
+        function closeVersionMenu() {
+            versionMenuBackdrop.classList.remove('show');
+            versionMenuBackdrop.setAttribute('aria-hidden', 'true');
         }
 
         portfolioLink.addEventListener('click', function(event) {
-            if (event.shiftKey) {
+            if (versionHoldTriggered) {
                 event.preventDefault();
-                window.location.href = 'Aktienrechner/Canary/Since BETA.html';
-            }
-
-            if (betaHoldTriggered) {
-                event.preventDefault();
-                betaHoldTriggered = false;
+                versionHoldTriggered = false;
             }
         });
 
         portfolioLink.addEventListener('pointerdown', function(event) {
-            if (event.pointerType === 'mouse') return;
+            if (event.button && event.button !== 0) return;
 
-            event.preventDefault();
-            betaHoldTriggered = false;
-            betaHoldArmed = false;
-            betaHoldMoved = false;
-            betaHoldActive = true;
-            betaHoldStartX = event.clientX;
-            betaHoldStartY = event.clientY;
+            if (event.pointerType !== 'mouse') {
+                event.preventDefault();
+            }
+
+            versionHoldTriggered = false;
+            versionHoldMoved = false;
+            versionHoldActive = true;
+            versionHoldStartX = event.clientX;
+            versionHoldStartY = event.clientY;
+            portfolioLink.classList.add('version-hold-active');
 
             try {
                 portfolioLink.setPointerCapture(event.pointerId);
             } catch (error) {
-                // Pointer capture is not available in every mobile browser.
+                // Pointer capture is not available in every browser.
             }
 
-            betaThresholdTimer = window.setTimeout(() => {
-                betaHoldArmed = true;
-                portfolioLink.classList.add('beta-hold-active');
-
-                betaHoldTimer = window.setTimeout(() => {
-                    betaHoldTriggered = true;
-                    betaHoldActive = false;
-                    window.location.href = 'Aktienrechner/Since BETA.html';
-                }, 900);
-            }, 1000);
+            versionHoldTimer = window.setTimeout(openVersionMenu, 620);
         });
 
         portfolioLink.addEventListener('pointermove', function(event) {
-            if (!betaHoldActive || event.pointerType === 'mouse') return;
+            if (!versionHoldActive) return;
 
-            const movedX = Math.abs(event.clientX - betaHoldStartX);
-            const movedY = Math.abs(event.clientY - betaHoldStartY);
+            const movedX = Math.abs(event.clientX - versionHoldStartX);
+            const movedY = Math.abs(event.clientY - versionHoldStartY);
 
             if (movedX > 14 || movedY > 14) {
-                betaHoldMoved = true;
-                clearBetaHold();
+                versionHoldMoved = true;
+                clearVersionHold();
             }
         });
 
         portfolioLink.addEventListener('pointerup', function(event) {
-            if (event.pointerType === 'mouse') return;
+            if (event.pointerType !== 'mouse') {
+                event.preventDefault();
+            }
 
-            event.preventDefault();
-            const shouldOpenNormal = betaHoldActive && !betaHoldArmed && !betaHoldTriggered && !betaHoldMoved;
-            clearBetaHold();
+            const shouldOpenNormal = event.pointerType !== 'mouse'
+                && versionHoldActive
+                && !versionHoldTriggered
+                && !versionHoldMoved;
+            clearVersionHold();
 
             if (shouldOpenNormal) {
                 window.location.href = portfolioLink.href;
             }
         });
 
-        portfolioLink.addEventListener('pointercancel', clearBetaHold);
+        portfolioLink.addEventListener('pointerleave', function(event) {
+            if (event.pointerType === 'mouse') {
+                clearVersionHold();
+            }
+        });
+        portfolioLink.addEventListener('pointercancel', clearVersionHold);
         portfolioLink.addEventListener('contextmenu', function(event) {
-            if (betaHoldActive || betaHoldTriggered) {
-                event.preventDefault();
+            event.preventDefault();
+        });
+
+        versionMenuBackdrop.addEventListener('click', function(event) {
+            if (event.target === versionMenuBackdrop) {
+                closeVersionMenu();
+            }
+        });
+
+        versionMenuBackdrop.querySelectorAll('[data-version-url]').forEach(button => {
+            button.addEventListener('click', function() {
+                window.location.href = button.dataset.versionUrl;
+            });
+        });
+
+        versionMenuCancel.addEventListener('click', closeVersionMenu);
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeVersionMenu();
             }
         });
 

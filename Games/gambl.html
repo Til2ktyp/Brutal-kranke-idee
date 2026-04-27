@@ -431,15 +431,15 @@
     <div class="box">
         <h3>📊 Chancen</h3>
         <div class="info">
-            <p>Gewinnchance: <b>18%</b></p>
+            <p>Gewinnchance: <b>23%</b></p>
             <ul>
                 <li>0.14% → 🌌 Mega weltraum??? (150x)</li>
                 <li>0.46% → 🔥 Super Jackpot (55x)</li>
                 <li>1.2% → 💰 Jackpot (12x)</li>
                 <li>2.5% → ✨ Großer Gewinn (5x)</li>
-                <li>13.7% → ✅ Kleiner Gewinn (2.5x)</li>
+                <li>18.7% → ✅ Kleiner Gewinn (2.5x)</li>
             </ul>
-            <p>Verlustchance: <b>82%</b></p>
+            <p>Verlustchance: <b>77%</b></p>
             <p>➡️ Vorteil liegt beim Spiel</p>
         </div>
     </div>
@@ -585,7 +585,7 @@ function spielen() {
         geld += gewinn;
         log("✨ Großer Gewinn +" + gewinn + "€");
     } 
-    else if (r < 0.18) {
+    else if (r < 0.23) {
         let gewinn = einsatz * 2.5;
         geld += gewinn;
         log("✅ Kleiner Gewinn +" + gewinn + "€");
