@@ -136,8 +136,7 @@
                     e.preventDefault();
                     chart.pan({ x: e.deltaY * 1.2 }, undefined, 'default');
                     hideSelectionPopup();
-                    scheduleVisibleStatsUpdate(35, false);
-                    scheduleChartRefresh(75);
+                    updateVisibleStats();
                 }
             }, { passive: false });
 
@@ -162,8 +161,7 @@
                         if (Math.abs(deltaX) > 1) {
                             chart.pan({ x: deltaX * -1 }, undefined, 'default');
                             hideSelectionPopup();
-                            scheduleVisibleStatsUpdate(35, false);
-                            scheduleChartRefresh(75);
+                            updateVisibleStats();
                         }
                     }
 

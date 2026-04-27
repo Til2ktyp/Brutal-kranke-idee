@@ -233,30 +233,8 @@
             gainLossElement.style.color = gainLoss >= 0 ? '#2ecc71' : '#e74c3c';
         }
 
-        function updateVisiblePriceAxis(startIndex, endIndex) {
-            if (!chart || !portfolioData || !Array.isArray(portfolioData.prices)) return;
-            if (!chart.options || !chart.options.scales || !chart.options.scales.yPrice) return;
-
-            const safeStart = Math.max(0, Math.floor(startIndex));
-            const safeEnd = Math.min(portfolioData.prices.length - 1, Math.ceil(endIndex));
-            const visiblePrices = portfolioData.prices
-                .slice(safeStart, safeEnd + 1)
-                .filter(price => Number.isFinite(price));
-
-            if (visiblePrices.length === 0) return;
-
-            const minPrice = Math.min(...visiblePrices);
-            const maxPrice = Math.max(...visiblePrices);
-            const range = maxPrice - minPrice;
-            const padding = range > 0 ? range * 0.14 : Math.max(maxPrice * 0.08, 1);
-
-            chart.options.scales.yPrice.min = Math.max(0, minPrice - padding);
-            chart.options.scales.yPrice.max = maxPrice + padding;
-        }
-
-        function updateVisibleStats(options = {}) {
+        function updateVisibleStats() {
             if (!portfolioData) return;
-            const shouldUpdatePriceAxis = options.updatePriceAxis !== false;
 
             if (!chart || !chart.scales || !chart.scales.x) {
                 document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
@@ -269,52 +247,8 @@
             const startIndex = Number.isFinite(xScale.min) ? Math.max(0, Math.floor(xScale.min)) : 0;
             const endIndex = Number.isFinite(xScale.max) ? Math.min(portfolioData.months.length - 1, Math.ceil(xScale.max)) : portfolioData.months.length - 1;
 
-            if (shouldUpdatePriceAxis) {
-                updateVisiblePriceAxis(startIndex, endIndex);
-            }
-
             document.title = `Investment Portfolio Rechner – ${currentLoadedStock || 'Aktie'} – ${currentPeriod} Jahre – Kurs € ${getLatestPrice().toLocaleString('de-DE', { maximumFractionDigits: 2 })}`;
             applyStatsFromRange(startIndex, endIndex);
-        }
-
-        function scheduleVisibleStatsUpdate(delay = 35, shouldUpdateChart = false) {
-            visibleStatsShouldUpdateChart = visibleStatsShouldUpdateChart || shouldUpdateChart;
-
-            if (visibleStatsUpdateTimeout || visibleStatsUpdateFrame) return;
-
-            visibleStatsUpdateTimeout = window.setTimeout(() => {
-                visibleStatsUpdateTimeout = null;
-                visibleStatsUpdateFrame = window.requestAnimationFrame(() => {
-                    const shouldRefreshChart = visibleStatsShouldUpdateChart;
-                    visibleStatsShouldUpdateChart = false;
-                    visibleStatsUpdateFrame = null;
-                    updateVisibleStats({ updatePriceAxis: shouldRefreshChart });
-
-                    if (shouldRefreshChart && chart) {
-                        chart.update();
-                    }
-                });
-            }, delay);
-        }
-
-        function scheduleChartRefresh(delay = 75) {
-            if (chartRefreshTimeout) {
-                window.clearTimeout(chartRefreshTimeout);
-            }
-
-            chartRefreshTimeout = window.setTimeout(() => {
-                chartRefreshTimeout = null;
-
-                if (chart) {
-                    updateVisibleStats({ updatePriceAxis: true });
-                    chart.update();
-                }
-            }, delay);
-        }
-
-        function getChartDevicePixelRatio() {
-            const ratio = window.devicePixelRatio || 1;
-            return Math.min(ratio, 1.75);
         }
 
         function updateChart() {
@@ -326,23 +260,6 @@
             const investedAmounts = portfolioData.investedAmounts;
             const cumulativeDividends = portfolioData.cumulativeDividends;
             const prices = portfolioData.prices;
-            const validPrices = prices.filter(price => Number.isFinite(price) && price > 0);
-            const hasValidPrices = validPrices.length > 0;
-            const maxStockPrice = hasValidPrices ? Math.max(...validPrices) : 1;
-            const minStockPrice = hasValidPrices ? Math.min(...validPrices) : 0;
-            const stockPriceRange = maxStockPrice - minStockPrice;
-
-            const stockPricePadding = Number.isFinite(stockPriceRange) && stockPriceRange > 0
-                ? stockPriceRange * 0.12
-                : Math.max(maxStockPrice * 0.08, 0.01);
-
-            const stockPriceAxisMin = Number.isFinite(minStockPrice)
-                ? Math.max(0, minStockPrice - stockPricePadding)
-                : undefined;
-
-            const stockPriceAxisMax = Number.isFinite(maxStockPrice)
-                ? maxStockPrice + stockPricePadding
-                : undefined;
 
             // Erstelle Chart
             const ctx = document.getElementById('portfolioChart').getContext('2d');
@@ -416,48 +333,9 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    devicePixelRatio: getChartDevicePixelRatio(),
-                    animation: {
-                        duration: 620,
-                        easing: 'easeOutQuart'
-                    },
-                    normalized: true,
-                    transitions: {
-                        active: {
-                            animation: {
-                                duration: 180
-                            }
-                        },
-                        resize: {
-                            animation: {
-                                duration: 0
-                            }
-                        },
-                        show: {
-                            animations: {
-                                x: {
-                                    from: 0,
-                                    duration: 520,
-                                    easing: 'easeOutQuart'
-                                },
-                                y: {
-                                    from: 0,
-                                    duration: 520,
-                                    easing: 'easeOutQuart'
-                                }
-                            }
-                        },
-                        hide: {
-                            animation: {
-                                duration: 180,
-                                easing: 'easeOutCubic'
-                            }
-                        }
-                    },
                     interaction: {
                         mode: 'index',
-                        intersect: false,
-                        axis: 'x'
+                        intersect: false
                     },
                     hover: {
                         mode: 'index',
@@ -470,8 +348,7 @@
                                 mode: 'x',
                                 threshold: 2,
                                 onPanComplete: function() {
-                                    scheduleVisibleStatsUpdate(35, false);
-                                    scheduleChartRefresh(75);
+                                    updateVisibleStats();
                                     hideSelectionPopup();
                                 }
                             },
@@ -479,7 +356,7 @@
                                 wheel: {
                                     enabled: zoomEnabled,
                                     modifierKey: 'shift',
-                                    speed: 0.006
+                                    speed: 0.01
                                 },
                                 pinch: {
                                     enabled: zoomEnabled,
@@ -516,7 +393,7 @@
                                     isDragSelecting = false;
                                     dragSelectionStartIndex = null;
                                     hideSelectionPopup();
-                                    scheduleVisibleStatsUpdate(60, true);
+                                    updateVisibleStats();
                                 }
                             },
                             limits: {
@@ -575,8 +452,6 @@
                         },
                         yPrice: {
                             position: 'right',
-                            min: stockPriceAxisMin,
-                            max: stockPriceAxisMax,
                             ticks: {
                                 color: priceTickColor,
                                 sampleSize: 8,

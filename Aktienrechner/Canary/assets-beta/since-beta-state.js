@@ -16,10 +16,6 @@
         let lastPointerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         let isDragSelecting = false;
         let dragSelectionStartIndex = null;
-        let visibleStatsUpdateTimeout = null;
-        let visibleStatsUpdateFrame = null;
-        let visibleStatsShouldUpdateChart = false;
-        let chartRefreshTimeout = null;
         const CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
         const MAX_PERIOD_YEARS = 40;
         const MIN_PERIOD_YEARS = 1;
