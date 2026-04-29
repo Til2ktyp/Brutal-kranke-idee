@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Investment Portfolio Rechner</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
@@ -11,6 +11,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets-beta/since-beta.css">
+<style id="bb-touch-zoom-guard-style">
+    html,
+    body {
+        touch-action: manipulation;
+        -ms-touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+    }
+</style>
 </head>
 <body>
     <a class="back-home-btn" href="https://blopperbold.org" aria-label="Zurück zu BlopperBold">
@@ -207,5 +215,44 @@
     <script src="assets-beta/since-beta-ui.js"></script>
     <script src="assets-beta/since-beta-chart.js"></script>
     <script src="assets-beta/since-beta-main.js"></script>
+    <script>
+        document.addEventListener('contextmenu', event => {
+            if (event.target.closest('button, a, [role="button"]')) {
+                event.preventDefault();
+            }
+        });
+    </script>
+<script id="bb-touch-zoom-guard">
+(function() {
+    if (window.__bbTouchZoomGuard) return;
+    window.__bbTouchZoomGuard = true;
+
+    let lastTouchEnd = 0;
+
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+
+        if (now - lastTouchEnd <= 350 && event.cancelable) {
+            event.preventDefault();
+        }
+
+        lastTouchEnd = now;
+    }, { passive: false });
+
+    document.addEventListener('dblclick', function(event) {
+        if (event.cancelable) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach(function(eventName) {
+        document.addEventListener(eventName, function(event) {
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    });
+})();
+</script>
 </body>
 </html>

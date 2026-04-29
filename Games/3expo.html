@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Exponentieller Klick-Zähler mit Speicherung & Rendite</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -21,6 +21,16 @@
 
         * {
             box-sizing: border-box;
+        }
+
+        button,
+        a,
+        [role="button"] {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         body {
@@ -204,6 +214,17 @@
             transform: translateX(2px);
         }
     </style>
+    <style>
+        .dopamine-burst{position:fixed;z-index:9999;left:0;top:0;width:14px;height:14px;border:2px solid rgba(251,197,49,.95);border-radius:999px;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineRing .55s ease-out forwards}.dopamine-spark{position:fixed;z-index:9999;left:0;top:0;width:7px;height:7px;border-radius:999px;background:#fbc531;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineSpark .58s ease-out forwards}.dopamine-hit{animation:dopamineHit .22s ease}@keyframes dopamineRing{to{width:110px;height:110px;opacity:0}}@keyframes dopamineSpark{to{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.2);opacity:0}}@keyframes dopamineHit{50%{filter:brightness(1.35) saturate(1.4);transform:scale(1.035)}}
+    </style>
+<style id="bb-touch-zoom-guard-style">
+    html,
+    body {
+        touch-action: manipulation;
+        -ms-touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+    }
+</style>
 </head>
 <body>
     <div class="noise-layer" aria-hidden="true"></div>
@@ -376,6 +397,47 @@
 
         updateDisplay();
         valueChart.update();
+
+        document.addEventListener('contextmenu', event => {
+            if (event.target.closest('button, a, [role="button"]')) {
+                event.preventDefault();
+            }
+        });
     </script>
+    <script>
+        document.addEventListener('click',event=>{const target=event.target.closest('button,a,[role="button"]');if(!target)return;target.classList.remove('dopamine-hit');void target.offsetWidth;target.classList.add('dopamine-hit');const ring=document.createElement('span');ring.className='dopamine-burst';ring.style.left=event.clientX+'px';ring.style.top=event.clientY+'px';document.body.append(ring);setTimeout(()=>ring.remove(),620);for(let i=0;i<12;i++){const spark=document.createElement('span');spark.className='dopamine-spark';spark.style.left=event.clientX+'px';spark.style.top=event.clientY+'px';spark.style.background=i%3===0?'#38bdf8':i%3===1?'#fbc531':'#26de81';const angle=Math.random()*Math.PI*2,dist=32+Math.random()*42;spark.style.setProperty('--x',Math.cos(angle)*dist+'px');spark.style.setProperty('--y',Math.sin(angle)*dist+'px');document.body.append(spark);setTimeout(()=>spark.remove(),650)}});
+    </script>
+<script id="bb-touch-zoom-guard">
+(function() {
+    if (window.__bbTouchZoomGuard) return;
+    window.__bbTouchZoomGuard = true;
+
+    let lastTouchEnd = 0;
+
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+
+        if (now - lastTouchEnd <= 350 && event.cancelable) {
+            event.preventDefault();
+        }
+
+        lastTouchEnd = now;
+    }, { passive: false });
+
+    document.addEventListener('dblclick', function(event) {
+        if (event.cancelable) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+
+    ['gesturestart', 'gesturechange', 'gestureend'].forEach(function(eventName) {
+        document.addEventListener(eventName, function(event) {
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    });
+})();
+</script>
 </body>
 </html>
