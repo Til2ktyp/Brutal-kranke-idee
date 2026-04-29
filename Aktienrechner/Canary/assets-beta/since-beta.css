@@ -1544,3 +1544,16 @@
             transform: none !important;
             filter: none !important;
         }
+
+        body.performance-mode .stat-char-old {
+            display: none !important;
+        }
+
+        body.performance-mode .stat-char-new {
+            position: static !important;
+            opacity: 1 !important;
+        }
+
+        body.performance-mode .stat-char-roller {
+            overflow: visible !important;
+        }

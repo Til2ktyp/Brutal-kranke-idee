@@ -122,7 +122,7 @@
             element.dataset.statRawValue = nextText;
             element.setAttribute('aria-label', nextText);
 
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (chartPerformanceMode || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                 element.innerText = nextText;
                 return;
             }

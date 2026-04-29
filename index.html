@@ -348,6 +348,163 @@
             animation: versionHoldFill 0.62s linear forwards;
         }
 
+        .more-games-trigger {
+            position: relative;
+            isolation: isolate;
+            grid-column: 1 / -1;
+            min-height: 72px;
+            border: 1px solid rgba(251, 197, 49, 0.26);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.18), transparent 34%),
+                linear-gradient(135deg, rgba(251, 197, 49, 0.24), rgba(56, 189, 248, 0.16)),
+                rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 950;
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
+        }
+
+        .more-games-trigger::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-120%) skewX(-10deg);
+            transition: transform 0.48s ease;
+        }
+
+        .more-games-trigger:hover {
+            transform: translateY(-6px) scale(1.01);
+            filter: saturate(1.08);
+            border-color: rgba(251, 197, 49, 0.44);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28), 0 0 34px rgba(251, 197, 49, 0.14);
+        }
+
+        .more-games-trigger:hover::before {
+            transform: translateX(120%) skewX(-10deg);
+        }
+
+        .more-games-trigger span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.08rem;
+        }
+
+        .more-games-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, 0.42);
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(0);
+            transition: opacity 0.2s ease, backdrop-filter 0.28s ease;
+        }
+
+        .more-games-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+            backdrop-filter: blur(14px);
+        }
+
+        .more-games-widget {
+            width: min(760px, 100%);
+            max-height: min(720px, calc(100vh - 36px));
+            overflow: auto;
+            padding: clamp(20px, 5vw, 30px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background:
+                radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.2), transparent 34%),
+                radial-gradient(circle at 86% 18%, rgba(251, 197, 49, 0.16), transparent 30%),
+                rgba(15, 23, 42, 0.88);
+            box-shadow: 0 32px 110px rgba(0, 0, 0, 0.48);
+            transform: scale(0.88) translateY(20px);
+            filter: blur(10px);
+            transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.28s ease;
+        }
+
+        .more-games-backdrop.show .more-games-widget {
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
+
+        .more-games-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: start;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .more-games-kicker {
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(251, 197, 49, 0.18);
+            color: #fde68a;
+            border: 1px solid rgba(251, 197, 49, 0.22);
+            font-size: 0.72rem;
+            font-weight: 950;
+            text-transform: uppercase;
+        }
+
+        .more-games-title {
+            margin: 0;
+            color: white;
+            font-size: clamp(1.9rem, 6vw, 3.4rem);
+            line-height: 0.94;
+            letter-spacing: -0.04em;
+        }
+
+        .more-games-copy {
+            margin: 12px 0 0;
+            color: var(--soft-blue-text);
+            line-height: 1.55;
+        }
+
+        .more-games-close {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font: inherit;
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .more-games-close:hover,
+        .more-games-close:focus-visible {
+            outline: none;
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .more-games-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .more-games-grid .app-card {
+            min-height: 150px;
+        }
+
         .version-menu-backdrop {
             position: fixed;
             inset: 0;
@@ -654,6 +811,19 @@
                 grid-template-columns: 1fr;
             }
 
+            .more-games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .more-games-header {
+                grid-template-columns: 1fr;
+            }
+
+            .more-games-close {
+                justify-self: end;
+                order: -1;
+            }
+
             .app-card {
                 min-height: 112px;
             }
@@ -780,9 +950,46 @@
                         <span class="card-badge">Halten für Versionen</span>
                     </span>
                 </a>
+
+                <button class="more-games-trigger" type="button" id="moreGamesButton">
+                    <span>Mehr anzeigen ✨</span>
+                </button>
             </nav>
         </section>
     </main>
+
+    <div class="more-games-backdrop" id="moreGamesBackdrop" aria-hidden="true">
+        <section class="more-games-widget" role="dialog" aria-modal="true" aria-labelledby="moreGamesTitle">
+            <div class="more-games-header">
+                <div>
+                    <span class="more-games-kicker">Extra Games</span>
+                    <h2 class="more-games-title" id="moreGamesTitle">Die schlaue Schublade</h2>
+                    <p class="more-games-copy">Zwei Experimente für Gehirn, Alltag und ein bisschen kontrollierten Unsinn.</p>
+                </div>
+                <button class="more-games-close" type="button" id="moreGamesClose" aria-label="Mehr anzeigen schließen">×</button>
+            </div>
+
+            <div class="more-games-grid">
+                <a class="app-card" href="Games/biasbingo.html">
+                    <span class="card-icon">🧠</span>
+                    <span class="card-content">
+                        <span class="card-title">Bias Bingo</span>
+                        <span class="card-desc">Denkfehler erkennen, Hype-Schaden vermeiden und trotzdem Quatsch anklicken.</span>
+                        <span class="card-badge">Schlau</span>
+                    </span>
+                </a>
+
+                <a class="app-card" href="Games/entscheidomat.html">
+                    <span class="card-icon">⚖️</span>
+                    <span class="card-content">
+                        <span class="card-title">Entscheidomat</span>
+                        <span class="card-desc">Alltagsentscheidungen gegen Geld, Zeit, Energie und Zukunftswert rechnen.</span>
+                        <span class="card-badge">Nützlich</span>
+                    </span>
+                </a>
+            </div>
+        </section>
+    </div>
 
     <div class="version-menu-backdrop" id="versionMenuBackdrop" aria-hidden="true">
         <div class="version-menu" role="dialog" aria-modal="true" aria-labelledby="versionMenuTitle">
@@ -801,6 +1008,9 @@
     </footer>
 
     <script>
+        const moreGamesButton = document.getElementById('moreGamesButton');
+        const moreGamesBackdrop = document.getElementById('moreGamesBackdrop');
+        const moreGamesClose = document.getElementById('moreGamesClose');
         const portfolioLink = document.getElementById('portfolioLink');
         const versionMenuBackdrop = document.getElementById('versionMenuBackdrop');
         const versionMenuCancel = document.getElementById('versionMenuCancel');
@@ -810,6 +1020,27 @@
         let versionHoldMoved = false;
         let versionHoldStartX = 0;
         let versionHoldStartY = 0;
+
+        function openMoreGames() {
+            moreGamesBackdrop.classList.add('show');
+            moreGamesBackdrop.setAttribute('aria-hidden', 'false');
+            moreGamesClose.focus();
+        }
+
+        function closeMoreGames() {
+            moreGamesBackdrop.classList.remove('show');
+            moreGamesBackdrop.setAttribute('aria-hidden', 'true');
+            moreGamesButton.focus();
+        }
+
+        moreGamesButton.addEventListener('click', openMoreGames);
+        moreGamesClose.addEventListener('click', closeMoreGames);
+
+        moreGamesBackdrop.addEventListener('click', function(event) {
+            if (event.target === moreGamesBackdrop) {
+                closeMoreGames();
+            }
+        });
 
         function clearVersionHold() {
             window.clearTimeout(versionHoldTimer);
@@ -916,6 +1147,9 @@
 
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
+                if (moreGamesBackdrop.classList.contains('show')) {
+                    closeMoreGames();
+                }
                 closeVersionMenu();
             }
         });
