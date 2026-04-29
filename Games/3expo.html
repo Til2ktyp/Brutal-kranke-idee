@@ -225,8 +225,13 @@
         -webkit-text-size-adjust: 100%;
     }
 </style>
+<style id="bb-hyper-style">
+.bb-hyper-toggle{position:fixed;top:20px;right:18px;z-index:12000;width:48px;height:48px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:linear-gradient(145deg,rgba(15,23,42,.86),rgba(99,102,241,.72));color:#fff;font-size:1.25rem;font-weight:950;display:grid;place-items:center;cursor:pointer;box-shadow:0 16px 42px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(18px);-webkit-tap-highlight-color:transparent;touch-action:manipulation}.bb-hyper-toggle:hover{transform:translateY(-2px);filter:brightness(1.08)}.bb-hyper-toggle.is-on{background:linear-gradient(135deg,#fbc531,#38bdf8 52%,#a855f7);box-shadow:0 0 28px rgba(251,197,49,.35),0 18px 48px rgba(56,189,248,.28)}.bb-hyper-panel{position:fixed;top:76px;right:18px;z-index:12001;width:min(340px,calc(100vw - 36px));padding:16px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(49,46,129,.88));color:#fff;box-shadow:0 28px 80px rgba(0,0,0,.44);backdrop-filter:blur(24px);display:none;transform:scale(.92) translateY(-8px);opacity:0;filter:blur(10px)}.bb-hyper-panel.show{display:block;animation:bbHyperPanelIn .28s cubic-bezier(.18,.9,.24,1) forwards}.bb-hyper-panel.closing{display:block;animation:bbHyperPanelOut .2s ease forwards}.bb-hyper-title{margin:0 0 4px;font-size:1rem;font-weight:950;color:#fde68a}.bb-hyper-subtitle{margin:0 0 14px;color:rgba(255,255,255,.72);font-size:.84rem;line-height:1.35}.bb-hyper-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.08);margin-top:10px}.bb-hyper-row span{font-size:.92rem;font-weight:850}.bb-hyper-switch{position:relative;width:56px;height:31px;flex:0 0 auto}.bb-hyper-switch input{position:absolute;opacity:0;inset:0}.bb-hyper-slider{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transition:.2s}.bb-hyper-slider:before{content:"";position:absolute;width:25px;height:25px;left:3px;top:3px;border-radius:999px;background:#fff;box-shadow:0 5px 12px rgba(0,0,0,.25);transition:.22s cubic-bezier(.18,.9,.24,1)}.bb-hyper-switch input:checked + .bb-hyper-slider{background:linear-gradient(135deg,#fbc531,#38bdf8)}.bb-hyper-switch input:checked + .bb-hyper-slider:before{transform:translateX(25px)}.bb-hyper-note{margin:12px 0 0;color:rgba(255,255,255,.62);font-size:.78rem;line-height:1.35}.bb-hyper-on h1,.bb-hyper-on .hero h1{animation:bbHyperTitle 2.2s ease-in-out infinite;text-shadow:0 0 18px rgba(251,197,49,.55),0 0 34px rgba(56,189,248,.34)}.bb-hyper-on button:not(.bb-hyper-toggle),.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill{animation:bbHyperBreath 1.9s ease-in-out infinite}.bb-hyper-on .chart,.bb-hyper-on .chart-container,.bb-hyper-on canvas,.bb-hyper-on .progress-bar-container,.bb-hyper-on .track,.bb-hyper-on .card{filter:saturate(1.28);box-shadow:0 0 34px rgba(56,189,248,.22),0 0 54px rgba(251,197,49,.14)}.bb-hyper-on::after{content:"";position:fixed;inset:-20%;z-index:11990;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,rgba(255,255,255,.14) 44%,transparent 52% 100%);mix-blend-mode:screen;animation:bbHyperSweep 2.8s linear infinite}.bb-hyper-spark{position:fixed;z-index:11999;left:0;top:0;width:8px;height:8px;border-radius:999px;pointer-events:none;background:var(--bb-c,#fbc531);box-shadow:0 0 16px var(--bb-c,#fbc531),0 0 28px rgba(255,255,255,.34);transform:translate(-50%,-50%);animation:bbHyperSpark .9s ease-out forwards}.bb-hyper-star{position:fixed;z-index:11998;left:0;top:0;width:5px;height:5px;border-radius:999px;background:#fff;pointer-events:none;box-shadow:0 0 14px #fff,0 0 28px rgba(251,197,49,.72);animation:bbHyperFall 1.9s linear forwards}.bb-hyper-toast{position:fixed;z-index:12002;left:50%;bottom:22px;transform:translateX(-50%) scale(.92);padding:10px 14px;border-radius:999px;background:rgba(15,23,42,.86);border:1px solid rgba(255,255,255,.18);color:#fde68a;font-weight:950;box-shadow:0 18px 44px rgba(0,0,0,.35);opacity:0;pointer-events:none;animation:bbHyperToast .9s ease forwards}@keyframes bbHyperPanelIn{to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}@keyframes bbHyperPanelOut{from{opacity:1;transform:scale(1);filter:blur(0)}to{opacity:0;transform:scale(.94) translateY(-8px);filter:blur(10px)}}@keyframes bbHyperTitle{0%,100%{filter:hue-rotate(0) saturate(1)}50%{filter:hue-rotate(55deg) saturate(1.8);transform:translateY(-1px) scale(1.012)}}@keyframes bbHyperBreath{0%,100%{filter:saturate(1);box-shadow:inherit}50%{filter:saturate(1.35) brightness(1.08);box-shadow:0 0 26px rgba(251,197,49,.18),0 0 42px rgba(56,189,248,.14)}}@keyframes bbHyperSweep{to{transform:translateX(65%)}}@keyframes bbHyperSpark{to{transform:translate(calc(-50% + var(--bb-x)),calc(-50% + var(--bb-y))) scale(.18) rotate(240deg);opacity:0}}@keyframes bbHyperFall{to{transform:translate(var(--bb-x),120vh) rotate(260deg);opacity:0}}@keyframes bbHyperToast{20%,78%{opacity:1;transform:translateX(-50%) scale(1)}to{opacity:0;transform:translateX(-50%) scale(.96) translateY(8px)}}.bb-canary-page .bb-hyper-toggle{top:76px}.bb-canary-page .bb-hyper-panel{top:132px}@media(max-width:720px){.bb-hyper-toggle{top:72px;right:12px;width:44px;height:44px}.bb-hyper-panel{top:124px;right:12px;width:calc(100vw - 24px)}}@media(prefers-reduced-motion:reduce){.bb-hyper-on h1,.bb-hyper-on .hero h1,.bb-hyper-on button,.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill,.bb-hyper-on::after,.bb-hyper-spark,.bb-hyper-star,.bb-hyper-toast{animation:none!important}}
+</style>
+
 </head>
-<body>
+<body><button class="bb-hyper-toggle" id="bbHyperToggle" type="button" aria-label="Hyperaktivitäts-Einstellungen" aria-expanded="false">⚙</button><div class="bb-hyper-panel" id="bbHyperPanel" aria-hidden="true"><p class="bb-hyper-title" id="bbHyperTitle">Hyper-Einstellungen</p><p class="bb-hyper-subtitle">Dopamin-Spikes, Glitzer, Pop und Klick-Explosionen. Kann jederzeit wieder ruhig gestellt werden.</p><label class="bb-hyper-row"><span>Hyperaktivitätsmodus</span><span class="bb-hyper-switch"><input id="bbHyperMode" type="checkbox"><span class="bb-hyper-slider"></span></span></label><label class="bb-hyper-row"><span>Klick-Explosionen</span><span class="bb-hyper-switch"><input id="bbHyperClicks" type="checkbox"><span class="bb-hyper-slider"></span></span></label><label class="bb-hyper-row"><span>Glitzerregen</span><span class="bb-hyper-switch"><input id="bbHyperAmbient" type="checkbox"><span class="bb-hyper-slider"></span></span></label><p class="bb-hyper-note">Die Einstellung wird pro Seite gespeichert.</p></div>
+
     <div class="noise-layer" aria-hidden="true"></div>
 
     <main class="container">
@@ -405,7 +410,7 @@
         });
     </script>
     <script>
-        document.addEventListener('click',event=>{const target=event.target.closest('button,a,[role="button"]');if(!target)return;target.classList.remove('dopamine-hit');void target.offsetWidth;target.classList.add('dopamine-hit');const ring=document.createElement('span');ring.className='dopamine-burst';ring.style.left=event.clientX+'px';ring.style.top=event.clientY+'px';document.body.append(ring);setTimeout(()=>ring.remove(),620);for(let i=0;i<12;i++){const spark=document.createElement('span');spark.className='dopamine-spark';spark.style.left=event.clientX+'px';spark.style.top=event.clientY+'px';spark.style.background=i%3===0?'#38bdf8':i%3===1?'#fbc531':'#26de81';const angle=Math.random()*Math.PI*2,dist=32+Math.random()*42;spark.style.setProperty('--x',Math.cos(angle)*dist+'px');spark.style.setProperty('--y',Math.sin(angle)*dist+'px');document.body.append(spark);setTimeout(()=>spark.remove(),650)}});
+        document.addEventListener('click',event=>{if(!document.body.classList.contains('bb-hyper-clicks-on'))return;const target=event.target.closest('button,a,[role="button"]');if(!target)return;target.classList.remove('dopamine-hit');void target.offsetWidth;target.classList.add('dopamine-hit');const ring=document.createElement('span');ring.className='dopamine-burst';ring.style.left=event.clientX+'px';ring.style.top=event.clientY+'px';document.body.append(ring);setTimeout(()=>ring.remove(),620);for(let i=0;i<12;i++){const spark=document.createElement('span');spark.className='dopamine-spark';spark.style.left=event.clientX+'px';spark.style.top=event.clientY+'px';spark.style.background=i%3===0?'#38bdf8':i%3===1?'#fbc531':'#26de81';const angle=Math.random()*Math.PI*2,dist=32+Math.random()*42;spark.style.setProperty('--x',Math.cos(angle)*dist+'px');spark.style.setProperty('--y',Math.sin(angle)*dist+'px');document.body.append(spark);setTimeout(()=>spark.remove(),650)}});
     </script>
 <script id="bb-touch-zoom-guard">
 (function() {
@@ -439,5 +444,41 @@
     });
 })();
 </script>
+<script id="bb-hyper-script">
+(function(){
+  if(window.__bbHyperController)return;
+  window.__bbHyperController=true;
+  const key='bbHyper:'+location.pathname;
+  const gear=document.getElementById('bbHyperToggle');
+  const panel=document.getElementById('bbHyperPanel');
+  const title=document.getElementById('bbHyperTitle');
+  const mode=document.getElementById('bbHyperMode');
+  const clicks=document.getElementById('bbHyperClicks');
+  const ambient=document.getElementById('bbHyperAmbient');
+  if(!gear||!panel||!mode||!clicks||!ambient)return;
+  title.textContent=(document.title||'BlopperBold')+' Einstellungen';
+  let closeTimer=0;
+  let state;
+  try{state=JSON.parse(localStorage.getItem(key)||'null')}catch(error){state=null}
+  if(!state)state={mode:true,clicks:true,ambient:true};
+  function save(){localStorage.setItem(key,JSON.stringify(state))}
+  function toast(text){if(!state.mode)return;const el=document.createElement('div');el.className='bb-hyper-toast';el.textContent=text;document.body.append(el);setTimeout(()=>el.remove(),950)}
+  function apply(){document.body.classList.toggle('bb-hyper-on',!!state.mode);document.body.classList.toggle('bb-hyper-clicks-on',!!state.mode&&!!state.clicks);gear.classList.toggle('is-on',!!state.mode);mode.checked=!!state.mode;clicks.checked=!!state.clicks;ambient.checked=!!state.ambient;save()}
+  function openPanel(){clearTimeout(closeTimer);panel.classList.remove('closing');panel.classList.add('show');panel.setAttribute('aria-hidden','false');gear.setAttribute('aria-expanded','true')}
+  function closePanel(){if(!panel.classList.contains('show'))return;clearTimeout(closeTimer);panel.classList.remove('show');panel.classList.add('closing');panel.setAttribute('aria-hidden','true');gear.setAttribute('aria-expanded','false');closeTimer=setTimeout(()=>panel.classList.remove('closing'),220)}
+  function burst(x,y,amount){if(!state.mode||!state.clicks)return;const colors=['#fbc531','#38bdf8','#26de81','#fb7185','#a78bfa','#fff'];for(let i=0;i<amount;i++){const s=document.createElement('span');s.className='bb-hyper-spark';s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--bb-c',colors[i%colors.length]);const angle=Math.random()*Math.PI*2;const dist=38+Math.random()*96;s.style.setProperty('--bb-x',Math.cos(angle)*dist+'px');s.style.setProperty('--bb-y',Math.sin(angle)*dist+'px');document.body.append(s);setTimeout(()=>s.remove(),950)}}
+  gear.addEventListener('click',event=>{event.stopPropagation();panel.classList.contains('show')?closePanel():openPanel();burst(event.clientX,event.clientY,18)});
+  panel.addEventListener('click',event=>event.stopPropagation());
+  document.addEventListener('click',event=>{if(!panel.contains(event.target)&&event.target!==gear)closePanel()});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')closePanel()});
+  mode.addEventListener('change',()=>{state.mode=mode.checked;apply();toast(state.mode?'Hypermodus an':'Hypermodus aus')});
+  clicks.addEventListener('change',()=>{state.clicks=clicks.checked;apply();toast(state.clicks?'Klicks glitzern':'Klicks ruhig')});
+  ambient.addEventListener('change',()=>{state.ambient=ambient.checked;apply();toast(state.ambient?'Glitzerregen an':'Glitzerregen aus')});
+  document.addEventListener('click',event=>{const target=event.target.closest('button,a,[role="button"],.progress-bar-container,.card,.chart');if(!target||target.closest('.bb-hyper-panel'))return;burst(event.clientX,event.clientY,target.id==='bbHyperToggle'?18:26)});
+  setInterval(()=>{if(!state.mode||!state.ambient||document.hidden)return;const star=document.createElement('span');star.className='bb-hyper-star';star.style.left=Math.random()*100+'vw';star.style.top='-12px';star.style.setProperty('--bb-x',(Math.random()*90-45)+'px');document.body.append(star);setTimeout(()=>star.remove(),2100)},180);
+  apply();
+})();
+</script>
+
 </body>
 </html>
