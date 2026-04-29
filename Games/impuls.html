@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impuls</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881" crossorigin="anonymous"></script>
+<style>
+:root{--bg-1:#0f172a;--bg-2:#312e81;--bg-3:#7c3aed;--border:rgba(255,255,255,.18);--text:#fff;--muted:rgba(255,255,255,.72);--accent:#fbc531;--accent-2:#38bdf8;--good:#26de81;--danger:#ef4444;--dark:#1e272e}
+*{box-sizing:border-box}body{min-height:100vh;margin:0;padding:92px 18px 48px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 18%,rgba(56,189,248,.34),transparent 28%),radial-gradient(circle at 88% 14%,rgba(251,197,49,.25),transparent 24%),radial-gradient(circle at 50% 100%,rgba(168,85,247,.33),transparent 33%),linear-gradient(135deg,var(--bg-1),var(--bg-2) 52%,var(--bg-3));overflow-x:hidden}body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.13;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(circle at center,#000,transparent 78%)}
+.back-home-btn{position:fixed;top:20px;left:20px;z-index:2;background:var(--accent);color:var(--dark);padding:12px 18px;border-radius:12px;font-weight:900;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.shell{position:relative;z-index:1;width:min(980px,100%);margin:0 auto}.hero{text-align:center;margin-bottom:20px}.eyebrow{display:inline-flex;margin-bottom:10px;padding:7px 12px;border-radius:999px;background:rgba(251,197,49,.16);color:#fde68a;border:1px solid rgba(251,197,49,.22);font-size:.8rem;font-weight:950;text-transform:uppercase}h1{margin:0;color:var(--accent);font-size:clamp(2.4rem,8vw,5rem);line-height:.95;font-weight:950}.subtitle{max-width:680px;margin:12px auto 0;color:var(--muted);line-height:1.55}
+.grid{display:grid;grid-template-columns:260px 1fr;gap:18px}.box{padding:22px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.07));box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(18px)}.stats{display:grid;gap:10px}.stat{padding:14px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.08)}.stat strong{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase}.stat span{display:block;margin-top:5px;font-size:1.6rem;font-weight:950}
+button{min-height:46px;border:0;border-radius:13px;padding:11px 14px;background:linear-gradient(135deg,var(--accent-2),#2563eb);color:#07111f;cursor:pointer;font:inherit;font-weight:950;box-shadow:0 10px 24px rgba(37,99,235,.26)}button.secondary{background:rgba(255,255,255,.12);color:var(--text);border:1px solid var(--border);box-shadow:none}.board{position:relative;height:min(58vh,520px);min-height:390px;border-radius:20px;border:1px solid var(--border);background:rgba(5,10,20,.42);overflow:hidden}.chip{position:absolute;width:74px;height:74px;border-radius:20px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.24);background:linear-gradient(135deg,rgba(56,189,248,.95),rgba(251,197,49,.86));color:#07111f;font-weight:950;font-size:1.7rem;box-shadow:0 18px 38px rgba(0,0,0,.28);transform:scale(.86);animation:pop .18s ease forwards}.chip.bad{background:linear-gradient(135deg,#ef4444,#fb7185);color:white}.flash{animation:flash .3s ease}.log{min-height:52px;margin-top:14px;color:var(--muted);font-weight:850}@keyframes pop{to{transform:scale(1)}}@keyframes flash{50%{filter:brightness(1.7)}}@media(max-width:760px){body{padding-top:86px}.grid{grid-template-columns:1fr}.board{min-height:360px}}
+</style>
+</head>
+<body>
+<a class="back-home-btn" href="https://blopperbold.org">← BlopperBold</a>
+<main class="shell">
+<section class="hero"><div class="eyebrow">Reflex-Modus</div><h1>Impuls</h1><p class="subtitle">Treffe die hellen Impulse, meide rote Störer. 45 Sekunden, Combo hoch, ruhig bleiben.</p></section>
+<div class="grid">
+<section class="box"><div class="stats"><div class="stat"><strong>Score</strong><span id="score">0</span></div><div class="stat"><strong>Combo</strong><span id="combo">0x</span></div><div class="stat"><strong>Zeit</strong><span id="time">45</span></div><div class="stat"><strong>Highscore</strong><span id="best">0</span></div></div><button id="start" style="width:100%;margin-top:14px">Start</button><button class="secondary" id="reset" style="width:100%;margin-top:10px">Reset</button></section>
+<section class="box"><div class="board" id="board"></div><div class="log" id="log">Bereit. Tipp: Nicht alles klicken, rot ist minus.</div></section>
+</div>
+</main>
+<script>
+const board=document.getElementById('board'),scoreEl=document.getElementById('score'),comboEl=document.getElementById('combo'),timeEl=document.getElementById('time'),bestEl=document.getElementById('best'),logEl=document.getElementById('log');
+let score=0,combo=0,time=45,running=false,spawnTimer=null,tickTimer=null;
+let best=Number(localStorage.getItem('impulsBest')||0);bestEl.textContent=best;
+function rnd(max){return Math.floor(Math.random()*max)}
+function update(){scoreEl.textContent=score;comboEl.textContent=combo+'x';timeEl.textContent=time;bestEl.textContent=best}
+function spawn(){if(!running)return;const chip=document.createElement('button');const bad=Math.random()<.18;chip.className='chip'+(bad?' bad':'');chip.textContent=bad?'!':'+';const rect=board.getBoundingClientRect();chip.style.left=rnd(Math.max(1,rect.width-82))+'px';chip.style.top=rnd(Math.max(1,rect.height-82))+'px';chip.addEventListener('click',()=>{if(!running)return;if(bad){score=Math.max(0,score-35);combo=0;logEl.textContent='Störer getroffen. Combo weg.'}else{combo++;score+=10+combo*3;logEl.textContent=combo>8?'Combo brennt. Weiter.':'Sauber.'}chip.remove();board.classList.add('flash');setTimeout(()=>board.classList.remove('flash'),160);update()});board.append(chip);setTimeout(()=>{if(chip.isConnected){chip.remove();if(!bad&&running){combo=0;update()}}},bad?1350:1100)}
+function end(){running=false;clearInterval(spawnTimer);clearInterval(tickTimer);board.innerHTML='';if(score>best){best=score;localStorage.setItem('impulsBest',best);logEl.textContent='Neuer Highscore: '+best}else{logEl.textContent='Runde fertig. Score '+score}update()}
+function start(){if(running)return;clearInterval(spawnTimer);clearInterval(tickTimer);score=0;combo=0;time=45;running=true;board.innerHTML='';update();logEl.textContent='Los.';spawnTimer=setInterval(spawn,620);tickTimer=setInterval(()=>{time--;update();if(time<=0)end()},1000)}
+document.getElementById('start').addEventListener('click',start);document.getElementById('reset').addEventListener('click',()=>{localStorage.removeItem('impulsBest');best=0;update()});
+</script>
+</body>
+</html>
