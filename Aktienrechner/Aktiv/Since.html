@@ -228,11 +228,13 @@
     window.__bbTouchZoomGuard = true;
 
     let lastTouchEnd = 0;
+    const interactiveSelector = 'button, a, input, select, textarea, label, [role="button"], .progress-bar-container, .card, .chart';
 
     document.addEventListener('touchend', function(event) {
         const now = Date.now();
+        const isInteractive = event.target.closest && event.target.closest(interactiveSelector);
 
-        if (now - lastTouchEnd <= 350 && event.cancelable) {
+        if (!isInteractive && now - lastTouchEnd <= 350 && event.cancelable) {
             event.preventDefault();
         }
 
