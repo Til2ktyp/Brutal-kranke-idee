@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Admin Tools</title>
+    <style>
+        :root {
+            --bg-1: #07111f;
+            --bg-2: #172554;
+            --bg-3: #4338ca;
+            --panel: rgba(255, 255, 255, 0.11);
+            --panel-strong: rgba(255, 255, 255, 0.17);
+            --border: rgba(255, 255, 255, 0.17);
+            --text: #ffffff;
+            --muted: rgba(255, 255, 255, 0.7);
+            --accent: #fbc531;
+            --accent-2: #38bdf8;
+            --good: #26de81;
+            --danger: #ef4444;
+            --dark: #111827;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 18px;
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(56, 189, 248, 0.32), transparent 28%),
+                radial-gradient(circle at 86% 18%, rgba(251, 197, 49, 0.22), transparent 24%),
+                radial-gradient(circle at 70% 92%, rgba(168, 85, 247, 0.26), transparent 32%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 54%, var(--bg-3));
+            overflow-x: hidden;
+        }
+
+        button,
+        a,
+        input,
+        textarea,
+        [role="button"] {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .admin-shell {
+            width: 100%;
+            min-height: calc(100vh - 36px);
+            display: grid;
+            grid-template-columns: 102px minmax(0, 1fr);
+            gap: 18px;
+        }
+
+        .dock {
+            position: sticky;
+            top: 18px;
+            width: 102px;
+            height: calc(100vh - 36px);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            justify-items: center;
+            gap: 14px;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08));
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+            backdrop-filter: blur(22px);
+        }
+
+        .dock-logo,
+        .dock-home {
+            width: 72px;
+            height: 72px;
+            display: grid;
+            place-items: center;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: var(--dark);
+            font-size: 1.45rem;
+            font-weight: 950;
+            text-decoration: none;
+            box-shadow: 0 16px 38px rgba(56, 189, 248, 0.24);
+        }
+
+        .dock-nav {
+            display: grid;
+            align-content: start;
+            justify-items: center;
+            gap: 12px;
+        }
+
+        .dock-button {
+            width: 72px;
+            min-height: 72px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            gap: 4px;
+            font: inherit;
+            font-weight: 900;
+            transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+        }
+
+        .dock-button span:first-child {
+            font-size: 1.35rem;
+            line-height: 1;
+        }
+
+        .dock-button small {
+            max-width: 58px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.62rem;
+            line-height: 1.05;
+        }
+
+        .dock-button.active,
+        .dock-button:hover {
+            transform: translateY(-2px);
+            border-color: rgba(251, 197, 49, 0.46);
+            background: rgba(251, 197, 49, 0.18);
+        }
+
+        .workspace {
+            min-width: 0;
+            width: 100%;
+            display: grid;
+            align-content: start;
+            gap: 18px;
+        }
+
+        .workspace > .hero,
+        .workspace > .panel {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 170px;
+            display: grid;
+            align-content: end;
+            padding: clamp(22px, 4vw, 34px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(56, 189, 248, 0.2), transparent 34%),
+                radial-gradient(circle at 90% 8%, rgba(251, 197, 49, 0.18), transparent 30%),
+                linear-gradient(145deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.08));
+            box-shadow: 0 28px 84px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(20px);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--accent);
+            font-size: clamp(2.2rem, 6vw, 5.4rem);
+            line-height: 0.9;
+            font-weight: 950;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            max-width: 760px;
+            margin: 14px 0 0;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .panel {
+            display: none;
+            padding: clamp(18px, 3vw, 26px);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            background: linear-gradient(145deg, var(--panel-strong), var(--panel));
+            box-shadow: 0 24px 72px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(20px);
+            animation: panelIn 0.22s ease both;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .panel h2 {
+            margin: 0 0 14px;
+            color: white;
+            font-size: clamp(1.45rem, 4vw, 2.2rem);
+            line-height: 1;
+        }
+
+        .panel-copy {
+            margin: 0 0 18px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .card,
+        .tool-link {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        .card strong {
+            display: block;
+            color: var(--muted);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+        }
+
+        .card span {
+            display: block;
+            margin-top: 8px;
+            color: white;
+            font-size: 1.45rem;
+            font-weight: 950;
+            font-variant-numeric: tabular-nums;
+            overflow-wrap: anywhere;
+        }
+
+        .tool-link {
+            min-height: 126px;
+            display: grid;
+            align-content: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 950;
+        }
+
+        .tool-link small {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        button,
+        .action-link {
+            min-height: 46px;
+            border: 0;
+            border-radius: 14px;
+            padding: 0 14px;
+            background: linear-gradient(135deg, var(--accent), #f59e0b);
+            color: var(--dark);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 950;
+            text-decoration: none;
+            display: inline-grid;
+            place-items: center;
+        }
+
+        button.secondary,
+        .action-link.secondary {
+            color: white;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        button.danger {
+            color: white;
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 190px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px;
+            background: rgba(3, 7, 18, 0.42);
+            color: white;
+            resize: vertical;
+            outline: none;
+            font: 0.9rem/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        }
+
+        .flag-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 14px;
+            align-items: center;
+            padding: 13px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.08);
+            margin-top: 10px;
+        }
+
+        .switch {
+            position: relative;
+            width: 58px;
+            height: 32px;
+        }
+
+        .switch input {
+            position: absolute;
+            opacity: 0;
+            inset: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            transition: 0.18s ease;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            left: 3px;
+            top: 3px;
+            border-radius: 999px;
+            background: white;
+            transition: 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .switch input:checked + .slider {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        }
+
+        .switch input:checked + .slider::before {
+            transform: translateX(26px);
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            z-index: 10;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            color: #fde68a;
+            font-weight: 950;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(8px);
+            transition: 0.18s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @keyframes panelIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+                filter: blur(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @media (max-width: 840px) {
+            body {
+                padding: 12px;
+            }
+
+            .admin-shell {
+                min-height: calc(100vh - 24px);
+                grid-template-columns: 1fr;
+            }
+
+            .dock {
+                position: sticky;
+                top: 12px;
+                z-index: 4;
+                width: 100%;
+                height: auto;
+                grid-template-columns: auto 1fr auto;
+                grid-template-rows: auto;
+                align-items: center;
+                overflow-x: auto;
+            }
+
+            .dock-nav {
+                grid-auto-flow: column;
+                grid-auto-columns: 72px;
+                overflow-x: auto;
+                align-content: center;
+                justify-items: center;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="admin-shell">
+        <aside class="dock" aria-label="Admin Applets">
+            <div class="dock-logo">B</div>
+            <nav class="dock-nav">
+                <button class="dock-button active" type="button" data-panel="overview"><span>⌘</span><small>Home</small></button>
+                <button class="dock-button" type="button" data-panel="storage"><span>🧰</span><small>Storage</small></button>
+                <button class="dock-button" type="button" data-panel="reset"><span>↻</span><small>Reset</small></button>
+                <button class="dock-button" type="button" data-panel="flags"><span>⚙</span><small>Flags</small></button>
+                <button class="dock-button" type="button" data-panel="backup"><span>⇅</span><small>Backup</small></button>
+                <button class="dock-button" type="button" data-panel="system"><span>◎</span><small>System</small></button>
+            </nav>
+            <a class="dock-home" href="../index.html" aria-label="Zur Startseite">⌂</a>
+        </aside>
+
+        <section class="workspace">
+            <header class="hero">
+                <h1>Admin Tools</h1>
+                <p class="subtitle">CarPlay fuer den kleinen Maschinenraum: Storage, Resets, Flags, Backups und Systemstatus ohne die normale Startseite vollzustellen.</p>
+            </header>
+
+            <section class="panel active" id="panel-overview">
+                <h2>Uebersicht</h2>
+                <p class="panel-copy">Schneller Blick auf den Browser-Zustand dieser Origin.</p>
+                <div class="grid">
+                    <div class="card"><strong>Origin</strong><span id="originValue">-</span></div>
+                    <div class="card"><strong>Storage Keys</strong><span id="keyCount">0</span></div>
+                    <div class="card"><strong>Storage Groesse</strong><span id="storageSize">0 B</span></div>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-storage">
+                <h2>Storage</h2>
+                <p class="panel-copy">LocalStorage bleibt ein eigenes Tool, hier kommst du direkt rein.</p>
+                <a class="tool-link" href="localstorage.html">
+                    Local Storage Viewer
+                    <small>Keys ansehen, Werte bearbeiten, exportieren und loeschen.</small>
+                </a>
+            </section>
+
+            <section class="panel" id="panel-reset">
+                <h2>Reset Center</h2>
+                <p class="panel-copy">Schnelle Reset-Aktionen fuer Spielstaende und Hyper-Einstellungen.</p>
+                <div class="button-row">
+                    <button class="danger" type="button" id="resetGamesBtn">Games-Saves loeschen</button>
+                    <button class="danger" type="button" id="resetHyperBtn">Games-Hyper loeschen</button>
+                    <button class="danger" type="button" id="resetAllBtn">Alles localStorage loeschen</button>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-flags">
+                <h2>Feature Flags</h2>
+                <p class="panel-copy">Zentrale Schalter fuer Hypermodus und ruhige Canary-Ansicht.</p>
+                <div class="flag-row">
+                    <div>
+                        <strong>Games Hypermodus</strong>
+                        <p class="panel-copy">Gilt fuer alle Games mit gemeinsamem Key.</p>
+                    </div>
+                    <label class="switch"><input id="gamesHyperToggle" type="checkbox"><span class="slider"></span></label>
+                </div>
+                <div class="flag-row">
+                    <div>
+                        <strong>Games Klick-Explosionen</strong>
+                        <p class="panel-copy">Partikel beim Klicken in den Games.</p>
+                    </div>
+                    <label class="switch"><input id="gamesClicksToggle" type="checkbox"><span class="slider"></span></label>
+                </div>
+                <div class="flag-row">
+                    <div>
+                        <strong>Games Glitzerregen</strong>
+                        <p class="panel-copy">Ambient-Glitzer in den Games.</p>
+                    </div>
+                    <label class="switch"><input id="gamesAmbientToggle" type="checkbox"><span class="slider"></span></label>
+                </div>
+                <div class="flag-row">
+                    <div>
+                        <strong>Universeller Game Debug</strong>
+                        <p class="panel-copy">Oeffnet Debug-Panels automatisch in Games, die eins haben.</p>
+                    </div>
+                    <label class="switch"><input id="gamesDebugToggle" type="checkbox"><span class="slider"></span></label>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-backup">
+                <h2>Export / Import</h2>
+                <p class="panel-copy">Alle localStorage-Daten als JSON sichern oder wieder einspielen.</p>
+                <textarea id="backupText" placeholder="Export erscheint hier. Zum Import JSON einfuegen."></textarea>
+                <div class="button-row">
+                    <button type="button" id="exportBtn">Export anzeigen</button>
+                    <button class="secondary" type="button" id="copyExportBtn">Kopieren</button>
+                    <button class="danger" type="button" id="importBtn">Import einspielen</button>
+                </div>
+            </section>
+
+            <section class="panel" id="panel-system">
+                <h2>System Check</h2>
+                <p class="panel-copy">Kleine Diagnose fuer Pfade, Origin und bekannte Tools.</p>
+                <div class="grid">
+                    <div class="card"><strong>Protocol</strong><span id="protocolValue">-</span></div>
+                    <div class="card"><strong>Path</strong><span id="pathValue">-</span></div>
+                    <div class="card"><strong>Ad Script</strong><span id="adValue">-</span></div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const toast = document.getElementById('toast');
+        const gameSaveKeys = [
+            'biasBingoState',
+            'biasBingoHighscore',
+            'entscheidomatState',
+            'impulsState',
+            'impulsBest',
+            'kurveState',
+            'kurveBest',
+            'sortfallState',
+            'sortfallBest',
+            'taktState',
+            'taktBest',
+            'gamblState',
+            'geld',
+            'bank',
+            'einsatz',
+            'minResetRecord',
+            'maxResetRecord',
+            'minResetRecordIncrement',
+            'maxResetRecordIncrement'
+        ];
+
+        function showToast(text) {
+            toast.textContent = text;
+            toast.classList.add('show');
+            window.clearTimeout(showToast.timer);
+            showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 1400);
+        }
+
+        function formatBytes(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+        }
+
+        function storageObject() {
+            const data = {};
+
+            for (let index = 0; index < localStorage.length; index++) {
+                const key = localStorage.key(index);
+                data[key] = localStorage.getItem(key);
+            }
+
+            return data;
+        }
+
+        function storageBytes() {
+            return Object.entries(storageObject()).reduce((sum, [key, value]) => sum + new Blob([key + value]).size, 0);
+        }
+
+        function readGamesHyper() {
+            try {
+                return JSON.parse(localStorage.getItem('bbHyper:games') || 'null') || { mode: true, clicks: true, ambient: true };
+            } catch (error) {
+                return { mode: true, clicks: true, ambient: true };
+            }
+        }
+
+        function saveGamesHyper(next) {
+            localStorage.setItem('bbHyper:games', JSON.stringify(next));
+            sync();
+            showToast('Gespeichert');
+        }
+
+        function sync() {
+            const data = storageObject();
+            const hyper = readGamesHyper();
+
+            document.getElementById('originValue').textContent = location.origin === 'null' ? 'file://' : location.origin;
+            document.getElementById('keyCount').textContent = String(Object.keys(data).length);
+            document.getElementById('storageSize').textContent = formatBytes(storageBytes());
+            document.getElementById('protocolValue').textContent = location.protocol;
+            document.getElementById('pathValue').textContent = location.pathname;
+            document.getElementById('adValue').textContent = window.adsbygoogle ? 'geladen' : 'nicht sichtbar';
+            document.getElementById('gamesHyperToggle').checked = !!hyper.mode;
+            document.getElementById('gamesClicksToggle').checked = !!hyper.clicks;
+            document.getElementById('gamesAmbientToggle').checked = !!hyper.ambient;
+            document.getElementById('gamesDebugToggle').checked = localStorage.getItem('bbDebug:games') === 'true';
+        }
+
+        document.querySelectorAll('.dock-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.dock-button').forEach(item => item.classList.toggle('active', item === button));
+                document.querySelectorAll('.panel').forEach(panel => panel.classList.toggle('active', panel.id === 'panel-' + button.dataset.panel));
+                sync();
+            });
+        });
+
+        document.getElementById('resetGamesBtn').addEventListener('click', () => {
+            if (!confirm('Games-Spielstaende wirklich loeschen?')) return;
+            gameSaveKeys.forEach(key => localStorage.removeItem(key));
+            sync();
+            showToast('Games-Saves geloescht');
+        });
+
+        document.getElementById('resetHyperBtn').addEventListener('click', () => {
+            localStorage.removeItem('bbHyper:games');
+            sync();
+            showToast('Games-Hyper geloescht');
+        });
+
+        document.getElementById('resetAllBtn').addEventListener('click', () => {
+            if (!confirm('Wirklich den kompletten localStorage loeschen?')) return;
+            localStorage.clear();
+            sync();
+            showToast('Alles geloescht');
+        });
+
+        document.getElementById('gamesHyperToggle').addEventListener('change', event => {
+            const hyper = readGamesHyper();
+            hyper.mode = event.target.checked;
+            saveGamesHyper(hyper);
+        });
+
+        document.getElementById('gamesClicksToggle').addEventListener('change', event => {
+            const hyper = readGamesHyper();
+            hyper.clicks = event.target.checked;
+            saveGamesHyper(hyper);
+        });
+
+        document.getElementById('gamesAmbientToggle').addEventListener('change', event => {
+            const hyper = readGamesHyper();
+            hyper.ambient = event.target.checked;
+            saveGamesHyper(hyper);
+        });
+
+        document.getElementById('gamesDebugToggle').addEventListener('change', event => {
+            localStorage.setItem('bbDebug:games', String(event.target.checked));
+            sync();
+            showToast(event.target.checked ? 'Game Debug an' : 'Game Debug aus');
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            document.getElementById('backupText').value = JSON.stringify(storageObject(), null, 2);
+            showToast('Export erstellt');
+        });
+
+        document.getElementById('copyExportBtn').addEventListener('click', async () => {
+            const text = document.getElementById('backupText').value;
+            if (!text) return showToast('Erst exportieren');
+
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('Kopiert');
+            } catch (error) {
+                showToast('Kopieren blockiert');
+            }
+        });
+
+        document.getElementById('importBtn').addEventListener('click', () => {
+            let parsed;
+
+            try {
+                parsed = JSON.parse(document.getElementById('backupText').value || '{}');
+            } catch (error) {
+                showToast('JSON kaputt');
+                return;
+            }
+
+            if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+                showToast('JSON muss ein Objekt sein');
+                return;
+            }
+
+            if (!confirm('Import einspielen und gleiche Keys ueberschreiben?')) return;
+
+            Object.entries(parsed).forEach(([key, value]) => {
+                localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+            });
+
+            sync();
+            showToast('Import fertig');
+        });
+
+        document.addEventListener('contextmenu', event => {
+            if (event.target.closest('button, a, [role="button"]')) {
+                event.preventDefault();
+            }
+        });
+
+        sync();
+    </script>
+</body>
+</html>

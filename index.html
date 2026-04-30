@@ -595,6 +595,246 @@
             font-weight: 900;
         }
 
+        .admin-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, 0.48);
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(0);
+            transition: opacity 0.22s ease, backdrop-filter 0.3s ease;
+        }
+
+        .admin-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+            backdrop-filter: blur(16px);
+        }
+
+        .admin-widget {
+            width: min(620px, 100%);
+            max-height: min(720px, calc(100vh - 36px));
+            overflow: hidden;
+            padding: clamp(20px, 5vw, 30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.2), transparent 34%),
+                radial-gradient(circle at 86% 18%, rgba(251, 197, 49, 0.16), transparent 30%),
+                rgba(15, 23, 42, 0.9);
+            box-shadow: 0 34px 115px rgba(0, 0, 0, 0.5);
+            transform: scale(0.86) translateY(22px);
+            filter: blur(12px);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
+        }
+
+        .admin-backdrop.show .admin-widget {
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
+
+        .admin-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: start;
+            text-align: left;
+        }
+
+        .admin-title {
+            margin: 0;
+            color: white;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            line-height: 0.96;
+        }
+
+        .admin-copy {
+            margin: 10px 0 0;
+            color: var(--soft-blue-text);
+            line-height: 1.5;
+        }
+
+        .admin-close {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font: inherit;
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .admin-pin-panel,
+        .admin-tools-panel {
+            margin-top: 18px;
+        }
+
+        .admin-pin-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+        }
+
+        .admin-pin-input {
+            min-height: 54px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            padding: 0 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font: inherit;
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-align: center;
+            outline: none;
+        }
+
+        .admin-pin-submit {
+            min-height: 54px;
+            border: 0;
+            border-radius: 16px;
+            padding: 0 18px;
+            background: linear-gradient(135deg, var(--accent), #f59e0b);
+            color: var(--dark);
+            cursor: pointer;
+            font: inherit;
+            font-weight: 950;
+        }
+
+        .admin-error {
+            min-height: 1.3em;
+            margin: 10px 0 0;
+            color: #fecaca;
+            font-weight: 850;
+            text-align: left;
+        }
+
+        .admin-hold-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            z-index: 31;
+            width: min(360px, calc(100vw - 36px));
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 18px;
+            background: rgba(15, 23, 42, 0.92);
+            box-shadow: 0 22px 70px rgba(0, 0, 0, 0.42);
+            backdrop-filter: blur(18px);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(16px) scale(0.96);
+            filter: blur(8px);
+            transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.22s ease;
+        }
+
+        .admin-hold-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        .admin-hold-toast.completing {
+            animation: adminHoldToDialog 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .admin-hold-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 9px;
+            color: white;
+            font-size: 0.84rem;
+            font-weight: 950;
+        }
+
+        .admin-hold-percent {
+            color: #fde68a;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .admin-hold-track {
+            height: 9px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.13);
+        }
+
+        .admin-hold-fill {
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--violet));
+            transform: scaleX(var(--admin-progress, 0));
+            transform-origin: left center;
+            box-shadow: 0 0 22px rgba(56, 189, 248, 0.38);
+        }
+
+        .admin-tools-panel {
+            display: none;
+            transform: translateY(42px);
+            opacity: 0;
+            filter: blur(8px);
+        }
+
+        .admin-widget.unlocked .admin-pin-panel {
+            display: none;
+        }
+
+        .admin-widget.unlocked .admin-tools-panel {
+            display: grid;
+            gap: 14px;
+            animation: adminToolsRise 0.36s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .admin-tool-card {
+            min-height: 118px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 14px;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            text-align: left;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+        }
+
+        .admin-tool-icon {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.14);
+            font-size: 1.45rem;
+        }
+
+        .admin-tool-title {
+            display: block;
+            font-weight: 950;
+        }
+
+        .admin-tool-desc {
+            display: block;
+            margin-top: 5px;
+            color: var(--soft-blue-text);
+            line-height: 1.4;
+        }
+
         .quick-hint {
             display: flex;
             align-items: center;
@@ -808,6 +1048,28 @@
             }
         }
 
+        @keyframes adminToolsRise {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes adminHoldToDialog {
+            55% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(-24vh) scale(1.08);
+                filter: blur(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-34vh) scale(1.22);
+                filter: blur(12px);
+            }
+        }
+
         @media (max-width: 760px) {
             body {
                 align-items: flex-start;
@@ -832,6 +1094,16 @@
             }
 
             .more-games-close {
+                justify-self: end;
+                order: -1;
+            }
+
+            .admin-header,
+            .admin-pin-row {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-close {
                 justify-self: end;
                 order: -1;
             }
@@ -1059,6 +1331,55 @@
         </div>
     </div>
 
+    <div class="admin-backdrop" id="adminBackdrop" aria-hidden="true">
+        <section class="admin-widget" id="adminWidget" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+            <div class="admin-header">
+                <div>
+                    <span class="more-games-kicker">Admin</span>
+                    <h2 class="admin-title" id="adminTitle">Admin Tools</h2>
+                    <p class="admin-copy">Versteckte Werkzeuge für Cache, Debug und kleine Maschinenraum-Sachen.</p>
+                </div>
+                <button class="admin-close" type="button" id="adminClose" aria-label="Admin Tools schließen">×</button>
+            </div>
+
+            <form class="admin-pin-panel" id="adminPinForm">
+                <div class="admin-pin-row">
+                    <input class="admin-pin-input" id="adminPinInput" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="PIN">
+                    <button class="admin-pin-submit" type="submit">Entsperren</button>
+                </div>
+                <p class="admin-error" id="adminError" aria-live="polite"></p>
+            </form>
+
+            <div class="admin-tools-panel" id="adminToolsPanel">
+                <a class="admin-tool-card" href="admin-tools/index.html">
+                    <span class="admin-tool-icon">⌘</span>
+                    <span>
+                        <span class="admin-tool-title">Admin Dashboard</span>
+                        <span class="admin-tool-desc">CarPlay-Menü für Reset Center, Feature Flags, Backup, System Check und Storage.</span>
+                    </span>
+                </a>
+
+                <a class="admin-tool-card" href="admin-tools/localstorage.html">
+                    <span class="admin-tool-icon">🧰</span>
+                    <span>
+                        <span class="admin-tool-title">Local Storage Viewer</span>
+                        <span class="admin-tool-desc">Browser-Cache ansehen, bearbeiten, exportieren oder einzelne Keys löschen.</span>
+                    </span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <div class="admin-hold-toast" id="adminHoldToast" aria-hidden="true">
+        <div class="admin-hold-head">
+            <span>Admin-Zugang wird geladen</span>
+            <span class="admin-hold-percent" id="adminHoldPercent">0%</span>
+        </div>
+        <div class="admin-hold-track">
+            <div class="admin-hold-fill" id="adminHoldFill"></div>
+        </div>
+    </div>
+
     <footer>
         <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
     </footer>
@@ -1070,12 +1391,23 @@
         const portfolioLink = document.getElementById('portfolioLink');
         const versionMenuBackdrop = document.getElementById('versionMenuBackdrop');
         const versionMenuCancel = document.getElementById('versionMenuCancel');
+        const adminBackdrop = document.getElementById('adminBackdrop');
+        const adminWidget = document.getElementById('adminWidget');
+        const adminClose = document.getElementById('adminClose');
+        const adminPinForm = document.getElementById('adminPinForm');
+        const adminPinInput = document.getElementById('adminPinInput');
+        const adminError = document.getElementById('adminError');
+        const adminHoldToast = document.getElementById('adminHoldToast');
+        const adminHoldPercent = document.getElementById('adminHoldPercent');
         let versionHoldTimer = null;
         let versionHoldTriggered = false;
         let versionHoldActive = false;
         let versionHoldMoved = false;
         let versionHoldStartX = 0;
         let versionHoldStartY = 0;
+        let adminHoldRaf = null;
+        let adminHoldStart = 0;
+        let adminHoldActive = false;
 
         function openMoreGames() {
             moreGamesBackdrop.classList.add('show');
@@ -1117,6 +1449,68 @@
         function closeVersionMenu() {
             versionMenuBackdrop.classList.remove('show');
             versionMenuBackdrop.setAttribute('aria-hidden', 'true');
+        }
+
+        function openAdminPin() {
+            adminHoldActive = false;
+            window.cancelAnimationFrame(adminHoldRaf);
+            adminHoldRaf = null;
+            adminHoldToast.classList.remove('show', 'completing');
+            adminHoldToast.setAttribute('aria-hidden', 'true');
+            adminWidget.classList.remove('unlocked');
+            adminPinInput.value = '';
+            adminError.textContent = '';
+            adminBackdrop.classList.add('show');
+            adminBackdrop.setAttribute('aria-hidden', 'false');
+            window.setTimeout(() => adminPinInput.focus(), 80);
+        }
+
+        function closeAdmin() {
+            adminBackdrop.classList.remove('show');
+            adminBackdrop.setAttribute('aria-hidden', 'true');
+            adminWidget.classList.remove('unlocked');
+            adminPinInput.value = '';
+            adminError.textContent = '';
+        }
+
+        function startAdminHold() {
+            if (adminHoldActive || adminBackdrop.classList.contains('show')) return;
+            adminHoldActive = true;
+            adminHoldStart = performance.now();
+            adminHoldToast.classList.remove('completing');
+            adminHoldToast.classList.add('show');
+            adminHoldToast.setAttribute('aria-hidden', 'false');
+            adminHoldToast.style.setProperty('--admin-progress', 0);
+            adminHoldPercent.textContent = '0%';
+            adminHoldRaf = window.requestAnimationFrame(tickAdminHold);
+        }
+
+        function tickAdminHold(now) {
+            if (!adminHoldActive) return;
+
+            const progress = Math.min((now - adminHoldStart) / 5000, 1);
+            adminHoldToast.style.setProperty('--admin-progress', progress.toFixed(3));
+            adminHoldPercent.textContent = Math.round(progress * 100) + '%';
+
+            if (progress >= 1) {
+                adminHoldActive = false;
+                adminHoldToast.classList.add('completing');
+                window.setTimeout(openAdminPin, 260);
+                return;
+            }
+
+            adminHoldRaf = window.requestAnimationFrame(tickAdminHold);
+        }
+
+        function clearAdminHold() {
+            if (!adminHoldActive) return;
+            adminHoldActive = false;
+            window.cancelAnimationFrame(adminHoldRaf);
+            adminHoldRaf = null;
+            adminHoldToast.classList.remove('show', 'completing');
+            adminHoldToast.setAttribute('aria-hidden', 'true');
+            adminHoldToast.style.setProperty('--admin-progress', 0);
+            adminHoldPercent.textContent = '0%';
         }
 
         portfolioLink.addEventListener('click', function(event) {
@@ -1200,15 +1594,64 @@
         });
 
         versionMenuCancel.addEventListener('click', closeVersionMenu);
+        adminClose.addEventListener('click', closeAdmin);
+
+        adminBackdrop.addEventListener('click', function(event) {
+            if (event.target === adminBackdrop) {
+                closeAdmin();
+            }
+        });
+
+        adminPinForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (adminPinInput.value === '7903') {
+                adminError.textContent = '';
+                adminWidget.classList.add('unlocked');
+                return;
+            }
+
+            adminError.textContent = 'PIN falsch.';
+            adminPinInput.select();
+        });
+
+        adminPinInput.addEventListener('input', function() {
+            adminPinInput.value = adminPinInput.value.replace(/\D/g, '').slice(0, 4);
+        });
+
+        adminPinInput.addEventListener('keydown', function(event) {
+            const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Home', 'End'];
+
+            if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) {
+                return;
+            }
+
+            if (!/^\d$/.test(event.key)) {
+                event.preventDefault();
+            }
+        });
 
         document.addEventListener('keydown', function(event) {
+            if (event.shiftKey && event.key.toLowerCase() === 'd' && !event.repeat) {
+                startAdminHold();
+            }
+
             if (event.key === 'Escape') {
                 if (moreGamesBackdrop.classList.contains('show')) {
                     closeMoreGames();
                 }
                 closeVersionMenu();
+                closeAdmin();
             }
         });
+
+        document.addEventListener('keyup', function(event) {
+            if (event.key === 'Shift' || event.key.toLowerCase() === 'd') {
+                clearAdminHold();
+            }
+        });
+
+        window.addEventListener('blur', clearAdminHold);
 
         let lastTouchEnd = 0;
         const bbInteractiveTapSelector = 'button, a, input, select, textarea, label, [role="button"]';

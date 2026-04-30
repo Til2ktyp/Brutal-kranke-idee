@@ -77,6 +77,17 @@ document.addEventListener('click',event=>{if(!document.body.classList.contains('
     });
 })();
 </script>
+<script id="bb-universal-debug">
+(function(){
+  function applyUniversalDebug(value){
+    if(typeof window.toggleDebug==='function')window.toggleDebug(value);
+  }
+  if(localStorage.getItem('bbDebug:games')==='true')applyUniversalDebug(true);
+  window.addEventListener('storage',function(event){
+    if(event.key==='bbDebug:games')applyUniversalDebug(event.newValue==='true');
+  });
+})();
+</script>
 <script id="bb-hyper-script">
 (function(){
   if(window.__bbHyperController)return;

@@ -740,9 +740,13 @@
             resetButton.classList.remove('holding');
         }
 
-        function toggleDebugPanel() {
-            const isOpen = debugPanel.classList.toggle('show');
+        function setDebugPanel(isOpen) {
+            debugPanel.classList.toggle('show', isOpen);
             debugPanel.setAttribute('aria-hidden', String(!isOpen));
+        }
+
+        function toggleDebugPanel() {
+            setDebugPanel(!debugPanel.classList.contains('show'));
         }
 
         // Rekorde beim Start der Seite laden und anzeigen
@@ -861,6 +865,16 @@
             if (event.shiftKey && event.key.toLowerCase() === 'd') {
                 event.preventDefault();
                 toggleDebugPanel();
+            }
+        });
+
+        if (localStorage.getItem('bbDebug:games') === 'true') {
+            setDebugPanel(true);
+        }
+
+        window.addEventListener('storage', event => {
+            if (event.key === 'bbDebug:games') {
+                setDebugPanel(event.newValue === 'true');
             }
         });
 
