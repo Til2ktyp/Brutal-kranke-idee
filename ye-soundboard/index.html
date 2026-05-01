@@ -398,6 +398,7 @@
         let justBeatAudio = null;
         let lastTouchEnd = 0;
         let lastVisual = 0;
+        let unlockPromise = null;
         let settings = readSettings();
 
         function readSettings() {
@@ -419,8 +420,25 @@
                 const Ctx = window.AudioContext || window.webkitAudioContext;
                 if (Ctx) context = new Ctx({ latencyHint: 'interactive' });
             }
-            if (context?.state === 'suspended') context.resume().catch(() => {});
             return context;
+        }
+
+        function unlockAudio() {
+            const ctx = audioContext();
+            if (!ctx || ctx.state === 'running') return Promise.resolve(true);
+            if (!unlockPromise) {
+                unlockPromise = ctx.resume().then(() => {
+                    const silent = ctx.createBuffer(1, 1, 22050);
+                    const source = ctx.createBufferSource();
+                    source.buffer = silent;
+                    source.connect(ctx.destination);
+                    source.start(0);
+                    return true;
+                }).catch(() => false).finally(() => {
+                    unlockPromise = null;
+                });
+            }
+            return unlockPromise;
         }
 
         function loadArrayBuffer(src) {
@@ -578,9 +596,10 @@
             }
         }
 
-        function hitPad(pad, event) {
-            audioContext();
+        async function hitPad(pad, event) {
             visual(pad, event);
+            const ctx = audioContext();
+            if (ctx?.state === 'suspended') await unlockAudio();
             if (pad.dataset.sound) playSound(pad.dataset.sound);
             if (pad.dataset.action === 'stop') stopAll();
             if (pad.dataset.action === 'reset') {
@@ -593,6 +612,7 @@
         pads.forEach(pad => {
             pad.addEventListener('pointerdown', event => {
                 event.preventDefault();
+                unlockAudio();
                 hitPad(pad, event);
             }, { passive: false });
         });
@@ -602,6 +622,7 @@
             const pad = padByKey[event.key.toLowerCase()];
             if (!pad || event.metaKey || event.ctrlKey || event.altKey) return;
             event.preventDefault();
+            unlockAudio();
             const rect = pad.getBoundingClientRect();
             hitPad(pad, { clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 });
         });
