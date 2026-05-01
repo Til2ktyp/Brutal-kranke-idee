@@ -200,10 +200,17 @@
             padding: 22px;
             background: rgba(3, 2, 7, 0.48);
             backdrop-filter: blur(16px);
+            opacity: 0;
         }
 
         .tutorial-backdrop.show {
             display: flex;
+            animation: tutorialBackdropIn 0.22s ease forwards;
+        }
+
+        .tutorial-backdrop.closing {
+            display: flex;
+            animation: tutorialBackdropOut 0.18s ease forwards;
         }
 
         .tutorial-card {
@@ -216,6 +223,17 @@
                 radial-gradient(circle at 20% 0%, rgba(255, 36, 61, 0.18), transparent 35%),
                 linear-gradient(145deg, rgba(35, 20, 62, 0.96), rgba(8, 5, 16, 0.94));
             box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            transform: scale(0.9) translateY(10px);
+            filter: blur(14px);
+        }
+
+        .tutorial-backdrop.show .tutorial-card {
+            animation: tutorialCardIn 0.28s cubic-bezier(0.18, 0.9, 0.24, 1) forwards;
+        }
+
+        .tutorial-backdrop.closing .tutorial-card {
+            animation: tutorialCardOut 0.18s ease forwards;
         }
 
         .tutorial-card h2 {
@@ -260,6 +278,44 @@
             background: linear-gradient(135deg, var(--red), var(--purple));
             font-weight: 950;
             cursor: pointer;
+        }
+
+        @keyframes tutorialBackdropIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes tutorialBackdropOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes tutorialCardIn {
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes tutorialCardOut {
+            from {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.92) translateY(8px);
+                filter: blur(12px);
+            }
         }
 
         .board {
@@ -778,12 +834,22 @@
             saveSettings();
         });
 
+        let tutorialCloseTimer = 0;
+
         function closeTutorial() {
+            if (!tutorialBackdrop.classList.contains('show')) return;
+            clearTimeout(tutorialCloseTimer);
             tutorialBackdrop.classList.remove('show');
+            tutorialBackdrop.classList.add('closing');
             tutorialBackdrop.setAttribute('aria-hidden', 'true');
+            tutorialCloseTimer = setTimeout(() => {
+                tutorialBackdrop.classList.remove('closing');
+            }, 190);
         }
 
         tutorialButton.addEventListener('click', () => {
+            clearTimeout(tutorialCloseTimer);
+            tutorialBackdrop.classList.remove('closing');
             tutorialBackdrop.classList.add('show');
             tutorialBackdrop.setAttribute('aria-hidden', 'false');
         });
