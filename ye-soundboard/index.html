@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0d0618">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0618">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Runaway Soundboard</title>
     <style>
         :root {
@@ -25,6 +29,7 @@
         body {
             min-height: 100%;
             margin: 0;
+            background: #0d0618;
             touch-action: manipulation;
             overscroll-behavior-x: none;
             -webkit-text-size-adjust: 100%;
@@ -34,6 +39,7 @@
 
         body {
             min-height: 100vh;
+            min-height: 100dvh;
             color: var(--text);
             font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             background:
@@ -43,6 +49,20 @@
                 radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.14), transparent 36%),
                 linear-gradient(135deg, #030207, #0d0618 52%, #17102b);
             overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 50% -10%, rgba(255, 36, 61, 0.22), transparent 28%),
+                radial-gradient(circle at 12% 12%, rgba(124, 58, 237, 0.34), transparent 30%),
+                radial-gradient(circle at 86% 18%, rgba(192, 132, 252, 0.22), transparent 26%),
+                radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.14), transparent 36%),
+                linear-gradient(135deg, #030207, #0d0618 52%, #17102b);
+            pointer-events: none;
         }
 
         button,
@@ -245,11 +265,12 @@
             .shell {
                 width: min(100% - 16px, 520px);
                 min-height: 100vh;
+                min-height: 100dvh;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                padding-top: 60px;
-                padding-bottom: 74px;
+                justify-content: flex-start;
+                padding-top: max(48px, env(safe-area-inset-top));
+                padding-bottom: max(74px, calc(env(safe-area-inset-bottom) + 58px));
             }
 
             .settings {
