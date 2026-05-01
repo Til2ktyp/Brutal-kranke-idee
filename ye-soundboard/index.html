@@ -243,8 +243,13 @@
 
         @media (max-width: 760px) {
             .shell {
-                width: min(100% - 14px, 560px);
-                padding-top: 66px;
+                width: min(100% - 16px, 520px);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding-top: 60px;
+                padding-bottom: 74px;
             }
 
             .settings {
@@ -262,40 +267,43 @@
             }
 
             .hero {
-                margin-bottom: 10px;
+                margin-bottom: 12px;
             }
 
             h1 {
-                font-size: clamp(2.15rem, 13vw, 4rem);
+                margin: 8px 0 4px;
+                font-size: clamp(2rem, 12vw, 3.6rem);
             }
 
             .subtitle {
-                font-size: 0.88rem;
+                display: none;
             }
 
             .status {
-                margin-top: 8px;
+                margin-top: 7px;
                 font-size: 0.76rem;
             }
 
             .board {
-                gap: 5px;
-                padding: 6px;
-                border-radius: 16px;
+                width: 100%;
+                margin: 0 auto;
+                gap: 7px;
+                padding: 8px;
+                border-radius: 18px;
             }
 
             .pad {
-                min-height: 64px;
-                padding: 6px 4px;
+                min-height: clamp(78px, 19vw, 96px);
+                padding: 8px 5px;
             }
 
             .key {
-                font-size: clamp(1.55rem, 9vw, 2.8rem);
+                font-size: clamp(1.9rem, 10vw, 3.2rem);
             }
 
             .label {
-                min-height: 16px;
-                font-size: 0.55rem;
+                min-height: 18px;
+                font-size: 0.62rem;
             }
         }
     </style>
