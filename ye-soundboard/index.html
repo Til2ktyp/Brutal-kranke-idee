@@ -176,6 +176,92 @@
             font-weight: 850;
         }
 
+        .tutorial-button {
+            min-height: 42px;
+            display: block;
+            margin: 12px auto 0;
+            padding: 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(18px);
+            font-weight: 950;
+            cursor: pointer;
+        }
+
+        .tutorial-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            background: rgba(3, 2, 7, 0.48);
+            backdrop-filter: blur(16px);
+        }
+
+        .tutorial-backdrop.show {
+            display: flex;
+        }
+
+        .tutorial-card {
+            width: min(520px, 100%);
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            color: white;
+            background:
+                radial-gradient(circle at 20% 0%, rgba(255, 36, 61, 0.18), transparent 35%),
+                linear-gradient(145deg, rgba(35, 20, 62, 0.96), rgba(8, 5, 16, 0.94));
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+        }
+
+        .tutorial-card h2 {
+            margin: 0 0 10px;
+            color: var(--red);
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+
+        .tutorial-card p {
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .tutorial-sequence {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 16px;
+        }
+
+        .tutorial-sequence span {
+            min-width: 38px;
+            min-height: 34px;
+            display: inline-grid;
+            place-items: center;
+            padding: 0 10px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 950;
+        }
+
+        .tutorial-close {
+            width: 100%;
+            min-height: 44px;
+            border: 0;
+            border-radius: 14px;
+            color: white;
+            background: linear-gradient(135deg, var(--red), var(--purple));
+            font-weight: 950;
+            cursor: pointer;
+        }
+
         .board {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -305,6 +391,12 @@
                 font-size: 0.76rem;
             }
 
+            .tutorial-button {
+                min-height: 38px;
+                margin-top: 9px;
+                font-size: 0.82rem;
+            }
+
             .board {
                 width: 100%;
                 margin: 0 auto;
@@ -342,6 +434,7 @@
             <h1 id="title">Runaway</h1>
             <p class="subtitle">Tasten hauen, Samples sofort feuern. Piano liegt auf A S D F G H J K, der große Beat auf Y.</p>
             <p class="status" id="status">Samples laden...</p>
+            <button class="tutorial-button" id="tutorialButton" type="button">Runaway Tutorial</button>
         </section>
 
         <section class="board" id="board" aria-label="Runaway Soundboard Pads">
@@ -363,6 +456,27 @@
             <button class="pad special" type="button" data-key="r" data-action="reset"><span class="key">R</span><span class="label">Reset</span></button>
         </section>
     </main>
+
+    <div class="tutorial-backdrop" id="tutorialBackdrop" aria-hidden="true">
+        <section class="tutorial-card" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+            <h2 id="tutorialTitle">Runaway spielen</h2>
+            <p>Erst die Piano-Folge, dann den Beat reinwerfen und Lookatcha komplett melken.</p>
+            <div class="tutorial-sequence" aria-label="Runaway Tastenfolge">
+                <span>A</span><span>A</span><span>A</span>
+                <span>S</span>
+                <span>D</span><span>D</span><span>D</span>
+                <span>F</span>
+                <span>G</span><span>G</span><span>G</span>
+                <span>H</span>
+                <span>J</span><span>J</span>
+                <span>K</span>
+                <span>A</span>
+                <span>Y</span>
+                <span>C spam</span>
+            </div>
+            <button class="tutorial-close" id="tutorialClose" type="button">Verstanden</button>
+        </section>
+    </div>
 
     <script>
         const SETTINGS_KEY = 'yeSoundboardSettings';
@@ -388,7 +502,11 @@
         const statusEl = document.getElementById('status');
         const spamToggle = document.getElementById('spamToggle');
         const adhdToggle = document.getElementById('adhdToggle');
+        const tutorialButton = document.getElementById('tutorialButton');
+        const tutorialBackdrop = document.getElementById('tutorialBackdrop');
+        const tutorialClose = document.getElementById('tutorialClose');
         const buffers = {};
+        const trimOffsets = {};
         const active = new Set();
         const fallbackActive = new Set();
         const fullBeat = new Audio(files.fullbeat);
@@ -460,6 +578,19 @@
             });
         }
 
+        function findTrimOffset(buffer) {
+            const threshold = 0.006;
+            const maxScan = Math.min(buffer.length, Math.floor(buffer.sampleRate * 0.18));
+            for (let i = 0; i < maxScan; i += 1) {
+                for (let channel = 0; channel < buffer.numberOfChannels; channel += 1) {
+                    if (Math.abs(buffer.getChannelData(channel)[i]) > threshold) {
+                        return Math.max(0, i / buffer.sampleRate - 0.002);
+                    }
+                }
+            }
+            return 0;
+        }
+
         async function loadSounds() {
             const ctx = audioContext();
             if (!ctx) {
@@ -476,6 +607,7 @@
                 try {
                     const data = await loadArrayBuffer(files[id]);
                     buffers[id] = await decodeAudio(ctx, data);
+                    trimOffsets[id] = findTrimOffset(buffers[id]);
                     done += 1;
                     statusEl.textContent = `${done}/${smallSounds.length} bereit`;
                 } catch {
@@ -502,7 +634,7 @@
             source._soundId = id;
             source.onended = () => active.delete(source);
             active.add(source);
-            const startOffset = !loop && id.startsWith('piano') ? 0.012 : 0;
+            const startOffset = !loop ? trimOffsets[id] || 0 : 0;
             source.start(0, startOffset);
             return source;
         }
@@ -646,8 +778,27 @@
             saveSettings();
         });
 
+        function closeTutorial() {
+            tutorialBackdrop.classList.remove('show');
+            tutorialBackdrop.setAttribute('aria-hidden', 'true');
+        }
+
+        tutorialButton.addEventListener('click', () => {
+            tutorialBackdrop.classList.add('show');
+            tutorialBackdrop.setAttribute('aria-hidden', 'false');
+        });
+
+        tutorialClose.addEventListener('click', closeTutorial);
+        tutorialBackdrop.addEventListener('click', event => {
+            if (event.target === tutorialBackdrop) closeTutorial();
+        });
+
         document.addEventListener('contextmenu', event => {
             if (event.target.closest('button, a')) event.preventDefault();
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') closeTutorial();
         });
 
         document.addEventListener('dblclick', event => event.preventDefault(), { passive: false });
