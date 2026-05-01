@@ -470,7 +470,9 @@
             let done = 0;
             let failed = 0;
             statusEl.textContent = 'Samples laden...';
-            for (const id of ['lookatcha', 'justbeat', ...smallSounds.filter(item => item !== 'lookatcha' && item !== 'justbeat')]) {
+            const pianoSounds = smallSounds.filter(id => id.startsWith('piano'));
+            const loadOrder = ['lookatcha', ...pianoSounds, 'justbeat', ...smallSounds.filter(id => id !== 'lookatcha' && id !== 'justbeat' && !id.startsWith('piano'))];
+            for (const id of loadOrder) {
                 try {
                     const data = await loadArrayBuffer(files[id]);
                     buffers[id] = await decodeAudio(ctx, data);
@@ -500,7 +502,8 @@
             source._soundId = id;
             source.onended = () => active.delete(source);
             active.add(source);
-            source.start();
+            const startOffset = !loop && id.startsWith('piano') ? 0.012 : 0;
+            source.start(0, startOffset);
             return source;
         }
 
@@ -570,6 +573,11 @@
                 }
                 justBeatSource = playBuffer(id, true) || null;
                 if (!justBeatSource) statusEl.textContent = 'Just Beat lädt noch kurz...';
+                return;
+            }
+
+            if (id.startsWith('piano') && !buffers[id]) {
+                statusEl.textContent = 'Piano lädt noch kurz...';
                 return;
             }
 
