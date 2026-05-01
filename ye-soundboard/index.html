@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Runaway Soundboard</title>
+    <style>
+        :root {
+            --red: #ff243d;
+            --purple: #7c3aed;
+            --violet: #c084fc;
+            --cyan: #38bdf8;
+            --gold: #fbc531;
+            --text: #ffffff;
+            --muted: rgba(255, 255, 255, 0.68);
+            --panel: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            margin: 0;
+            touch-action: manipulation;
+            overscroll-behavior-x: none;
+            -webkit-text-size-adjust: 100%;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 50% -10%, rgba(255, 36, 61, 0.22), transparent 28%),
+                radial-gradient(circle at 12% 12%, rgba(124, 58, 237, 0.34), transparent 30%),
+                radial-gradient(circle at 86% 18%, rgba(192, 132, 252, 0.22), transparent 26%),
+                radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.14), transparent 36%),
+                linear-gradient(135deg, #030207, #0d0618 52%, #17102b);
+            overflow-x: hidden;
+        }
+
+        button,
+        a,
+        input {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            font: inherit;
+        }
+
+        .back-home {
+            position: fixed;
+            left: max(14px, env(safe-area-inset-left));
+            top: max(14px, env(safe-area-inset-top));
+            z-index: 10;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 14px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: white;
+            text-decoration: none;
+            font-weight: 900;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(18px);
+        }
+
+        .settings {
+            position: fixed;
+            right: max(14px, env(safe-area-inset-right));
+            top: max(14px, env(safe-area-inset-top));
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chip {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(18px);
+            font-weight: 900;
+        }
+
+        .chip input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--red);
+        }
+
+        .shell {
+            width: min(920px, calc(100% - 24px));
+            margin: 0 auto;
+            padding: 72px 0 34px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .kicker {
+            display: inline-flex;
+            min-height: 30px;
+            align-items: center;
+            padding: 0 12px;
+            border: 1px solid rgba(255, 36, 61, 0.42);
+            border-radius: 999px;
+            color: #ffc9d0;
+            background: rgba(255, 36, 61, 0.1);
+            font-size: 0.75rem;
+            font-weight: 950;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 10px 0 7px;
+            color: var(--red);
+            font-size: clamp(2.45rem, 8vw, 5.2rem);
+            line-height: 0.9;
+            font-weight: 950;
+            letter-spacing: 0;
+            text-shadow: 0 0 26px rgba(255, 36, 61, 0.26);
+            transform: rotate(-1deg);
+        }
+
+        .subtitle {
+            max-width: 690px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-weight: 750;
+            line-height: 1.45;
+        }
+
+        .status {
+            margin: 12px auto 0;
+            color: rgba(255, 255, 255, 0.58);
+            font-size: 0.84rem;
+            font-weight: 850;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(124, 58, 237, 0.22), transparent 35%),
+                radial-gradient(circle at 84% 8%, rgba(255, 36, 61, 0.16), transparent 30%),
+                rgba(255, 255, 255, 0.07);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(22px);
+        }
+
+        .pad {
+            min-height: clamp(98px, 12vw, 136px);
+            display: grid;
+            grid-template-rows: 1fr auto;
+            align-items: center;
+            overflow: hidden;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: white;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            cursor: pointer;
+            transition: transform 0.06s ease, border-color 0.08s ease, background 0.08s ease;
+        }
+
+        .pad.special {
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.24), rgba(255, 255, 255, 0.07));
+        }
+
+        .pad.long {
+            border-color: rgba(251, 197, 49, 0.32);
+            background: linear-gradient(145deg, rgba(251, 197, 49, 0.18), rgba(124, 58, 237, 0.1));
+        }
+
+        .pad.hit {
+            transform: translateY(2px) scale(0.985);
+            border-color: rgba(255, 36, 61, 0.72);
+            background: linear-gradient(145deg, rgba(255, 36, 61, 0.24), rgba(124, 58, 237, 0.12));
+        }
+
+        .key {
+            display: block;
+            align-self: end;
+            font-size: clamp(2.75rem, 7vw, 5.2rem);
+            font-weight: 300;
+            line-height: 0.85;
+            text-transform: uppercase;
+        }
+
+        .label {
+            min-height: 22px;
+            display: block;
+            color: rgba(255, 255, 255, 0.88);
+            font-size: clamp(0.72rem, 1.3vw, 0.9rem);
+            font-weight: 950;
+            line-height: 1.1;
+        }
+
+        .spark {
+            position: fixed;
+            left: var(--x);
+            top: var(--y);
+            z-index: 20;
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--c);
+            box-shadow: 0 0 16px var(--c);
+            pointer-events: none;
+            animation: spark 0.52s ease-out forwards;
+        }
+
+        @keyframes spark {
+            to {
+                transform: translate(var(--dx), var(--dy)) scale(0.1);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .shell {
+                width: min(100% - 14px, 560px);
+                padding-top: 66px;
+            }
+
+            .settings {
+                top: auto;
+                right: 8px;
+                bottom: max(8px, env(safe-area-inset-bottom));
+                transform: scale(0.9);
+                transform-origin: right bottom;
+            }
+
+            .back-home {
+                min-height: 36px;
+                padding: 0 11px;
+                font-size: 0.82rem;
+            }
+
+            .hero {
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                font-size: clamp(2.15rem, 13vw, 4rem);
+            }
+
+            .subtitle {
+                font-size: 0.88rem;
+            }
+
+            .status {
+                margin-top: 8px;
+                font-size: 0.76rem;
+            }
+
+            .board {
+                gap: 5px;
+                padding: 6px;
+                border-radius: 16px;
+            }
+
+            .pad {
+                min-height: 64px;
+                padding: 6px 4px;
+            }
+
+            .key {
+                font-size: clamp(1.55rem, 9vw, 2.8rem);
+            }
+
+            .label {
+                min-height: 16px;
+                font-size: 0.55rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a class="back-home" href="../index.html">← BlopperBold</a>
+    <div class="settings" aria-label="Soundboard Einstellungen">
+        <label class="chip">Spam <input id="spamToggle" type="checkbox"></label>
+        <label class="chip">ADHS <input id="adhdToggle" type="checkbox"></label>
+    </div>
+
+    <main class="shell">
+        <section class="hero" aria-labelledby="title">
+            <span class="kicker">Ye Soundboard</span>
+            <h1 id="title">Runaway</h1>
+            <p class="subtitle">Tasten hauen, Samples sofort feuern. Piano liegt auf A S D F G H J K, der große Beat auf Y.</p>
+            <p class="status" id="status">Samples laden...</p>
+        </section>
+
+        <section class="board" id="board" aria-label="Runaway Soundboard Pads">
+            <button class="pad" type="button" data-key="a" data-sound="piano1"><span class="key">A</span><span class="label">piano 1</span></button>
+            <button class="pad" type="button" data-key="s" data-sound="piano2"><span class="key">S</span><span class="label">piano 2</span></button>
+            <button class="pad" type="button" data-key="d" data-sound="piano3"><span class="key">D</span><span class="label">piano 3</span></button>
+            <button class="pad" type="button" data-key="f" data-sound="piano4"><span class="key">F</span><span class="label">piano 4</span></button>
+            <button class="pad" type="button" data-key="g" data-sound="piano5"><span class="key">G</span><span class="label">piano 5</span></button>
+            <button class="pad" type="button" data-key="h" data-sound="piano6"><span class="key">H</span><span class="label">piano 6</span></button>
+            <button class="pad" type="button" data-key="j" data-sound="piano7"><span class="key">J</span><span class="label">piano 7</span></button>
+            <button class="pad" type="button" data-key="k" data-sound="piano8"><span class="key">K</span><span class="label">piano 8</span></button>
+            <button class="pad long" type="button" data-key="y" data-sound="fullbeat"><span class="key">Y</span><span class="label">Full Beat</span></button>
+            <button class="pad special" type="button" data-key="x" data-sound="ladies"><span class="key">X</span><span class="label">Ladies</span></button>
+            <button class="pad special" type="button" data-key="c" data-sound="lookatcha"><span class="key">C</span><span class="label">Lookatcha</span></button>
+            <button class="pad" type="button" data-key="b" data-sound="beautiful"><span class="key">B</span><span class="label">Beautiful</span></button>
+            <button class="pad" type="button" data-key="v" data-sound="justbeat"><span class="key">V</span><span class="label">Just Beat</span></button>
+            <button class="pad" type="button" data-key="m" data-action="stop"><span class="key">M</span><span class="label">Stop</span></button>
+            <button class="pad" type="button" data-key="i" data-action="info"><span class="key">I</span><span class="label">Info</span></button>
+            <button class="pad special" type="button" data-key="r" data-action="reset"><span class="key">R</span><span class="label">Reset</span></button>
+        </section>
+    </main>
+
+    <script>
+        const SETTINGS_KEY = 'yeSoundboardSettings';
+        const files = {
+            piano1: 'A.mp3',
+            piano2: 'B.mp3',
+            piano3: 'C.mp3',
+            piano4: 'D.mp3',
+            piano5: 'E.mp3',
+            piano6: 'F.mp3',
+            piano7: 'G.mp3',
+            piano8: 'H.mp3',
+            fullbeat: 'fullbeat.mp3',
+            ladies: 'ladiesandgentleman.mp3',
+            lookatcha: 'lookatcha.mp3',
+            beautiful: 'beautiful stars.mp3',
+            justbeat: 'justbeat.mp3'
+        };
+
+        const smallSounds = Object.keys(files).filter(id => id !== 'fullbeat');
+        const pads = Array.from(document.querySelectorAll('.pad'));
+        const padByKey = Object.fromEntries(pads.map(pad => [pad.dataset.key, pad]));
+        const statusEl = document.getElementById('status');
+        const spamToggle = document.getElementById('spamToggle');
+        const adhdToggle = document.getElementById('adhdToggle');
+        const buffers = {};
+        const active = new Set();
+        const fallbackActive = new Set();
+        const fullBeat = new Audio(files.fullbeat);
+        fullBeat.preload = 'metadata';
+        let context;
+        let justBeatSource = null;
+        let justBeatAudio = null;
+        let lastTouchEnd = 0;
+        let lastVisual = 0;
+        let settings = readSettings();
+
+        function readSettings() {
+            try {
+                return { spam: true, adhd: false, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
+            } catch {
+                return { spam: true, adhd: false };
+            }
+        }
+
+        function saveSettings() {
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            spamToggle.checked = settings.spam;
+            adhdToggle.checked = settings.adhd;
+        }
+
+        function audioContext() {
+            if (!context) {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (Ctx) context = new Ctx({ latencyHint: 'interactive' });
+            }
+            if (context?.state === 'suspended') context.resume().catch(() => {});
+            return context;
+        }
+
+        function loadArrayBuffer(src) {
+            return new Promise((resolve, reject) => {
+                const request = new XMLHttpRequest();
+                request.open('GET', encodeURI(src), true);
+                request.responseType = 'arraybuffer';
+                request.onload = () => request.status === 0 || request.status < 400 ? resolve(request.response) : reject();
+                request.onerror = reject;
+                request.send();
+            });
+        }
+
+        function decodeAudio(ctx, data) {
+            return new Promise((resolve, reject) => {
+                const copy = data.slice(0);
+                const result = ctx.decodeAudioData(copy, resolve, reject);
+                if (result?.then) result.then(resolve).catch(reject);
+            });
+        }
+
+        async function loadSounds() {
+            const ctx = audioContext();
+            if (!ctx) {
+                statusEl.textContent = 'Fallback bereit';
+                return;
+            }
+
+            let done = 0;
+            let failed = 0;
+            statusEl.textContent = 'Samples laden...';
+            for (const id of ['lookatcha', ...smallSounds.filter(item => item !== 'lookatcha')]) {
+                try {
+                    const data = await loadArrayBuffer(files[id]);
+                    buffers[id] = await decodeAudio(ctx, data);
+                    done += 1;
+                    statusEl.textContent = `${done}/${smallSounds.length} bereit`;
+                } catch {
+                    failed += 1;
+                }
+            }
+            statusEl.textContent = done ? `Samples bereit${failed ? ' + Fallback' : ''}` : 'Fallback bereit';
+        }
+
+        function playBuffer(id, loop = false) {
+            const ctx = audioContext();
+            const buffer = buffers[id];
+            if (!ctx || !buffer) return false;
+
+            if (!settings.spam && !loop) stopSound(id);
+            const source = ctx.createBufferSource();
+            source.buffer = buffer;
+            source.loop = loop;
+            source.connect(ctx.destination);
+            source._soundId = id;
+            source.onended = () => active.delete(source);
+            active.add(source);
+            source.start();
+            return source;
+        }
+
+        function playFallback(id, loop = false) {
+            const audio = new Audio(files[id]);
+            audio.loop = loop;
+            audio.preload = 'auto';
+            audio.addEventListener('ended', () => fallbackActive.delete(audio));
+            fallbackActive.add(audio);
+            audio.play().catch(() => fallbackActive.delete(audio));
+            return audio;
+        }
+
+        function stopSound(id) {
+            active.forEach(source => {
+                if (source._soundId !== id) return;
+                try {
+                    source.stop();
+                } catch {}
+                active.delete(source);
+            });
+        }
+
+        function stopAll() {
+            active.forEach(source => {
+                try {
+                    source.stop();
+                } catch {}
+            });
+            active.clear();
+            fallbackActive.forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+            fallbackActive.clear();
+            if (justBeatSource) justBeatSource = null;
+            if (justBeatAudio) {
+                justBeatAudio.pause();
+                justBeatAudio.currentTime = 0;
+                justBeatAudio = null;
+            }
+            fullBeat.pause();
+            fullBeat.currentTime = 0;
+            statusEl.textContent = 'Gestoppt';
+        }
+
+        function playSound(id) {
+            if (id === 'fullbeat') {
+                fullBeat.currentTime = 0;
+                fullBeat.play().catch(() => {});
+                return;
+            }
+
+            if (id === 'justbeat') {
+                if (justBeatSource) {
+                    try {
+                        justBeatSource.stop();
+                    } catch {}
+                    justBeatSource = null;
+                    return;
+                }
+                if (justBeatAudio) {
+                    justBeatAudio.pause();
+                    justBeatAudio.currentTime = 0;
+                    justBeatAudio = null;
+                    return;
+                }
+                justBeatSource = playBuffer(id, true) || null;
+                if (!justBeatSource) justBeatAudio = playFallback(id, true);
+                return;
+            }
+
+            if (!playBuffer(id)) playFallback(id);
+        }
+
+        function visual(pad, event) {
+            const now = performance.now();
+            if (!settings.adhd && now - lastVisual < 45) return;
+            lastVisual = now;
+            pad.classList.add('hit');
+            setTimeout(() => pad.classList.remove('hit'), 70);
+
+            if (!settings.adhd || !event) return;
+            const colors = ['#ff243d', '#c084fc', '#38bdf8', '#fbc531'];
+            for (let i = 0; i < 10; i += 1) {
+                const spark = document.createElement('span');
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 28 + Math.random() * 68;
+                spark.className = 'spark';
+                spark.style.setProperty('--x', event.clientX + 'px');
+                spark.style.setProperty('--y', event.clientY + 'px');
+                spark.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+                spark.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+                spark.style.setProperty('--c', colors[i % colors.length]);
+                document.body.append(spark);
+                setTimeout(() => spark.remove(), 540);
+            }
+        }
+
+        function hitPad(pad, event) {
+            audioContext();
+            visual(pad, event);
+            if (pad.dataset.sound) playSound(pad.dataset.sound);
+            if (pad.dataset.action === 'stop') stopAll();
+            if (pad.dataset.action === 'reset') {
+                stopAll();
+                statusEl.textContent = 'Samples bereit';
+            }
+            if (pad.dataset.action === 'info') statusEl.textContent = 'Keys: A S D F G H J K, Y, X, C';
+        }
+
+        pads.forEach(pad => {
+            pad.addEventListener('pointerdown', event => {
+                event.preventDefault();
+                hitPad(pad, event);
+            }, { passive: false });
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.repeat && !settings.spam) return;
+            const pad = padByKey[event.key.toLowerCase()];
+            if (!pad || event.metaKey || event.ctrlKey || event.altKey) return;
+            event.preventDefault();
+            const rect = pad.getBoundingClientRect();
+            hitPad(pad, { clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 });
+        });
+
+        spamToggle.addEventListener('change', () => {
+            settings.spam = spamToggle.checked;
+            saveSettings();
+        });
+
+        adhdToggle.addEventListener('change', () => {
+            settings.adhd = adhdToggle.checked;
+            saveSettings();
+        });
+
+        document.addEventListener('contextmenu', event => {
+            if (event.target.closest('button, a')) event.preventDefault();
+        });
+
+        document.addEventListener('dblclick', event => event.preventDefault(), { passive: false });
+        document.addEventListener('touchend', event => {
+            const now = Date.now();
+            if (now - lastTouchEnd < 350 && event.cancelable) event.preventDefault();
+            lastTouchEnd = now;
+        }, { passive: false });
+
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach(name => {
+            document.addEventListener(name, event => {
+                if (event.cancelable) event.preventDefault();
+            }, { passive: false });
+        });
+
+        saveSettings();
+        loadSounds().catch(() => {
+            statusEl.textContent = 'Fallback bereit';
+        });
+    </script>
+</body>
+</html>
