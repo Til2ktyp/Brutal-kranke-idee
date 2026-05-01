@@ -403,9 +403,9 @@
 
         function readSettings() {
             try {
-                return { spam: true, adhd: false, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
+                return { spam: true, adhd: true, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
             } catch {
-                return { spam: true, adhd: false };
+                return { spam: true, adhd: true };
             }
         }
 
