@@ -470,7 +470,7 @@
             let done = 0;
             let failed = 0;
             statusEl.textContent = 'Samples laden...';
-            for (const id of ['lookatcha', ...smallSounds.filter(item => item !== 'lookatcha')]) {
+            for (const id of ['lookatcha', 'justbeat', ...smallSounds.filter(item => item !== 'lookatcha' && item !== 'justbeat')]) {
                 try {
                     const data = await loadArrayBuffer(files[id]);
                     buffers[id] = await decodeAudio(ctx, data);
@@ -486,12 +486,16 @@
         function playBuffer(id, loop = false) {
             const ctx = audioContext();
             const buffer = buffers[id];
-            if (!ctx || !buffer) return false;
+            if (!ctx || ctx.state !== 'running' || !buffer) return false;
 
             if (!settings.spam && !loop) stopSound(id);
             const source = ctx.createBufferSource();
             source.buffer = buffer;
             source.loop = loop;
+            if (loop && id === 'justbeat') {
+                source.loopStart = 0.002;
+                source.loopEnd = Math.max(source.loopStart + 0.05, buffer.duration - 0.018);
+            }
             source.connect(ctx.destination);
             source._soundId = id;
             source.onended = () => active.delete(source);
@@ -565,7 +569,7 @@
                     return;
                 }
                 justBeatSource = playBuffer(id, true) || null;
-                if (!justBeatSource) justBeatAudio = playFallback(id, true);
+                if (!justBeatSource) statusEl.textContent = 'Just Beat lädt noch kurz...';
                 return;
             }
 
@@ -596,10 +600,9 @@
             }
         }
 
-        async function hitPad(pad, event) {
+        function hitPad(pad, event) {
             visual(pad, event);
-            const ctx = audioContext();
-            if (ctx?.state === 'suspended') await unlockAudio();
+            unlockAudio();
             if (pad.dataset.sound) playSound(pad.dataset.sound);
             if (pad.dataset.action === 'stop') stopAll();
             if (pad.dataset.action === 'reset') {
@@ -612,7 +615,6 @@
         pads.forEach(pad => {
             pad.addEventListener('pointerdown', event => {
                 event.preventDefault();
-                unlockAudio();
                 hitPad(pad, event);
             }, { passive: false });
         });
@@ -622,7 +624,6 @@
             const pad = padByKey[event.key.toLowerCase()];
             if (!pad || event.metaKey || event.ctrlKey || event.altKey) return;
             event.preventDefault();
-            unlockAudio();
             const rect = pad.getBoundingClientRect();
             hitPad(pad, { clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 });
         });
