@@ -1188,7 +1188,7 @@
     <main class="container">
         <section class="hero" aria-labelledby="pageTitle">
             <div class="eyebrow-row">
-                <span class="pill hot">✨ BlopperBold Labs</span>
+                <span class="pill hot" id="adminMobileTrigger">✨ BlopperBold Labs</span>
                 <span class="pill">Beta-Spielplatz</span>
                 <span class="pill">Made mit bisschen zu viel Koffein</span>
             </div>
@@ -1408,6 +1408,7 @@
         const adminError = document.getElementById('adminError');
         const adminHoldToast = document.getElementById('adminHoldToast');
         const adminHoldPercent = document.getElementById('adminHoldPercent');
+        const adminMobileTrigger = document.getElementById('adminMobileTrigger');
         let versionHoldTimer = null;
         let versionHoldTriggered = false;
         let versionHoldActive = false;
@@ -1417,6 +1418,9 @@
         let adminHoldRaf = null;
         let adminHoldStart = 0;
         let adminHoldActive = false;
+        let adminMobileHoldActive = false;
+        let adminMobileHoldStartX = 0;
+        let adminMobileHoldStartY = 0;
 
         function openMoreGames() {
             moreGamesBackdrop.classList.add('show');
@@ -1462,6 +1466,7 @@
 
         function openAdminPin() {
             adminHoldActive = false;
+            adminMobileHoldActive = false;
             window.cancelAnimationFrame(adminHoldRaf);
             adminHoldRaf = null;
             adminHoldToast.classList.remove('show', 'completing');
@@ -1503,6 +1508,7 @@
 
             if (progress >= 1) {
                 adminHoldActive = false;
+                adminMobileHoldActive = false;
                 adminHoldToast.classList.add('completing');
                 window.setTimeout(openAdminPin, 260);
                 return;
@@ -1514,12 +1520,41 @@
         function clearAdminHold() {
             if (!adminHoldActive) return;
             adminHoldActive = false;
+            adminMobileHoldActive = false;
             window.cancelAnimationFrame(adminHoldRaf);
             adminHoldRaf = null;
             adminHoldToast.classList.remove('show', 'completing');
             adminHoldToast.setAttribute('aria-hidden', 'true');
             adminHoldToast.style.setProperty('--admin-progress', 0);
             adminHoldPercent.textContent = '0%';
+        }
+
+        function startMobileAdminHold(event) {
+            if (event.pointerType === 'mouse') return;
+            event.preventDefault();
+            adminMobileHoldActive = true;
+            adminMobileHoldStartX = event.clientX;
+            adminMobileHoldStartY = event.clientY;
+            try {
+                adminMobileTrigger.setPointerCapture(event.pointerId);
+            } catch (error) {
+                // Pointer capture is not available in every browser.
+            }
+            startAdminHold();
+        }
+
+        function moveMobileAdminHold(event) {
+            if (!adminMobileHoldActive) return;
+            const movedX = Math.abs(event.clientX - adminMobileHoldStartX);
+            const movedY = Math.abs(event.clientY - adminMobileHoldStartY);
+            if (movedX > 16 || movedY > 16) {
+                clearAdminHold();
+            }
+        }
+
+        function stopMobileAdminHold(event) {
+            if (event && event.pointerType === 'mouse') return;
+            clearAdminHold();
         }
 
         portfolioLink.addEventListener('click', function(event) {
@@ -1604,6 +1639,14 @@
 
         versionMenuCancel.addEventListener('click', closeVersionMenu);
         adminClose.addEventListener('click', closeAdmin);
+
+        adminMobileTrigger.addEventListener('pointerdown', startMobileAdminHold);
+        adminMobileTrigger.addEventListener('pointermove', moveMobileAdminHold);
+        adminMobileTrigger.addEventListener('pointerup', stopMobileAdminHold);
+        adminMobileTrigger.addEventListener('pointercancel', stopMobileAdminHold);
+        adminMobileTrigger.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
 
         adminBackdrop.addEventListener('click', function(event) {
             if (event.target === adminBackdrop) {
