@@ -364,6 +364,12 @@
             background: linear-gradient(145deg, rgba(255, 36, 61, 0.24), rgba(124, 58, 237, 0.12));
         }
 
+        .pad.toggle-on {
+            border-color: rgba(251, 197, 49, 0.7);
+            background: linear-gradient(145deg, rgba(251, 197, 49, 0.22), rgba(124, 58, 237, 0.14));
+            box-shadow: 0 0 28px rgba(251, 197, 49, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        }
+
         .key {
             display: block;
             align-self: end;
@@ -509,7 +515,7 @@
             <button class="pad" type="button" data-key="v" data-sound="justbeat"><span class="key">V</span><span class="label">Just Beat</span></button>
             <button class="pad" type="button" data-key="m" data-action="stop"><span class="key">M</span><span class="label">Stop</span></button>
             <button class="pad" type="button" data-key="i" data-action="info"><span class="key">I</span><span class="label">Info</span></button>
-            <button class="pad special" type="button" data-key="r" data-action="reset"><span class="key">R</span><span class="label">Reset</span></button>
+            <button class="pad special" type="button" data-key="r" data-action="lyrics"><span class="key">R</span><span class="label">Kanye Lyrics</span></button>
         </section>
     </main>
 
@@ -549,10 +555,11 @@
             ladies: 'ladiesandgentleman.mp3',
             lookatcha: 'lookatcha.mp3',
             beautiful: 'beautiful stars.mp3',
-            justbeat: 'justbeat.mp3'
+            justbeat: 'justbeat.mp3',
+            lyrics: 'lyrics.mp3'
         };
 
-        const smallSounds = Object.keys(files).filter(id => id !== 'fullbeat');
+        const smallSounds = Object.keys(files).filter(id => id !== 'fullbeat' && id !== 'lyrics');
         const pads = Array.from(document.querySelectorAll('.pad'));
         const padByKey = Object.fromEntries(pads.map(pad => [pad.dataset.key, pad]));
         const statusEl = document.getElementById('status');
@@ -567,12 +574,15 @@
         const fallbackActive = new Set();
         const fullBeat = new Audio(files.fullbeat);
         fullBeat.preload = 'metadata';
+        const lyricsAudio = new Audio(files.lyrics);
+        lyricsAudio.preload = 'metadata';
         let context;
         let justBeatSource = null;
         let justBeatAudio = null;
         let lastTouchEnd = 0;
         let lastVisual = 0;
         let unlockPromise = null;
+        let lyricsEnabled = false;
         let settings = readSettings();
 
         function readSettings() {
@@ -699,6 +709,7 @@
             const audio = new Audio(files[id]);
             audio.loop = loop;
             audio.preload = 'auto';
+            audio._soundId = id;
             audio.addEventListener('ended', () => fallbackActive.delete(audio));
             fallbackActive.add(audio);
             audio.play().catch(() => fallbackActive.delete(audio));
@@ -712,6 +723,15 @@
                     source.stop();
                 } catch {}
                 active.delete(source);
+            });
+        }
+
+        function stopFallback(id) {
+            fallbackActive.forEach(audio => {
+                if (audio._soundId !== id) return;
+                audio.pause();
+                audio.currentTime = 0;
+                fallbackActive.delete(audio);
             });
         }
 
@@ -735,6 +755,10 @@
             }
             fullBeat.pause();
             fullBeat.currentTime = 0;
+            lyricsAudio.pause();
+            lyricsAudio.currentTime = 0;
+            lyricsEnabled = false;
+            padByKey.r?.classList.remove('toggle-on');
             statusEl.textContent = 'Gestoppt';
         }
 
@@ -743,6 +767,26 @@
                 fullBeat.currentTime = 0;
                 fullBeat.play().catch(() => {});
                 return;
+            }
+
+            if (id === 'lyrics') {
+                lyricsEnabled = !lyricsEnabled;
+                padByKey.r?.classList.toggle('toggle-on', lyricsEnabled);
+                if (lyricsEnabled) {
+                    lyricsAudio.currentTime = 0;
+                    lyricsAudio.play().catch(() => {});
+                    statusEl.textContent = 'Kanye West Lyrics an';
+                } else {
+                    lyricsAudio.pause();
+                    lyricsAudio.currentTime = 0;
+                    statusEl.textContent = 'Kanye West Lyrics aus';
+                }
+                return;
+            }
+
+            if (id === 'lookatcha') {
+                stopSound(id);
+                stopFallback(id);
             }
 
             if (id === 'justbeat') {
@@ -801,10 +845,7 @@
             unlockAudio();
             if (pad.dataset.sound) playSound(pad.dataset.sound);
             if (pad.dataset.action === 'stop') stopAll();
-            if (pad.dataset.action === 'reset') {
-                stopAll();
-                statusEl.textContent = 'Samples bereit';
-            }
+            if (pad.dataset.action === 'lyrics') playSound('lyrics');
             if (pad.dataset.action === 'info') statusEl.textContent = 'Keys: A S D F G H J K, Y, X, C';
         }
 
