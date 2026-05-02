@@ -189,6 +189,15 @@
             box-shadow: 0 10px 30px rgba(251, 197, 49, 0.24), 0 0 34px rgba(251, 197, 49, 0.18);
         }
 
+        #adminMobileTrigger {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            cursor: default;
+        }
+
         h1 {
             margin: 0;
             font-size: clamp(2.35rem, 7vw, 5.35rem);
@@ -1531,7 +1540,9 @@
 
         function startMobileAdminHold(event) {
             if (event.pointerType === 'mouse') return;
-            event.preventDefault();
+            if (event.cancelable) {
+                event.preventDefault();
+            }
             adminMobileHoldActive = true;
             adminMobileHoldStartX = event.clientX;
             adminMobileHoldStartY = event.clientY;
