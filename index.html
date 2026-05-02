@@ -919,7 +919,7 @@
             position: fixed;
             left: 18px;
             right: 18px;
-            bottom: clamp(140px, 16vh, 220px);
+            bottom: clamp(-110px, 2vh, 220px);
             z-index: 0;
             width: min(680px, calc(100% - 36px));
             margin: 0 auto;
@@ -937,6 +937,15 @@
 
         footer p {
             margin: 0;
+        }
+
+        .footer-easteregg {
+            display: block;
+            margin-top: 5px;
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 800;
+            opacity: 0.5;
         }
 
         @keyframes pageEnter {
@@ -1400,6 +1409,7 @@
 
     <footer>
         <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
+        <span class="footer-easteregg">made by til and miro with &lt;3</span>
     </footer>
 
     <script>
