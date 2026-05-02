@@ -540,6 +540,14 @@
         </section>
     </div>
 
+    <div class="tutorial-backdrop" id="infoBackdrop" aria-hidden="true">
+        <section class="tutorial-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+            <h2 id="infoTitle">Info</h2>
+            <p>Made by Til 2ktyp with &lt;3</p>
+            <button class="tutorial-close" id="infoClose" type="button">Stark</button>
+        </section>
+    </div>
+
     <script>
         const SETTINGS_KEY = 'yeSoundboardSettings';
         const files = {
@@ -568,6 +576,8 @@
         const tutorialButton = document.getElementById('tutorialButton');
         const tutorialBackdrop = document.getElementById('tutorialBackdrop');
         const tutorialClose = document.getElementById('tutorialClose');
+        const infoBackdrop = document.getElementById('infoBackdrop');
+        const infoClose = document.getElementById('infoClose');
         const buffers = {};
         const trimOffsets = {};
         const active = new Set();
@@ -846,7 +856,7 @@
             if (pad.dataset.sound) playSound(pad.dataset.sound);
             if (pad.dataset.action === 'stop') stopAll();
             if (pad.dataset.action === 'lyrics') playSound('lyrics');
-            if (pad.dataset.action === 'info') statusEl.textContent = 'Keys: A S D F G H J K, Y, X, C';
+            if (pad.dataset.action === 'info') openInfo();
         }
 
         pads.forEach(pad => {
@@ -900,12 +910,34 @@
             if (event.target === tutorialBackdrop) closeTutorial();
         });
 
+        function openInfo() {
+            infoBackdrop.classList.remove('closing');
+            infoBackdrop.classList.add('show');
+            infoBackdrop.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeInfo() {
+            if (!infoBackdrop.classList.contains('show')) return;
+            infoBackdrop.classList.remove('show');
+            infoBackdrop.classList.add('closing');
+            infoBackdrop.setAttribute('aria-hidden', 'true');
+            setTimeout(() => infoBackdrop.classList.remove('closing'), 190);
+        }
+
+        infoClose.addEventListener('click', closeInfo);
+        infoBackdrop.addEventListener('click', event => {
+            if (event.target === infoBackdrop) closeInfo();
+        });
+
         document.addEventListener('contextmenu', event => {
             if (event.target.closest('button, a')) event.preventDefault();
         });
 
         document.addEventListener('keydown', event => {
-            if (event.key === 'Escape') closeTutorial();
+            if (event.key === 'Escape') {
+                closeTutorial();
+                closeInfo();
+            }
         });
 
         document.addEventListener('dblclick', event => event.preventDefault(), { passive: false });
