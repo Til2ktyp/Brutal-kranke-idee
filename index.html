@@ -1408,8 +1408,8 @@
     </div>
 
     <footer>
-        <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
-        <span class="footer-easteregg">made by til and miro with &lt;3</span>
+        <p>2026 © BlopperBold AG. Alle Rechte vorbehalten.</p>
+        <span class="footer-easteregg">made by Til and Miro with &lt;3</span>
     </footer>
 
     <script>
@@ -1521,7 +1521,7 @@
         function tickAdminHold(now) {
             if (!adminHoldActive) return;
 
-            const progress = Math.min((now - adminHoldStart) / 5000, 1);
+            const progress = Math.min((now - adminHoldStart) / 2000, 1);
             adminHoldToast.style.setProperty('--admin-progress', progress.toFixed(3));
             adminHoldPercent.textContent = Math.round(progress * 100) + '%';
 
