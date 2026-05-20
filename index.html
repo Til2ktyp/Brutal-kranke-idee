@@ -919,7 +919,8 @@
             position: fixed;
             left: 18px;
             right: 18px;
-            bottom: clamp(-110px, 2vh, 220px);
+            /* Footer-Hoehe/Tiefe einstellen: negativer = weiter hinter dem Big Widget, positiver = weiter nach oben. */
+            bottom: clamp(-110px, 1vh, 220px);
             z-index: 0;
             width: min(680px, calc(100% - 36px));
             margin: 0 auto;
@@ -932,20 +933,187 @@
             box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
             font-size: 0.9rem;
             opacity: 0.72;
-            pointer-events: none;
+            pointer-events: auto;
         }
 
         footer p {
             margin: 0;
         }
 
-        .footer-easteregg {
-            display: block;
+        .footer-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
             margin-top: 5px;
+        }
+
+        .footer-easteregg {
             color: white;
             font-size: 0.72rem;
             font-weight: 800;
             opacity: 0.5;
+        }
+
+        .impressum-trigger {
+            position: relative;
+            isolation: isolate;
+            min-height: 24px;
+            padding: 0 10px;
+            overflow: hidden;
+            border: 1px solid rgba(251, 197, 49, 0.24);
+            border-radius: 999px;
+            background:
+                radial-gradient(circle at 25% 0%, rgba(255, 255, 255, 0.22), transparent 42%),
+                rgba(255, 255, 255, 0.1);
+            color: #fde68a;
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.68rem;
+            font-weight: 950;
+            box-shadow: 0 8px 24px rgba(251, 197, 49, 0.12);
+            transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+            animation: impressumPulse 2.8s ease-in-out infinite;
+        }
+
+        .impressum-trigger::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.26), transparent);
+            transform: translateX(-120%) skewX(-12deg);
+            transition: transform 0.5s ease;
+        }
+
+        .impressum-trigger:hover,
+        .impressum-trigger:focus-visible {
+            outline: none;
+            transform: translateY(-2px) scale(1.05);
+            border-color: rgba(251, 197, 49, 0.48);
+            background: rgba(255, 255, 255, 0.16);
+            box-shadow: 0 12px 32px rgba(251, 197, 49, 0.2);
+            animation-play-state: paused;
+        }
+
+        .impressum-trigger:hover::before,
+        .impressum-trigger:focus-visible::before {
+            transform: translateX(120%) skewX(-12deg);
+        }
+
+        .impressum-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, 0.48);
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(0);
+            transition: opacity 0.22s ease, backdrop-filter 0.3s ease;
+        }
+
+        .impressum-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+            backdrop-filter: blur(16px);
+        }
+
+        .impressum-widget {
+            width: min(560px, 100%);
+            max-height: min(680px, calc(100vh - 36px));
+            overflow: auto;
+            padding: clamp(20px, 5vw, 30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.2), transparent 34%),
+                radial-gradient(circle at 86% 18%, rgba(251, 197, 49, 0.16), transparent 30%),
+                rgba(15, 23, 42, 0.92);
+            box-shadow: 0 34px 115px rgba(0, 0, 0, 0.5);
+            transform: scale(0.86) translateY(22px);
+            filter: blur(12px);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
+        }
+
+        .impressum-backdrop.show .impressum-widget {
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
+
+        .impressum-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: start;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .impressum-title {
+            margin: 0;
+            color: white;
+            font-size: clamp(1.8rem, 5vw, 3.2rem);
+            line-height: 0.96;
+            letter-spacing: -0.04em;
+        }
+
+        .impressum-close {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font: inherit;
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .impressum-close:hover,
+        .impressum-close:focus-visible {
+            outline: none;
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .impressum-content {
+            display: grid;
+            gap: 14px;
+            text-align: left;
+        }
+
+        .impressum-content p,
+        .impressum-content h4 {
+            margin: 0;
+        }
+
+        .impressum-content h4 {
+            margin-top: 4px;
+            color: #fde68a;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .impressum-content p {
+            color: var(--soft-blue-text);
+            line-height: 1.55;
+        }
+
+        .impressum-content a {
+            color: #fde68a;
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+        .impressum-content a:hover,
+        .impressum-content a:focus-visible {
+            outline: none;
+            text-decoration: underline;
         }
 
         @keyframes pageEnter {
@@ -1088,6 +1256,16 @@
             }
         }
 
+        @keyframes impressumPulse {
+            0%, 100% {
+                box-shadow: 0 8px 24px rgba(251, 197, 49, 0.12);
+            }
+
+            50% {
+                box-shadow: 0 8px 28px rgba(56, 189, 248, 0.18), 0 0 18px rgba(251, 197, 49, 0.16);
+            }
+        }
+
         @media (max-width: 760px) {
             body {
                 align-items: flex-start;
@@ -1117,11 +1295,13 @@
             }
 
             .admin-header,
-            .admin-pin-row {
+            .admin-pin-row,
+            .impressum-header {
                 grid-template-columns: 1fr;
             }
 
-            .admin-close {
+            .admin-close,
+            .impressum-close {
                 justify-self: end;
                 order: -1;
             }
@@ -1217,7 +1397,7 @@
             </h1>
 
             <p class="subtitle">
-                Deine kleine Kommandozentrale für Experimente, Rechner und absolut seriöse Web-App-Machenschaften.
+                Deine kleine Kommandozentrale für Experimente, Rechner und absolut seriöse Web-App-Machenschaften. Made by Miro and Til.
             </p>
             <div class="status-strip">
                 <span class="status-dot"></span>
@@ -1407,9 +1587,37 @@
         </div>
     </div>
 
+    <div class="impressum-backdrop" id="impressumBackdrop" aria-hidden="true">
+        <section class="impressum-widget" role="dialog" aria-modal="true" aria-labelledby="impressumTitle">
+            <div class="impressum-header">
+                <div>
+                    <span class="more-games-kicker">Legal Stuff</span>
+                    <h2 class="impressum-title" id="impressumTitle">Impressum</h2>
+                </div>
+                <button class="impressum-close" type="button" id="impressumClose" aria-label="Impressum schließen">×</button>
+            </div>
+
+            <div class="impressum-content">
+                <p>Til Freitag</p>
+                <p>
+                    Ringstraße 40<br>
+                    19075 Pampow
+                </p>
+                <h4>Kontakt</h4>
+                <p>
+                    Telefon: +4915141907361<br>
+                    E-Mail: <a href="mailto:dertilfreitag@blopperbold.org">dertilfreitag@blopperbold.org</a>
+                </p>
+            </div>
+        </section>
+    </div>
+
     <footer>
-        <p>2026 © BlopperBold AG. Alle Rechte vorbehalten.</p>
-        <span class="footer-easteregg">made by Til and Miro with &lt;3</span>
+        <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
+        <div class="footer-row">
+            <span class="footer-easteregg">made by Til &amp; miro with &lt;3</span>
+            <button class="impressum-trigger" type="button" id="impressumButton">Impressum</button>
+        </div>
     </footer>
 
     <script>
@@ -1428,6 +1636,9 @@
         const adminHoldToast = document.getElementById('adminHoldToast');
         const adminHoldPercent = document.getElementById('adminHoldPercent');
         const adminMobileTrigger = document.getElementById('adminMobileTrigger');
+        const impressumButton = document.getElementById('impressumButton');
+        const impressumBackdrop = document.getElementById('impressumBackdrop');
+        const impressumClose = document.getElementById('impressumClose');
         let versionHoldTimer = null;
         let versionHoldTriggered = false;
         let versionHoldActive = false;
@@ -1453,12 +1664,32 @@
             moreGamesButton.focus();
         }
 
+        function openImpressum() {
+            impressumBackdrop.classList.add('show');
+            impressumBackdrop.setAttribute('aria-hidden', 'false');
+            impressumClose.focus();
+        }
+
+        function closeImpressum() {
+            impressumBackdrop.classList.remove('show');
+            impressumBackdrop.setAttribute('aria-hidden', 'true');
+            impressumButton.focus();
+        }
+
         moreGamesButton.addEventListener('click', openMoreGames);
         moreGamesClose.addEventListener('click', closeMoreGames);
+        impressumButton.addEventListener('click', openImpressum);
+        impressumClose.addEventListener('click', closeImpressum);
 
         moreGamesBackdrop.addEventListener('click', function(event) {
             if (event.target === moreGamesBackdrop) {
                 closeMoreGames();
+            }
+        });
+
+        impressumBackdrop.addEventListener('click', function(event) {
+            if (event.target === impressumBackdrop) {
+                closeImpressum();
             }
         });
 
@@ -1712,6 +1943,9 @@
             if (event.key === 'Escape') {
                 if (moreGamesBackdrop.classList.contains('show')) {
                     closeMoreGames();
+                }
+                if (impressumBackdrop.classList.contains('show')) {
+                    closeImpressum();
                 }
                 closeVersionMenu();
                 closeAdmin();
