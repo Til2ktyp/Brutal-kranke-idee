@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Bug-Manager</title>
+    <title>Issuemanager</title>
     <style>
         :root {
             --bg-color: #121214;
@@ -14,7 +14,6 @@
             --primary: #4ea8de;
             --primary-hover: #3a8ebf;
             --danger: #ff6b6b;
-            --danger-hover: #fa5252;
             --success: #04d361;
             --border: #29292e;
         }
@@ -41,7 +40,7 @@
             font-weight: 800;
         }
 
-        /* Formular Styling */
+        /* --- FORMULAR STYLING (EXAKT WIE AUF SCREENSHOT) --- */
         .bug-form {
             background: var(--card-bg);
             padding: 25px;
@@ -99,17 +98,16 @@
             min-height: 80px;
         }
 
-        /* Ausklappbares Akkordeon */
-        .accordion {
+        /* Formular Akkordeon */
+        .form-accordion {
             border: 1px solid var(--border);
             border-radius: 6px;
-            background: var(--input-bg);
+            background: #202024;
             overflow: hidden;
         }
 
-        .accordion-header {
+        .form-accordion-header {
             padding: 12px;
-            background: #202024;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -121,18 +119,17 @@
             transition: background 0.2s;
         }
 
-        .accordion-header:hover {
+        .form-accordion-header:hover {
             background: #29292e;
             color: #fff;
         }
 
-        .accordion-arrow {
-            font-size: 12px;
+        .form-accordion-arrow {
+            font-size: 10px;
             transition: transform 0.3s ease;
         }
 
-        /* Die eigentliche Animation fürs Ausklappen */
-        .accordion-content {
+        .form-accordion-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out, padding 0.3s ease;
@@ -143,13 +140,12 @@
             background: var(--card-bg);
         }
 
-        /* Klasse wenn aktiv via JS */
-        .accordion.open .accordion-content {
-            max-height: 200px; /* Groß genug für die Felder */
+        .form-accordion.open .form-accordion-content {
+            max-height: 200px;
             padding: 15px;
         }
 
-        .accordion.open .accordion-arrow {
+        .form-accordion.open .form-accordion-arrow {
             transform: rotate(180deg);
         }
 
@@ -166,15 +162,11 @@
             border-radius: 6px;
         }
 
-        .btn-submit:hover { 
-            background-color: var(--primary-hover);
-        }
+        .btn-submit:hover { background-color: var(--primary-hover); }
+        .btn-submit:active { transform: scale(0.98); }
 
-        .btn-submit:active {
-            transform: scale(0.98);
-        }
 
-        /* Filter Sektion */
+        /* --- FILTER STYLING --- */
         .filters {
             background: var(--card-bg);
             padding: 15px;
@@ -187,41 +179,105 @@
             border: 1px solid var(--border);
         }
 
-        .filters input, .filters select {
+        .filters select {
             padding: 8px 12px;
             width: auto;
             font-size: 13px;
         }
 
-        /* Issue Liste Styling */
-        .bug-list {
-            list-style: none;
-            padding: 0;
+
+        /* --- LISTE: PROJEKT GRUPPEN (AKKORDEON FÜR BUGS) --- */
+        .project-group {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .project-header {
+            padding: 18px 20px;
+            background: #202024;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .project-header:hover { background: #29292e; }
+
+        .project-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .project-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
             margin: 0;
         }
 
+        .bug-count-badge {
+            background: var(--input-bg);
+            color: var(--text-muted);
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+            border: 1px solid var(--border);
+        }
+
+        .project-arrow {
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animation für das Ausklappen der Bugs */
+        .project-bugs-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #161619;
+        }
+
+        .project-group.open .project-bugs-wrapper {
+            max-height: 2000px; /* Bietet genug Platz */
+        }
+
+        .project-group.open .project-arrow {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+
+        .bug-list {
+            list-style: none;
+            padding: 15px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Bug Item Design */
         .bug-item {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            margin-bottom: 15px;
+            padding: 16px;
+            border-radius: 6px;
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            border-left: 6px solid var(--primary);
+            border-left: 5px solid var(--primary);
             border-top: 1px solid var(--border);
             border-right: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
-            animation: fadeIn 0.3s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Kategoriefarben */
         .bug-item.kategorie-ui { border-left-color: #4ea8de; }
         .bug-item.kategorie-backend { border-left-color: #9b59b6; }
         .bug-item.kategorie-critical { border-left-color: var(--danger); }
@@ -240,14 +296,14 @@
         .bug-left {
             display: flex;
             align-items: flex-start;
-            gap: 15px;
+            gap: 12px;
             flex: 1;
         }
 
         .bug-checkbox {
-            width: 20px;
-            height: 20px;
-            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            margin-top: 3px;
             cursor: pointer;
             accent-color: var(--primary);
         }
@@ -255,47 +311,43 @@
         .bug-content {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
             width: 100%;
         }
 
         .bug-title {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 600;
             color: #fff;
             margin: 0;
         }
 
         .bug-description {
-            font-size: 14px;
+            font-size: 13px;
             color: #c9c9d4;
             white-space: pre-wrap;
             margin: 0;
         }
 
-        .badge-container {
-            display: flex;
-            gap: 8px;
-            margin-top: 5px;
-        }
-
         .badge {
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 6px;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
             font-weight: bold;
-            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            align-self: flex-start;
+            margin-top: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
         }
-
-        .badge-proj { background: rgba(78, 168, 222, 0.15); color: var(--primary); }
-        .badge-cat { background: rgba(255, 255, 255, 0.08); color: var(--text-color); }
 
         .btn-delete {
             background: none;
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 22px;
+            font-size: 20px;
             line-height: 1;
             padding: 0 5px;
             transition: color 0.2s;
@@ -314,8 +366,9 @@
 <body>
 
 <div class="container">
-    <h1>🐛 Bug-Manager</h1>
+    <h1>Bug-Manager</h1>
 
+    <!-- Formular exakt wie auf deinem Screenshot -->
     <form class="bug-form" id="bugForm">
         <div class="form-group">
             <label for="bugTitle">Große Überschrift / Fehler-Titel</label>
@@ -327,12 +380,13 @@
             <textarea id="bugDesc" placeholder="Schreibe hier alle Details, Schritte zum Reproduzieren rein..."></textarea>
         </div>
 
-        <div class="accordion" id="accordionMenu">
-            <div class="accordion-header" onclick="toggleAccordion()">
+        <!-- Optionaler Bereich aus deinem Screenshot -->
+        <div class="form-accordion" id="formAccordionMenu">
+            <div class="form-accordion-header" onclick="toggleFormAccordion()">
                 <span>PROJEKT & KATEGORIE EINSTELLEN (OPTIONAL)</span>
-                <span class="accordion-arrow" id="accordionArrow">▼</span>
+                <span class="form-accordion-arrow" id="formAccordionArrow">▲</span>
             </div>
-            <div class="accordion-content">
+            <div class="form-accordion-content">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="bugProject">Projekt Name (Plain Text)</label>
@@ -355,14 +409,10 @@
         <button type="submit" class="btn-submit">Bug eintragen</button>
     </form>
 
+    <!-- Filter Optionen -->
     <div class="filters">
         <div>
-            <label for="filterProject">Projekt suchen:</label>
-            <input type="text" id="filterProject" placeholder="z.B. PulseOS..." oninput="renderBugs()">
-        </div>
-
-        <div>
-            <label for="filterCategory">Kategorie:</label>
+            <label for="filterCategory">Kategorie filtern:</label>
             <select id="filterCategory" onchange="renderBugs()">
                 <option value="all">Alle Kategorien</option>
                 <option value="ui">UI / Design</option>
@@ -377,37 +427,36 @@
         </label>
     </div>
 
-    <ul class="bug-list" id="bugList"></ul>
-    <div id="emptyState" class="empty-state" style="display: none;">Keine Bugs gefunden. Alles sauber! 🎉</div>
+    <!-- Hier landen die gruppierten Projekt-Popouts -->
+    <div id="projectGroupsContainer"></div>
+    <div id="emptyState" class="empty-state" style="display: none;">Keine Bugs vorhanden. Alles clean! 🎉</div>
 </div>
 
 <script>
-    // Daten aus LocalStorage laden
-    let bugs = JSON.parse(localStorage.getItem('darkTextBugs')) || [];
+    let bugs = JSON.parse(localStorage.getItem('finalGroupedBugs')) || [];
+    let openProjects = JSON.parse(localStorage.getItem('finalOpenProjects')) || {};
 
     const bugForm = document.getElementById('bugForm');
     const bugTitle = document.getElementById('bugTitle');
     const bugDesc = document.getElementById('bugDesc');
     const bugProject = document.getElementById('bugProject');
     const bugCategory = document.getElementById('bugCategory');
-    const bugList = document.getElementById('bugList');
+    const formAccordionMenu = document.getElementById('formAccordionMenu');
+    const projectGroupsContainer = document.getElementById('projectGroupsContainer');
     const emptyState = document.getElementById('emptyState');
-    const accordionMenu = document.getElementById('accordionMenu');
     
-    const filterProject = document.getElementById('filterProject');
     const filterCategory = document.getElementById('filterCategory');
     const hideResolved = document.getElementById('hideResolved');
 
-    // Funktion zum Auf- und Zuklappen des Menüs
-    function toggleAccordion() {
-        accordionMenu.classList.toggle('open');
+    // Steuert das Einklappen des Formular-Bereichs (Oben)
+    function toggleFormAccordion() {
+        formAccordionMenu.classList.toggle('open');
     }
 
     // Bug hinzufügen
     bugForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Wenn kein Projekt eingetragen wurde, kriegt es das Label "Allgemein"
         const projName = bugProject.value.trim() || 'Allgemein';
         
         const newBug = {
@@ -420,25 +469,40 @@
         };
 
         bugs.push(newBug);
-        localStorage.setItem('darkTextBugs', JSON.stringify(bugs));
+        localStorage.setItem('finalGroupedBugs', JSON.stringify(bugs));
         
-        // Formular zurücksetzen, Projektname bleibt stehen für schnelleres Arbeiten
+        // Das hinzugefügte Projekt soll unten direkt aufgeklappt angezeigt werden
+        openProjects[projName] = true;
+        localStorage.setItem('finalOpenProjects', JSON.stringify(openProjects));
+
+        // Nur Titel und Beschreibung resetten, Projektname bleibt fürs flüssige Arbeiten stehen
         bugTitle.value = '';
         bugDesc.value = '';
         
         renderBugs();
     });
 
+    // Steuert das Auf-/Zuklappen der Projektgruppen in der Liste (Unten)
+    function toggleProject(projName) {
+        openProjects[projName] = !openProjects[projName];
+        localStorage.setItem('finalOpenProjects', JSON.stringify(openProjects));
+        
+        const element = document.getElementById(`project-group-${cssSafeName(projName)}`);
+        if (element) {
+            element.classList.toggle('open');
+        }
+    }
+
     function toggleResolve(id) {
         bugs = bugs.map(bug => bug.id === id ? { ...bug, resolved: !bug.resolved } : bug);
-        localStorage.setItem('darkTextBugs', JSON.stringify(bugs));
+        localStorage.setItem('finalGroupedBugs', JSON.stringify(bugs));
         renderBugs();
     }
 
     function deleteBug(id) {
         if(confirm("Möchtest du diesen Bug wirklich löschen?")) {
             bugs = bugs.filter(bug => bug.id !== id);
-            localStorage.setItem('darkTextBugs', JSON.stringify(bugs));
+            localStorage.setItem('finalGroupedBugs', JSON.stringify(bugs));
             renderBugs();
         }
     }
@@ -450,46 +514,82 @@
         feature: 'Feature'
     };
 
-    // Die Render-Funktion
+    function cssSafeName(name) {
+        return btoa(unescape(encodeURIComponent(name))).replace(/=/g, "");
+    }
+
+    // Rendert die Liste unten mit den Popout-Menüs pro Projekt
     function renderBugs() {
-        bugList.innerHTML = '';
+        projectGroupsContainer.innerHTML = '';
         
-        const projectQuery = filterProject.value.toLowerCase().trim();
         const selectedCatFilter = filterCategory.value;
         const shouldHideResolved = hideResolved.checked;
 
         const filteredBugs = bugs.filter(bug => {
-            const matchesProj = projectQuery === '' || bug.project.toLowerCase().includes(projectQuery);
             const matchesCat = selectedCatFilter === 'all' || bug.category === selectedCatFilter;
             const matchesVisibility = !shouldHideResolved || !bug.resolved;
-            return matchesProj && matchesCat && matchesVisibility;
+            return matchesCat && matchesVisibility;
         });
 
-        emptyState.style.display = filteredBugs.length === 0 ? 'block' : 'none';
+        if (filteredBugs.length === 0) {
+            emptyState.style.display = 'block';
+            return;
+        }
+        emptyState.style.display = 'none';
 
+        // Nach Projekt gruppieren
+        const groups = {};
         filteredBugs.forEach(bug => {
-            const li = document.createElement('li');
-            li.className = `bug-item kategorie-${bug.category} ${bug.resolved ? 'resolved' : ''}`;
-            
-            const displayDesc = bug.description ? `<p class="bug-description">${escapeHTML(bug.description)}</p>` : '';
-
-            li.innerHTML = `
-                <div class="bug-left">
-                    <input type="checkbox" class="bug-checkbox" ${bug.resolved ? 'checked' : ''} onchange="toggleResolve(${bug.id})">
-                    <div class="bug-content">
-                        <h3 class="bug-title">${escapeHTML(bug.title)}</h3>
-                        ${displayDesc}
-                        <div class="badge-container">
-                            <span class="badge badge-proj">📁 ${escapeHTML(bug.project)}</span>
-                            <span class="badge badge-cat">${categoryLabels[bug.category]}</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn-delete" onclick="deleteBug(${bug.id})" title="Löschen">&times;</button>
-            `;
-            
-            bugList.appendChild(li);
+            if (!groups[bug.project]) {
+                groups[bug.project] = [];
+            }
+            groups[bug.project].push(bug);
         });
+
+        // Generiere animierte Gruppen-Ordner
+        for (const projName in groups) {
+            const projectBugs = groups[projName];
+            const isGroupOpen = openProjects[projName] !== false;
+
+            const groupDiv = document.createElement('div');
+            groupDiv.id = `project-group-${cssSafeName(projName)}`;
+            groupDiv.className = `project-group ${isGroupOpen ? 'open' : ''}`;
+
+            let bugsHTML = '';
+            projectBugs.forEach(bug => {
+                const displayDesc = bug.description ? `<p class="bug-description">${escapeHTML(bug.description)}</p>` : '';
+                bugsHTML += `
+                    <li class="bug-item kategorie-${bug.category} ${bug.resolved ? 'resolved' : ''}">
+                        <div class="bug-left">
+                            <input type="checkbox" class="bug-checkbox" ${bug.resolved ? 'checked' : ''} onchange="toggleResolve(${bug.id})">
+                            <div class="bug-content">
+                                <h4 class="bug-title">${escapeHTML(bug.title)}</h4>
+                                ${displayDesc}
+                                <span class="badge">${categoryLabels[bug.category]}</span>
+                            </div>
+                        </div>
+                        <button class="btn-delete" onclick="deleteBug(${bug.id})" title="Löschen">&times;</button>
+                    </li>
+                `;
+            });
+
+            groupDiv.innerHTML = `
+                <div class="project-header" onclick="toggleProject('${projName.replace(/'/g, "\\'")}')">
+                    <div class="project-title-wrapper">
+                        <h3 class="project-name">📁 ${escapeHTML(projName)}</h3>
+                        <span class="bug-count-badge">${projectBugs.length}</span>
+                    </div>
+                    <span class="project-arrow">▼</span>
+                </div>
+                <div class="project-bugs-wrapper">
+                    <ul class="bug-list">
+                        ${bugsHTML}
+                    </ul>
+                </div>
+            `;
+
+            projectGroupsContainer.appendChild(groupDiv);
+        }
     }
 
     function escapeHTML(str) {
@@ -498,7 +598,6 @@
         );
     }
 
-    // Erstes Rendern beim Start
     renderBugs();
 </script>
 
