@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Bug-Manager</title>
+    <style>
+        :root {
+            --bg-color: #121214;
+            --card-bg: #1a1a1e;
+            --input-bg: #26262b;
+            --text-color: #e1e1e6;
+            --text-muted: #a8a8b3;
+            --primary: #4ea8de;
+            --primary-hover: #3a8ebf;
+            --danger: #ff6b6b;
+            --danger-hover: #fa5252;
+            --success: #04d361;
+            --border: #29292e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        /* Formular Styling */
+        .bug-form {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 100%;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        label {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-color);
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #2d2d34;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Ausklappbares Akkordeon */
+        .accordion {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--input-bg);
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 12px;
+            background: #202024;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text-muted);
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: #29292e;
+            color: #fff;
+        }
+
+        .accordion-arrow {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Die eigentliche Animation fürs Ausklappen */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+            padding: 0 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: var(--card-bg);
+        }
+
+        /* Klasse wenn aktiv via JS */
+        .accordion.open .accordion-content {
+            max-height: 200px; /* Groß genug für die Felder */
+            padding: 15px;
+        }
+
+        .accordion.open .accordion-arrow {
+            transform: rotate(180deg);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: #0f0f12;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 12px 24px;
+            transition: background-color 0.2s, transform 0.1s;
+            align-self: flex-end;
+            border-radius: 6px;
+        }
+
+        .btn-submit:hover { 
+            background-color: var(--primary-hover);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Filter Sektion */
+        .filters {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid var(--border);
+        }
+
+        .filters input, .filters select {
+            padding: 8px 12px;
+            width: auto;
+            font-size: 13px;
+        }
+
+        /* Issue Liste Styling */
+        .bug-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bug-item {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            border-left: 6px solid var(--primary);
+            border-top: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Kategoriefarben */
+        .bug-item.kategorie-ui { border-left-color: #4ea8de; }
+        .bug-item.kategorie-backend { border-left-color: #9b59b6; }
+        .bug-item.kategorie-critical { border-left-color: var(--danger); }
+        .bug-item.kategorie-feature { border-left-color: #f1c40f; }
+
+        .bug-item.resolved {
+            opacity: 0.4;
+            border-left-color: var(--success);
+        }
+
+        .bug-item.resolved .bug-title {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .bug-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .bug-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 4px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .bug-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .bug-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+        }
+
+        .bug-description {
+            font-size: 14px;
+            color: #c9c9d4;
+            white-space: pre-wrap;
+            margin: 0;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-proj { background: rgba(78, 168, 222, 0.15); color: var(--primary); }
+        .badge-cat { background: rgba(255, 255, 255, 0.08); color: var(--text-color); }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+            padding: 0 5px;
+            transition: color 0.2s;
+        }
+
+        .btn-delete:hover { color: var(--danger); }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🐛 Bug-Manager</h1>
+
+    <form class="bug-form" id="bugForm">
+        <div class="form-group">
+            <label for="bugTitle">Große Überschrift / Fehler-Titel</label>
+            <input type="text" id="bugTitle" placeholder="z.B. Login-Button ohne Funktion" required>
+        </div>
+
+        <div class="form-group">
+            <label for="bugDesc">Ausführliche Beschreibung</label>
+            <textarea id="bugDesc" placeholder="Schreibe hier alle Details, Schritte zum Reproduzieren rein..."></textarea>
+        </div>
+
+        <div class="accordion" id="accordionMenu">
+            <div class="accordion-header" onclick="toggleAccordion()">
+                <span>PROJEKT & KATEGORIE EINSTELLEN (OPTIONAL)</span>
+                <span class="accordion-arrow" id="accordionArrow">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bugProject">Projekt Name (Plain Text)</label>
+                        <input type="text" id="bugProject" placeholder="z.B. PulseOS oder Blopperbold Nexus">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bugCategory">Kategorie</label>
+                        <select id="bugCategory">
+                            <option value="ui">UI / Design</option>
+                            <option value="backend">Backend / Logik</option>
+                            <option value="critical">Critical / Absturz</option>
+                            <option value="feature">Feature-Wunsch</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Bug eintragen</button>
+    </form>
+
+    <div class="filters">
+        <div>
+            <label for="filterProject">Projekt suchen:</label>
+            <input type="text" id="filterProject" placeholder="z.B. PulseOS..." oninput="renderBugs()">
+        </div>
+
+        <div>
+            <label for="filterCategory">Kategorie:</label>
+            <select id="filterCategory" onchange="renderBugs()">
+                <option value="all">Alle Kategorien</option>
+                <option value="ui">UI / Design</option>
+                <option value="backend">Backend / Logik</option>
+                <option value="critical">Critical / Absturz</option>
+                <option value="feature">Feature-Wunsch</option>
+            </select>
+        </div>
+        
+        <label style="margin-left: auto; font-size: 13px; color: var(--text-muted); user-select: none; display: flex; align-items: center; gap: 5px;">
+            <input type="checkbox" id="hideResolved" onchange="renderBugs()" style="width: auto; margin:0;"> Erledigte ausblenden
+        </label>
+    </div>
+
+    <ul class="bug-list" id="bugList"></ul>
+    <div id="emptyState" class="empty-state" style="display: none;">Keine Bugs gefunden. Alles sauber! 🎉</div>
+</div>
+
+<script>
+    // Daten aus LocalStorage laden
+    let bugs = JSON.parse(localStorage.getItem('darkTextBugs')) || [];
+
+    const bugForm = document.getElementById('bugForm');
+    const bugTitle = document.getElementById('bugTitle');
+    const bugDesc = document.getElementById('bugDesc');
+    const bugProject = document.getElementById('bugProject');
+    const bugCategory = document.getElementById('bugCategory');
+    const bugList = document.getElementById('bugList');
+    const emptyState = document.getElementById('emptyState');
+    const accordionMenu = document.getElementById('accordionMenu');
+    
+    const filterProject = document.getElementById('filterProject');
+    const filterCategory = document.getElementById('filterCategory');
+    const hideResolved = document.getElementById('hideResolved');
+
+    // Funktion zum Auf- und Zuklappen des Menüs
+    function toggleAccordion() {
+        accordionMenu.classList.toggle('open');
+    }
+
+    // Bug hinzufügen
+    bugForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Wenn kein Projekt eingetragen wurde, kriegt es das Label "Allgemein"
+        const projName = bugProject.value.trim() || 'Allgemein';
+        
+        const newBug = {
+            id: Date.now(),
+            title: bugTitle.value.trim(),
+            description: bugDesc.value.trim(),
+            project: projName,
+            category: bugCategory.value,
+            resolved: false
+        };
+
+        bugs.push(newBug);
+        localStorage.setItem('darkTextBugs', JSON.stringify(bugs));
+        
+        // Formular zurücksetzen, Projektname bleibt stehen für schnelleres Arbeiten
+        bugTitle.value = '';
+        bugDesc.value = '';
+        
+        renderBugs();
+    });
+
+    function toggleResolve(id) {
+        bugs = bugs.map(bug => bug.id === id ? { ...bug, resolved: !bug.resolved } : bug);
+        localStorage.setItem('darkTextBugs', JSON.stringify(bugs));
+        renderBugs();
+    }
+
+    function deleteBug(id) {
+        if(confirm("Möchtest du diesen Bug wirklich löschen?")) {
+            bugs = bugs.filter(bug => bug.id !== id);
+            localStorage.setItem('darkTextBugs', JSON.stringify(bugs));
+            renderBugs();
+        }
+    }
+
+    const categoryLabels = {
+        ui: 'UI / Design',
+        backend: 'Backend / Logik',
+        critical: 'Critical',
+        feature: 'Feature'
+    };
+
+    // Die Render-Funktion
+    function renderBugs() {
+        bugList.innerHTML = '';
+        
+        const projectQuery = filterProject.value.toLowerCase().trim();
+        const selectedCatFilter = filterCategory.value;
+        const shouldHideResolved = hideResolved.checked;
+
+        const filteredBugs = bugs.filter(bug => {
+            const matchesProj = projectQuery === '' || bug.project.toLowerCase().includes(projectQuery);
+            const matchesCat = selectedCatFilter === 'all' || bug.category === selectedCatFilter;
+            const matchesVisibility = !shouldHideResolved || !bug.resolved;
+            return matchesProj && matchesCat && matchesVisibility;
+        });
+
+        emptyState.style.display = filteredBugs.length === 0 ? 'block' : 'none';
+
+        filteredBugs.forEach(bug => {
+            const li = document.createElement('li');
+            li.className = `bug-item kategorie-${bug.category} ${bug.resolved ? 'resolved' : ''}`;
+            
+            const displayDesc = bug.description ? `<p class="bug-description">${escapeHTML(bug.description)}</p>` : '';
+
+            li.innerHTML = `
+                <div class="bug-left">
+                    <input type="checkbox" class="bug-checkbox" ${bug.resolved ? 'checked' : ''} onchange="toggleResolve(${bug.id})">
+                    <div class="bug-content">
+                        <h3 class="bug-title">${escapeHTML(bug.title)}</h3>
+                        ${displayDesc}
+                        <div class="badge-container">
+                            <span class="badge badge-proj">📁 ${escapeHTML(bug.project)}</span>
+                            <span class="badge badge-cat">${categoryLabels[bug.category]}</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-delete" onclick="deleteBug(${bug.id})" title="Löschen">&times;</button>
+            `;
+            
+            bugList.appendChild(li);
+        });
+    }
+
+    function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+
+    // Erstes Rendern beim Start
+    renderBugs();
+</script>
+
+</body>
+</html>
