@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /admin-tools/
+Disallow: /localstorage.html
+Disallow: /old/
+Disallow: /ye-soundboard/
+Disallow: /Aktienrechner/Alt/
+Disallow: /Aktienrechner/Canary/
+Disallow: /Games/gambl.html
+
+Sitemap: https://blopperbold.org/sitemap.xml
