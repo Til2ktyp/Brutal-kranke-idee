@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>BlopperBold AG · Startseite</title>
+    <title>BlopperBold · Startseite</title>
     <link rel="icon" type="image/x-icon" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="images/favicon.png">
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881" crossorigin="anonymous"></script>
+    <script src="consent.js"></script>
     <style>
         :root {
             --bg-1: #0f172a;
@@ -962,6 +963,9 @@
         .impressum-trigger {
             position: relative;
             isolation: isolate;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             min-height: 24px;
             padding: 0 10px;
             overflow: hidden;
@@ -975,6 +979,7 @@
             font: inherit;
             font-size: 0.68rem;
             font-weight: 950;
+            text-decoration: none;
             box-shadow: 0 8px 24px rgba(251, 197, 49, 0.12);
             transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
             animation: impressumPulse 2.8s ease-in-out infinite;
@@ -1026,7 +1031,7 @@
         }
 
         .impressum-widget {
-            width: min(560px, 100%);
+            width: min(760px, 100%);
             max-height: min(680px, calc(100vh - 36px));
             overflow: auto;
             padding: clamp(20px, 5vw, 30px);
@@ -1395,8 +1400,8 @@
             </div>
 
             <h1 id="pageTitle">
-                Willkommen bei der<br>
-                <span class="gradient-text">BlopperBold AG.</span>
+                Willkommen bei<br>
+                <span class="gradient-text">BlopperBold.</span>
             </h1>
 
             <p class="subtitle">
@@ -1603,7 +1608,7 @@
             <div class="impressum-content">
                 <p>Til Freitag</p>
                 <p>
-                    Ahornstraße 25<br>
+                    Ringstraße 40<br>
                     19075 Pampow
                 </p>
                 <h4>Kontakt</h4>
@@ -1611,15 +1616,25 @@
                     Telefon: +49 1522 9234713<br>
                     E-Mail: <a href="mailto:business@blopperbold.org">business@blopperbold.org</a>
                 </p>
+                <h4>Datenschutz</h4>
+                <p>
+                    Die Datenschutzerklärung ist hier abrufbar:
+                    <a href="datenschutz.html">Datenschutzerklärung öffnen</a>
+                </p>
+                <h4>Haftungsausschluss</h4>
+                <p>
+                    Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
+                </p>
             </div>
         </section>
     </div>
 
     <footer>
-        <p>2026 BlopperBold AG. Alle Rechte vorbehalten.</p>
+        <p>2026 BlopperBold. Alle Rechte vorbehalten.</p>
         <div class="footer-row">
-            <span class="footer-easteregg">Made by Til &amp; Miro with &lt;3</span>
             <button class="impressum-trigger" type="button" id="impressumButton">Impressum</button>
+            <span class="footer-easteregg">Made by Til &amp; Miro with &lt;3</span>
+            <a class="impressum-trigger" href="datenschutz.html">Datenschutz</a>
         </div>
     </footer>
 
