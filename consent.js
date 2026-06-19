@@ -363,8 +363,9 @@
             <div class="bb-consent-copy">
                 <p class="bb-consent-title">Cookies und Anzeigen</p>
                 <p class="bb-consent-text">
-                    Wir laden Google AdSense erst nach deiner Einwilligung. Dabei können Cookies,
-                    ähnliche Technologien und Nutzungsdaten für Anzeigen und Messung verwendet werden.
+                    Wir laden Werbung erst nach deiner Einwilligung. Dabei können Cookies,
+                    ähnliche Technologien und Nutzungsdaten für Anzeigen und Messung verwendet werden. <br>
+                    Bitte ziehe in Erwägung Werbung zu akzeptieren, um die Website kostenlos zu unterstützen. <br> Wir danken für dein Verständnis!
                     Mehr dazu in der <a href="${PRIVACY_URL}">Datenschutzerklärung</a>.
                 </p>
             </div>
