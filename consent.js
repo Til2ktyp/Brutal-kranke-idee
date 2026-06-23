@@ -337,7 +337,7 @@
     }
 
     function showSettingsButton() {
-        if (document.getElementById('bbConsentSettings')) return;
+        if (document.getElementById('bbConsentSettings')) return;2
 
         const button = document.createElement('button');
         button.id = 'bbConsentSettings';
