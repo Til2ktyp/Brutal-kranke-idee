@@ -1,3 +1,15 @@
+        // Performance: rAF-based throttle so stat DOM updates fire at most once per frame
+        let _statsRafId = null;
+        let _lastStatsRange = { start: -1, end: -1 };
+
+        function scheduleVisibleStatsUpdate() {
+            if (_statsRafId !== null) return;
+            _statsRafId = requestAnimationFrame(() => {
+                _statsRafId = null;
+                updateVisibleStats();
+            });
+        }
+
         function getIndexFromCanvasX(chartInstance, clientX) {
             if (!chartInstance || !chartInstance.scales || !chartInstance.scales.x) return null;
 
@@ -239,7 +251,11 @@
             if (!chart || !chart.scales || !chart.scales.x) {
                 document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
                 document.getElementById('latestPriceInfo').innerText = formatCurrency(getLatestPrice());
-                applyStatsFromRange(0, portfolioData.months.length - 1);
+                const fullEnd = portfolioData.months.length - 1;
+                if (_lastStatsRange.start !== 0 || _lastStatsRange.end !== fullEnd) {
+                    _lastStatsRange = { start: 0, end: fullEnd };
+                    applyStatsFromRange(0, fullEnd);
+                }
                 return;
             }
 
@@ -247,12 +263,17 @@
             const startIndex = Number.isFinite(xScale.min) ? Math.max(0, Math.floor(xScale.min)) : 0;
             const endIndex = Number.isFinite(xScale.max) ? Math.min(portfolioData.months.length - 1, Math.ceil(xScale.max)) : portfolioData.months.length - 1;
 
+            // Skip expensive DOM updates when visible range is unchanged
+            if (startIndex === _lastStatsRange.start && endIndex === _lastStatsRange.end) return;
+            _lastStatsRange = { start: startIndex, end: endIndex };
+
             document.title = `Investment Portfolio Rechner – ${currentLoadedStock || 'Aktie'} – ${currentPeriod} Jahre – Kurs € ${getLatestPrice().toLocaleString('de-DE', { maximumFractionDigits: 2 })}`;
             applyStatsFromRange(startIndex, endIndex);
         }
 
         function updateChart() {
             if (!portfolioData) return;
+            _lastStatsRange = { start: -1, end: -1 }; // reset cache for new data
 
             // Verwende alle Daten (da sie bereits für den Zeitraum generiert wurden)
             const months = portfolioData.months;
@@ -333,6 +354,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    resizeDelay: 100,
                     devicePixelRatio: chartPerformanceMode ? Math.min(window.devicePixelRatio || 1, 1.5) : undefined,
                     animation: chartPerformanceMode ? false : undefined,
                     transitions: chartPerformanceMode ? {
@@ -372,7 +394,7 @@
                                 mode: 'x',
                                 threshold: 2,
                                 onPanComplete: function() {
-                                    updateVisibleStats();
+                                    scheduleVisibleStatsUpdate();
                                     hideSelectionPopup();
                                 }
                             },
@@ -417,7 +439,7 @@
                                     isDragSelecting = false;
                                     dragSelectionStartIndex = null;
                                     hideSelectionPopup();
-                                    updateVisibleStats();
+                                    scheduleVisibleStatsUpdate();
                                 }
                             },
                             limits: {
@@ -512,7 +534,7 @@
                 chart.setDatasetVisibility(index, isVisible);
             });
 
-            chart.update();
+            chart.update('none');
             syncDatasetCheckboxes();
             updateVisibleStats();
         }

@@ -139,7 +139,7 @@
                     e.preventDefault();
                     chart.pan({ x: e.deltaY * 1.2 }, undefined, 'default');
                     hideSelectionPopup();
-                    updateVisibleStats();
+                    scheduleVisibleStatsUpdate();
                 }
             }, { passive: false });
 
@@ -164,7 +164,7 @@
                         if (Math.abs(deltaX) > 1) {
                             chart.pan({ x: deltaX * -1 }, undefined, 'default');
                             hideSelectionPopup();
-                            updateVisibleStats();
+                            scheduleVisibleStatsUpdate();
                         }
                     }
 
@@ -184,7 +184,14 @@
                 dragSelectionStartIndex = null;
                 hideSelectionPopup();
             });
+            let _resizeDebounceId = null;
             window.addEventListener('resize', () => {
                 hideSelectionPopup();
+                if (_resizeDebounceId !== null) clearTimeout(_resizeDebounceId);
+                _resizeDebounceId = setTimeout(() => {
+                    _resizeDebounceId = null;
+                    _lastStatsRange = { start: -1, end: -1 };
+                    updateVisibleStats();
+                }, 150);
             });
         });

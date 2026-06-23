@@ -322,6 +322,16 @@
             );
             updateQuickAmountButtons();
             updateChart();
+
+            // Chart period-change pulse animation
+            const chartEl = document.querySelector('.chart-container');
+            if (chartEl) {
+                chartEl.classList.remove('chart-period-change');
+                void chartEl.offsetWidth; // force reflow
+                chartEl.classList.add('chart-period-change');
+                setTimeout(() => chartEl.classList.remove('chart-period-change'), 800);
+            }
+
             showStatus(`Zeitraum lokal aktualisiert: ${currentPeriod} Jahre für ${currentLoadedStock}`, 'success');
             return true;
         }

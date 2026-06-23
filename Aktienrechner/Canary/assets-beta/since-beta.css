@@ -12,6 +12,10 @@
             --green: #22c55e;
             --red: #ef4444;
             --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+            /* Apple easing tokens */
+            --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
         }
 
         * {
@@ -141,12 +145,23 @@
             box-shadow: none;
             font-size: 13px;
             font-weight: 900;
+            transition:
+                background 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .market-ticker-btn:hover {
-            background: rgba(255, 255, 255, 0.16);
-            transform: translateY(-1px);
-            box-shadow: none;
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+        }
+
+        .market-ticker-btn:active {
+            transform: scale(0.93) translateY(0) !important;
+            transition-duration: 0.08s !important;
         }
 
         .controls {
@@ -173,6 +188,8 @@
             background: var(--panel-soft);
             border: 1px solid var(--border);
             border-radius: 22px;
+            position: relative;
+            z-index: 10;
         }
 
         .quick-amounts {
@@ -327,12 +344,25 @@
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
+            transition:
+                background 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .reality-mode-btn:active {
+            transform: scale(0.93) !important;
+            transition-duration: 0.08s !important;
         }
 
         .reality-mode-btn.active {
             background: #fbc531;
             color: #1e272e;
             border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 22px rgba(251, 197, 49, 0.42), 0 4px 14px rgba(251, 197, 49, 0.22);
+            animation: realityModeActivate 0.46s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         .control-group {
@@ -456,6 +486,7 @@
 
         .period-selector {
             position: relative;
+            z-index: 2000;
         }
 
         .period-dropdown {
@@ -476,6 +507,7 @@
 
         .period-dropdown.show {
             display: grid;
+            animation: dropdownIn 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         .period-option {
@@ -716,15 +748,15 @@
         }
 
         .stat-char-old {
-            animation: statDigitOld 0.791s cubic-bezier(0.16, 0.84, 0.24, 1) both;
+            animation: statDigitOld 0.46s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .stat-char-new {
-            animation: statDigitNew 0.791s cubic-bezier(0.16, 0.84, 0.24, 1) both;
+            animation: statDigitNew 0.54s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         .stat-char-fade {
-            animation: statValueChange 0.791s cubic-bezier(0.16, 0.84, 0.24, 1);
+            animation: statValueChange 0.52s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes statDigitOld {
@@ -736,21 +768,21 @@
 
             to {
                 opacity: 0;
-                transform: translateY(105%) scale(0.98);
-                filter: blur(2px);
+                transform: translateY(120%) scale(0.88);
+                filter: blur(3.5px);
             }
         }
 
         @keyframes statDigitNew {
             from {
                 opacity: 0;
-                transform: translateY(-105%) scale(0.98);
-                filter: blur(2px);
+                transform: translateY(-120%) scale(0.88);
+                filter: blur(3.5px);
             }
 
-            55% {
+            46% {
                 opacity: 1;
-                transform: translateY(9%) scale(1.015);
+                transform: translateY(7%) scale(1.03);
                 filter: blur(0);
             }
 
@@ -763,14 +795,14 @@
 
         @keyframes statValueChange {
             from {
-                opacity: 0.45;
-                transform: translateY(9px) scale(0.98);
-                filter: blur(1.5px);
+                opacity: 0.28;
+                transform: translateY(14px) scale(0.94);
+                filter: blur(3px);
             }
 
-            55% {
+            46% {
                 opacity: 1;
-                transform: translateY(-2px) scale(1.015);
+                transform: translateY(-3px) scale(1.025);
                 filter: blur(0);
             }
 
@@ -823,6 +855,12 @@
 
         .status-banner.show {
             display: block;
+            animation: statusBannerIn 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .status-banner.exiting {
+            display: block;
+            animation: statusBannerOut 0.32s cubic-bezier(0.7, 0, 0.84, 0) forwards;
         }
 
         .status-banner.error {
@@ -995,12 +1033,32 @@
             padding: 18px;
             z-index: 1003;
             box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
-            display: none;
             backdrop-filter: blur(16px);
+            /* Animated visibility */
+            visibility: hidden;
+            opacity: 0;
+            transform: scale(0.91) translateY(-10px);
+            filter: blur(7px);
+            pointer-events: none;
+            transform-origin: top right;
+            transition:
+                visibility 0s 0.30s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .graph-settings-panel.show {
-            display: block;
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+            pointer-events: auto;
+            transition:
+                visibility 0s 0s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .app-settings-panel {
@@ -1016,12 +1074,32 @@
             padding: 18px;
             z-index: 1004;
             box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
-            display: none;
             backdrop-filter: blur(16px);
+            /* Animated visibility */
+            visibility: hidden;
+            opacity: 0;
+            transform: scale(0.91) translateY(-10px);
+            filter: blur(7px);
+            pointer-events: none;
+            transform-origin: top right;
+            transition:
+                visibility 0s 0.30s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .app-settings-panel.show {
-            display: block;
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+            pointer-events: auto;
+            transition:
+                visibility 0s 0s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .app-settings-header {
@@ -1566,4 +1644,228 @@
 
         body.performance-mode .stat-char-roller {
             overflow: visible !important;
+        }
+
+        /* =====================================================================
+           APPLE-STYLE ANIMATION SYSTEM — EXTENDED
+           ===================================================================== */
+
+        /* --- Global button active press feel --- */
+        button:active:not(.bb-hyper-toggle):not(.app-settings-close) {
+            transform: scale(0.95) !important;
+            filter: brightness(0.94) !important;
+            transition: transform 0.08s ease, filter 0.08s ease !important;
+        }
+
+        /* --- Status banner keyframes --- */
+        @keyframes statusBannerIn {
+            from {
+                opacity: 0;
+                transform: translateY(-14px) scale(0.97);
+                filter: blur(5px);
+            }
+            58% {
+                opacity: 1;
+                transform: translateY(3px) scale(1.005);
+                filter: blur(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes statusBannerOut {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.97);
+                filter: blur(4px);
+            }
+        }
+
+        /* --- Dropdown pop-in --- */
+        @keyframes dropdownIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.86) translateY(-12px);
+                filter: blur(5px);
+            }
+            58% {
+                transform: translateX(-50%) scale(1.03) translateY(0);
+                filter: blur(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* --- Ticker button active (green spring) --- */
+        .market-ticker-btn.ticker-active {
+            background: rgba(34, 197, 94, 0.22) !important;
+            border-color: #22c55e !important;
+            color: #4ade80 !important;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.34), inset 0 0 10px rgba(34, 197, 94, 0.1) !important;
+            animation: tickerActivate 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes tickerActivate {
+            0%   { transform: scale(0.82); opacity: 0.5; }
+            55%  { transform: scale(1.1);  }
+            100% { transform: scale(1);   }
+        }
+
+        /* --- Reality mode button spring pop --- */
+        @keyframes realityModeActivate {
+            0%   { transform: scale(0.78); opacity: 0.55; }
+            58%  { transform: scale(1.1);  }
+            100% { transform: scale(1);   }
+        }
+
+        /* --- Period display flip --- */
+        .period-display.changing {
+            animation: periodOut 0.11s cubic-bezier(0.7, 0, 0.84, 0) both;
+        }
+
+        .period-display.changed {
+            animation: periodIn 0.44s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes periodOut {
+            to {
+                opacity: 0.35;
+                transform: translateY(6px) scale(0.92);
+                filter: blur(2.5px);
+            }
+        }
+
+        @keyframes periodIn {
+            from {
+                opacity: 0.25;
+                transform: translateY(-12px) scale(0.88);
+                filter: blur(4px);
+            }
+            55% {
+                transform: translateY(3px) scale(1.05);
+                filter: blur(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* --- Chart period change pulse --- */
+        .chart-container.chart-period-change {
+            animation: chartPeriodPulse 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes chartPeriodPulse {
+            0% {
+                box-shadow:
+                    inset 0 0 0 2px rgba(56, 189, 248, 0.55),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                    0 18px 40px rgba(0, 0, 0, 0.22);
+            }
+            55% {
+                box-shadow:
+                    inset 0 0 0 1px rgba(56, 189, 248, 0.18),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                    0 18px 40px rgba(0, 0, 0, 0.22);
+            }
+            100% {
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                    0 18px 40px rgba(0, 0, 0, 0.22);
+            }
+        }
+
+        /* --- Section stagger fade-in (page load) --- */
+        @keyframes sectionFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+                filter: blur(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .hero        { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.04s  both; }
+        .market-strip { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.10s  both; }
+        .controls    { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.16s  both; }
+        .top-action-row { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both; }
+        .zoom-controls  { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.27s both; }
+        .info-row    { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.31s  both; }
+        .chart-container { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.36s both; }
+        .stats       { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.43s  both; }
+        .reality-check { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.50s both; }
+
+        /* --- Stat box hover lift --- */
+        .stat-box {
+            transition:
+                transform 0.30s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .stat-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(251, 197, 49, 0.14);
+        }
+
+        /* --- Info pill hover lift --- */
+        .info-pill {
+            transition:
+                transform 0.30s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .info-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
+        }
+
+        /* --- Reduced motion: disable all new animations --- */
+        @media (prefers-reduced-motion: reduce) {
+            .hero, .market-strip, .controls, .top-action-row,
+            .zoom-controls, .info-row, .chart-container, .stats, .reality-check,
+            .market-ticker-btn.ticker-active, .reality-mode-btn.active,
+            .period-display.changing, .period-display.changed,
+            .chart-container.chart-period-change,
+            .status-banner.show, .status-banner.exiting,
+            .period-dropdown.show {
+                animation: none !important;
+                transition: none !important;
+                filter: none !important;
+                transform: none !important;
+            }
+        }
+
+        /* --- Performance mode: disable new animations --- */
+        body.performance-mode .hero,
+        body.performance-mode .market-strip,
+        body.performance-mode .controls,
+        body.performance-mode .top-action-row,
+        body.performance-mode .zoom-controls,
+        body.performance-mode .info-row,
+        body.performance-mode .stats,
+        body.performance-mode .reality-check,
+        body.performance-mode .stat-box,
+        body.performance-mode .info-pill,
+        body.performance-mode .market-ticker-btn,
+        body.performance-mode .reality-mode-btn,
+        body.performance-mode .period-display,
+        body.performance-mode .status-banner,
+        body.performance-mode .chart-container {
+            animation: none !important;
+            transition: none !important;
         }

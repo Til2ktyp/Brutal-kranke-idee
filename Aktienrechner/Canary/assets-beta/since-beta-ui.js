@@ -1,17 +1,40 @@
+        let _statusDismissTimeout = null;
+        let _statusExitTimeout = null;
+
         function showStatus(message, type = 'success') {
             const banner = document.getElementById('statusBanner');
             if (!banner) return;
 
+            // Cancel any in-flight dismiss/exit
+            if (_statusDismissTimeout) clearTimeout(_statusDismissTimeout);
+            if (_statusExitTimeout) clearTimeout(_statusExitTimeout);
+
             banner.textContent = message;
             banner.className = `status-banner show ${type}`;
+
+            // Auto-dismiss success banners after 3.5 s
+            if (type === 'success') {
+                _statusDismissTimeout = setTimeout(() => {
+                    clearStatus();
+                }, 3500);
+            }
         }
 
         function clearStatus() {
             const banner = document.getElementById('statusBanner');
             if (!banner) return;
 
-            banner.textContent = '';
-            banner.className = 'status-banner';
+            if (_statusDismissTimeout) clearTimeout(_statusDismissTimeout);
+
+            // Play slide-out, then fully hide
+            banner.classList.remove('show');
+            banner.classList.add('exiting');
+
+            _statusExitTimeout = setTimeout(() => {
+                banner.classList.remove('exiting');
+                banner.textContent = '';
+                banner.className = 'status-banner';
+            }, 360);
         }
 
         function updateQuickAmountButtons() {
@@ -120,6 +143,17 @@
                 autocompleteList.classList.remove('show');
             }
             clearStatus();
+
+            // Spring-highlight the active ticker button
+            document.querySelectorAll('.market-ticker-btn.ticker-active').forEach(btn => {
+                btn.classList.remove('ticker-active');
+            });
+            document.querySelectorAll('.market-ticker-btn').forEach(btn => {
+                const onclick = btn.getAttribute('onclick') || '';
+                if (onclick.includes(`'${ticker}'`)) {
+                    btn.classList.add('ticker-active');
+                }
+            });
 
             if (shouldLoad) {
                 loadData();
@@ -375,9 +409,28 @@
         }
                 function updatePeriodDisplay() {
             const periodDisplay = document.getElementById('periodDisplay');
-            if (periodDisplay) {
-                periodDisplay.innerText = currentPeriod === 1 ? '1 Jahr' : `${currentPeriod} Jahre`;
+            if (!periodDisplay) return;
+
+            const nextText = currentPeriod === 1 ? '1 Jahr' : `${currentPeriod} Jahre`;
+            const prevText = periodDisplay.textContent.trim();
+
+            if (prevText === nextText) {
+                periodDisplay.innerText = nextText;
+                return;
             }
+
+            // Phase 1: flip out
+            periodDisplay.classList.remove('changed');
+            periodDisplay.classList.add('changing');
+
+            setTimeout(() => {
+                periodDisplay.innerText = nextText;
+                periodDisplay.classList.remove('changing');
+                // Phase 2: spring pop-in (force reflow so animation re-triggers)
+                void periodDisplay.offsetWidth;
+                periodDisplay.classList.add('changed');
+                setTimeout(() => periodDisplay.classList.remove('changed'), 520);
+            }, 110);
         }
 
         function syncPeriodDropdownSelection() {
