@@ -1522,109 +1522,6 @@
             }
         }
 
-        /* Beta Popup Styles */
-        .beta-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 2147483100;
-            display: grid;
-            place-items: center;
-            padding: 18px;
-            background: rgba(15, 23, 42, 0.54);
-            opacity: 0;
-            pointer-events: none;
-            backdrop-filter: blur(0);
-            transition: opacity 0.24s ease, backdrop-filter 0.3s ease;
-        }
-
-        .beta-backdrop.show {
-            opacity: 1;
-            pointer-events: auto;
-            backdrop-filter: blur(18px);
-        }
-
-        .beta-widget {
-            width: min(480px, 100%);
-            padding: clamp(22px, 5vw, 34px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 28px;
-            background:
-                radial-gradient(circle at 12% 0%, rgba(229, 169, 59, 0.25), transparent 36%),
-                radial-gradient(circle at 86% 18%, rgba(45, 212, 191, 0.12), transparent 30%),
-                rgba(15, 23, 42, 0.92);
-            box-shadow: 0 34px 115px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-            transform: scale(0.86) translateY(22px);
-            filter: blur(12px);
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
-            text-align: center;
-        }
-
-        .beta-backdrop.show .beta-widget {
-            transform: scale(1) translateY(0);
-            filter: blur(0);
-        }
-
-        .beta-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 22px;
-            display: grid;
-            place-items: center;
-            font-size: 2.2rem;
-            margin: 0 auto 20px;
-            background:
-                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.34), transparent 32%),
-                rgba(229, 169, 59, 0.16);
-            border: 1px solid rgba(229, 169, 59, 0.28);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 8px 24px rgba(229, 169, 59, 0.15);
-        }
-
-        .beta-title {
-            margin: 0 0 12px 0;
-            color: #ffffff;
-            font-size: clamp(1.6rem, 5vw, 2.2rem);
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            text-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        }
-
-        .beta-desc {
-            margin: 0 0 24px 0;
-            color: var(--soft-blue-text);
-            font-size: 0.98rem;
-            line-height: 1.6;
-        }
-
-        .beta-desc strong {
-            color: #ffffff;
-        }
-
-        .beta-btn {
-            width: 100%;
-            min-height: 52px;
-            border: 0;
-            border-radius: 18px;
-            background: linear-gradient(135deg, var(--accent), #f59e0b);
-            color: #0b0f19;
-            cursor: pointer;
-            font: inherit;
-            font-weight: 950;
-            font-size: 1.05rem;
-            box-shadow: 0 10px 24px rgba(229, 169, 59, 0.2);
-            transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .beta-btn:hover,
-        .beta-btn:focus-visible {
-            outline: none;
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-            box-shadow: 0 12px 28px rgba(229, 169, 59, 0.3);
-        }
-
-        .beta-btn:active {
-            transform: translateY(0);
-        }
 
         /* --- APPLE OVER-ANIMATION OVERHAUL STYLES --- */
         .cursor-glow {
@@ -1754,109 +1651,6 @@
             pointer-events: none;
         }
 
-        /* Apple-style Slide-to-Unlock for Beta widget */
-        .apple-unlock-container {
-            position: relative;
-            width: 100%;
-            height: 60px;
-            border-radius: 30px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            overflow: hidden;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.25);
-            user-select: none;
-            -webkit-user-select: none;
-            margin-top: 10px;
-        }
-
-        .apple-unlock-track {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .apple-unlock-shimmer {
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            color: rgba(255, 255, 255, 0.45);
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0.4) 100%);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmerText 2.2s infinite linear;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        @keyframes shimmerText {
-            0% {
-                background-position: -150% 0;
-            }
-
-            100% {
-                background-position: 150% 0;
-            }
-        }
-
-        .apple-unlock-handle {
-            position: absolute;
-            left: 4px;
-            top: 4px;
-            width: 50px;
-            height: 50px;
-            border-radius: 25px;
-            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            display: grid;
-            place-items: center;
-            cursor: grab;
-            z-index: 10;
-            touch-action: none;
-        }
-
-        .apple-unlock-handle:active {
-            cursor: grabbing;
-            background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
-        }
-
-        .apple-unlock-arrow {
-            color: #0b0f19;
-            font-size: 1.15rem;
-            font-weight: 900;
-            user-select: none;
-            pointer-events: none;
-        }
-
-        .apple-unlock-container.unlocked {
-            animation: unlockPulse 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes unlockPulse {
-            0% {
-                transform: scale(1);
-                background: rgba(45, 212, 191, 0.22);
-                border-color: rgba(45, 212, 191, 0.45);
-            }
-
-            50% {
-                transform: scale(1.04);
-                background: rgba(45, 212, 191, 0.45);
-                border-color: rgba(45, 212, 191, 0.7);
-            }
-
-            100% {
-                transform: scale(0.96);
-                opacity: 0;
-            }
-        }
 
         .shake-modal {
             animation: shakeModalAnimation 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
@@ -2447,10 +2241,6 @@
             animation-play-state: paused !important;
         }
 
-        .beta-backdrop:not(.show) .apple-unlock-shimmer {
-            animation: none !important;
-        }
-
         .siri-wave-container:not(.show) .siri-path,
         .siri-wave-container:not(.show) .siri-glow-bg {
             animation: none !important;
@@ -2462,9 +2252,7 @@
 
             *,
             *::before,
-            *::after,
-            .beta-backdrop,
-            .beta-widget {
+            *::after {
                 animation: none !important;
                 transition: none !important;
                 scroll-behavior: auto !important;
@@ -2500,7 +2288,6 @@
         <section class="hero" aria-labelledby="pageTitle">
             <div class="eyebrow-row">
                 <span class="pill hot" id="adminMobileTrigger">✨ BlopperBold Labs</span>
-                <span class="pill">Beta-Spielplatz</span>
                 <span class="pill">Made mit bisschen zu viel Koffein</span>
             </div>
 
@@ -2796,30 +2583,6 @@
         </section>
     </div>
 
-    <div class="beta-backdrop" id="betaBackdrop" aria-hidden="true">
-        <section class="beta-widget" role="dialog" aria-modal="true" aria-labelledby="betaTitle">
-            <div class="beta-icon">🧪</div>
-            <h2 class="beta-title" id="betaTitle">Beta-Spielplatz</h2>
-            <p class="beta-desc">
-                Du betrittst die offizielle <strong>BlopperBold Beta-Seite</strong>.
-                Hier probieren wir neue Features, Games und abenteuerliche Designs aus.
-                Manche Dinge könnten wackelig sein – Feedback ist immer gern gesehen!
-            </p>
-            <button class="beta-btn" type="button" id="betaDismissBtn" style="display: none;">Verstanden &amp;
-                Weiter</button>
-            <div class="apple-unlock-container" id="betaUnlockContainer">
-                <div class="apple-unlock-track">
-                    <div class="apple-unlock-shimmer" id="betaUnlockShimmer">
-                        <span>➔ zum Eintreten wischen</span>
-                    </div>
-                    <div class="apple-unlock-handle" id="betaUnlockHandle">
-                        <span class="apple-unlock-arrow">❯</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
     <footer>
         <p>2026 BlopperBold. Alle Rechte vorbehalten.</p>
         <div class="footer-row">
@@ -2912,8 +2675,6 @@
         const impressumButton = document.getElementById('impressumButton');
         const impressumBackdrop = document.getElementById('impressumBackdrop');
         const impressumClose = document.getElementById('impressumClose');
-        const betaBackdrop = document.getElementById('betaBackdrop');
-        const betaDismissBtn = document.getElementById('betaDismissBtn');
         let versionHoldTimer = null;
         let versionHoldTriggered = false;
         let versionHoldActive = false;
@@ -3246,9 +3007,6 @@
             }
 
             if (event.key === 'Escape') {
-                if (betaBackdrop.classList.contains('show')) {
-                    closeBetaPopup();
-                }
                 if (moreGamesBackdrop.classList.contains('show')) {
                     closeMoreGames();
                 }
@@ -3266,25 +3024,6 @@
             }
         });
 
-        // Beta Popup Logic
-        function openBetaPopup() {
-            betaBackdrop.classList.add('show');
-            betaBackdrop.setAttribute('aria-hidden', 'false');
-            betaDismissBtn.focus();
-        }
-
-        function closeBetaPopup() {
-            betaBackdrop.classList.remove('show');
-            betaBackdrop.setAttribute('aria-hidden', 'true');
-        }
-
-        betaDismissBtn.addEventListener('click', closeBetaPopup);
-
-        betaBackdrop.addEventListener('click', function (event) {
-            if (event.target === betaBackdrop) {
-                closeBetaPopup();
-            }
-        });
 
         // --- APPLE OVER-ANIMATION OVERHAUL JS ENGINE ---
 
@@ -3612,89 +3351,6 @@
             });
         }
 
-        // 5. Slide to Unlock Beta dialog dismisser
-        function initSlideToUnlock() {
-            const container = document.getElementById('betaUnlockContainer');
-            const handle = document.getElementById('betaUnlockHandle');
-            const shimmer = document.getElementById('betaUnlockShimmer');
-            const dismissBtn = document.getElementById('betaDismissBtn');
-            const widget = document.querySelector('.beta-widget');
-
-            if (!container || !handle) return;
-
-            let isDragging = false;
-            let startX = 0;
-            let currentX = 0;
-
-            function onStart(e) {
-                isDragging = true;
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                startX = clientX - currentX;
-                handle.style.transition = 'none';
-                shimmer.style.transition = 'none';
-                if (handle.setPointerCapture) {
-                    handle.setPointerCapture(e.pointerId);
-                }
-            }
-
-            function onMove(e) {
-                if (!isDragging) return;
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                if (clientX === undefined) return;
-
-                const maxDrag = container.clientWidth - handle.clientWidth - 8;
-                let x = clientX - startX;
-                if (x < 0) x = 0;
-                if (x > maxDrag) x = maxDrag;
-
-                currentX = x;
-                handle.style.transform = `translateX(${x}px)`;
-
-                const pct = x / maxDrag;
-                shimmer.style.opacity = (1 - pct * 1.5).toFixed(2);
-            }
-
-            function onEnd(e) {
-                if (!isDragging) return;
-                isDragging = false;
-                if (handle.releasePointerCapture) {
-                    handle.releasePointerCapture(e.pointerId);
-                }
-
-                const maxDrag = container.clientWidth - handle.clientWidth - 8;
-                if (currentX >= maxDrag * 0.88) {
-                    container.classList.add('unlocked');
-                    handle.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
-                    handle.style.transform = `translateX(${maxDrag}px)`;
-
-                    const rect = handle.getBoundingClientRect();
-                    for (let i = 0; i < 32; i++) {
-                        clickParticles.push(new SparkleParticle(rect.left + 25, rect.top + 25));
-                    }
-                    startParticleAnimation();
-
-                    setTimeout(() => {
-                        dismissBtn.click();
-                    }, 350);
-                } else {
-                    currentX = 0;
-                    handle.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.75, 0.64, 1)';
-                    handle.style.transform = 'translateX(0px)';
-                    shimmer.style.transition = 'opacity 0.4s ease';
-                    shimmer.style.opacity = 1;
-
-                    if (widget) {
-                        widget.classList.add('shake-modal');
-                        setTimeout(() => widget.classList.remove('shake-modal'), 450);
-                    }
-                }
-            }
-
-            handle.addEventListener('pointerdown', onStart);
-            handle.addEventListener('pointermove', onMove);
-            handle.addEventListener('pointerup', onEnd);
-            handle.addEventListener('pointercancel', onEnd);
-        }
 
         // --- EASTER EGGS ENGINE ---
 
@@ -4640,12 +4296,6 @@
         splitTitleText();
         startGlowAnimation();
         initCardTilts();
-        initSlideToUnlock();
-
-        // ----------------------------------------------
-
-        // Auto-show on load
-        window.setTimeout(openBetaPopup, 300);
 
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
