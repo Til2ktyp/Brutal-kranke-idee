@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0d0618">
@@ -11,15 +14,18 @@
     <title>Runaway Soundboard</title>
     <style>
         :root {
-            --red: #ff243d;
-            --purple: #7c3aed;
-            --violet: #c084fc;
-            --cyan: #38bdf8;
-            --gold: #fbc531;
+            --red: #e5a93b;
+            --purple: #2dd4bf;
+            --violet: #2dd4bf;
+            --cyan: #2dd4bf;
+            --gold: #e5a93b;
             --text: #ffffff;
-            --muted: rgba(255, 255, 255, 0.68);
+            --muted: rgba(204, 251, 241, 0.65);
             --panel: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.14);
+            --bg-1: #0b0f19;
+            --bg-2: #072a3a;
+            --bg-3: #043e4f;
         }
 
         * {
@@ -30,7 +36,7 @@
         body {
             min-height: 100%;
             margin: 0;
-            background: #0d0618;
+            background: var(--bg-1);
             touch-action: manipulation;
             overscroll-behavior-x: none;
             -webkit-text-size-adjust: 100%;
@@ -44,11 +50,10 @@
             color: var(--text);
             font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             background:
-                radial-gradient(circle at 50% -10%, rgba(255, 36, 61, 0.22), transparent 28%),
-                radial-gradient(circle at 12% 12%, rgba(124, 58, 237, 0.34), transparent 30%),
-                radial-gradient(circle at 86% 18%, rgba(192, 132, 252, 0.22), transparent 26%),
-                radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.14), transparent 36%),
-                linear-gradient(135deg, #030207, #0d0618 52%, #17102b);
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
             overflow-x: hidden;
         }
 
@@ -58,11 +63,10 @@
             inset: 0;
             z-index: -1;
             background:
-                radial-gradient(circle at 50% -10%, rgba(255, 36, 61, 0.22), transparent 28%),
-                radial-gradient(circle at 12% 12%, rgba(124, 58, 237, 0.34), transparent 30%),
-                radial-gradient(circle at 86% 18%, rgba(192, 132, 252, 0.22), transparent 26%),
-                radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.14), transparent 36%),
-                linear-gradient(135deg, #030207, #0d0618 52%, #17102b);
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
             pointer-events: none;
         }
 
@@ -141,10 +145,10 @@
             min-height: 30px;
             align-items: center;
             padding: 0 12px;
-            border: 1px solid rgba(255, 36, 61, 0.42);
+            border: 1px solid rgba(229, 169, 59, 0.42);
             border-radius: 999px;
-            color: #ffc9d0;
-            background: rgba(255, 36, 61, 0.1);
+            color: #fde68a;
+            background: rgba(229, 169, 59, 0.1);
             font-size: 0.75rem;
             font-weight: 950;
             letter-spacing: 0.08em;
@@ -158,7 +162,7 @@
             line-height: 0.9;
             font-weight: 950;
             letter-spacing: 0;
-            text-shadow: 0 0 26px rgba(255, 36, 61, 0.26);
+            text-shadow: 0 0 26px rgba(229, 169, 59, 0.26);
             transform: rotate(-1deg);
         }
 
@@ -214,37 +218,36 @@
             animation: tutorialBackdropOut 0.18s ease forwards;
         }
 
-        .tutorial-card {
+        .soundboard-modal-card {
             width: min(520px, 100%);
             padding: 20px;
             border: 1px solid var(--border);
             border-radius: 24px;
             color: white;
             background:
-                radial-gradient(circle at 20% 0%, rgba(255, 36, 61, 0.18), transparent 35%),
-                linear-gradient(145deg, rgba(35, 20, 62, 0.96), rgba(8, 5, 16, 0.94));
+                radial-gradient(circle at 20% 0%, rgba(229, 169, 59, 0.18), transparent 35%),
+                linear-gradient(145deg, rgba(7, 42, 58, 0.96), rgba(11, 15, 25, 0.94));
             box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
             opacity: 0;
             transform: scale(0.9) translateY(10px);
-            filter: blur(14px);
         }
 
-        .tutorial-backdrop.show .tutorial-card {
+        .tutorial-backdrop.show .soundboard-modal-card {
             animation: tutorialCardIn 0.28s cubic-bezier(0.18, 0.9, 0.24, 1) forwards;
         }
 
-        .tutorial-backdrop.closing .tutorial-card {
+        .tutorial-backdrop.closing .soundboard-modal-card {
             animation: tutorialCardOut 0.18s ease forwards;
         }
 
-        .tutorial-card h2 {
+        .soundboard-modal-card h2 {
             margin: 0 0 10px;
             color: var(--red);
             font-size: 1.6rem;
             line-height: 1;
         }
 
-        .tutorial-card p {
+        .soundboard-modal-card p {
             margin: 0 0 14px;
             color: var(--muted);
             font-weight: 800;
@@ -301,7 +304,6 @@
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
-                filter: blur(0);
             }
         }
 
@@ -309,13 +311,11 @@
             from {
                 opacity: 1;
                 transform: scale(1) translateY(0);
-                filter: blur(0);
             }
 
             to {
                 opacity: 0;
                 transform: scale(0.92) translateY(8px);
-                filter: blur(12px);
             }
         }
 
@@ -327,8 +327,8 @@
             border: 1px solid var(--border);
             border-radius: 22px;
             background:
-                radial-gradient(circle at 18% 0%, rgba(124, 58, 237, 0.22), transparent 35%),
-                radial-gradient(circle at 84% 8%, rgba(255, 36, 61, 0.16), transparent 30%),
+                radial-gradient(circle at 18% 0%, rgba(45, 212, 191, 0.22), transparent 35%),
+                radial-gradient(circle at 84% 8%, rgba(229, 169, 59, 0.16), transparent 30%),
                 rgba(255, 255, 255, 0.07);
             box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
             backdrop-filter: blur(22px);
@@ -351,24 +351,24 @@
         }
 
         .pad.special {
-            background: linear-gradient(145deg, rgba(124, 58, 237, 0.24), rgba(255, 255, 255, 0.07));
+            background: linear-gradient(145deg, rgba(45, 212, 191, 0.24), rgba(255, 255, 255, 0.07));
         }
 
         .pad.long {
-            border-color: rgba(251, 197, 49, 0.32);
-            background: linear-gradient(145deg, rgba(251, 197, 49, 0.18), rgba(124, 58, 237, 0.1));
+            border-color: rgba(229, 169, 59, 0.32);
+            background: linear-gradient(145deg, rgba(229, 169, 59, 0.18), rgba(45, 212, 191, 0.1));
         }
 
         .pad.hit {
             transform: translateY(2px) scale(0.985);
-            border-color: rgba(255, 36, 61, 0.72);
-            background: linear-gradient(145deg, rgba(255, 36, 61, 0.24), rgba(124, 58, 237, 0.12));
+            border-color: rgba(45, 212, 191, 0.85);
+            background: linear-gradient(145deg, rgba(45, 212, 191, 0.24), rgba(229, 169, 59, 0.12));
         }
 
         .pad.toggle-on {
-            border-color: rgba(251, 197, 49, 0.7);
-            background: linear-gradient(145deg, rgba(251, 197, 49, 0.22), rgba(124, 58, 237, 0.14));
-            box-shadow: 0 0 28px rgba(251, 197, 49, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            border-color: rgba(229, 169, 59, 0.8);
+            background: linear-gradient(145deg, rgba(229, 169, 59, 0.24), rgba(45, 212, 191, 0.14));
+            box-shadow: 0 0 28px rgba(229, 169, 59, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.14);
         }
 
         .key {
@@ -483,10 +483,12 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../tutorial.css">
 </head>
 <body>
     <a class="back-home" href="../index.html">← BlopperBold</a>
     <div class="settings" aria-label="Soundboard Einstellungen">
+        <label class="chip" style="display: inline-flex; align-items: center; gap: 8px;">Vol: <input id="volumeSlider" type="range" min="0" max="1" step="0.05" style="width: 80px; vertical-align: middle; height: auto; cursor: pointer;"></label>
         <label class="chip">Spam <input id="spamToggle" type="checkbox"></label>
         <label class="chip">ADHS <input id="adhdToggle" type="checkbox"></label>
     </div>
@@ -497,7 +499,17 @@
             <h1 id="title">Runaway</h1>
             <p class="subtitle">Tasten hauen, Samples sofort feuern.</p>
             <p class="status" id="status">Samples laden...</p>
-            <button class="tutorial-button" id="tutorialButton" type="button">Runaway Tutorial</button>
+            <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                <button class="tutorial-button" id="tutorialButton" type="button" style="margin-top: 12px;">Runaway Tutorial</button>
+                <button class="tutorial-button" id="recordBtn" type="button" style="margin-top: 12px; background: rgba(229, 169, 59, 0.1); border-color: rgba(229, 169, 59, 0.4); color: #fde68a;">⏺ Aufnehmen</button>
+                <button class="tutorial-button" id="playBtn" type="button" style="margin-top: 12px; display: none;">▶ Abspielen</button>
+                <button class="tutorial-button" id="playPresetBtn" type="button" style="margin-top: 12px; background: rgba(45, 212, 191, 0.1); border-color: rgba(45, 212, 191, 0.4); color: #cbfbf4;">✨ Preset abspielen</button>
+                <button class="tutorial-button" id="stopPlayBtn" type="button" style="margin-top: 12px; display: none; background: rgba(229, 169, 59, 0.1); border-color: rgba(229, 169, 59, 0.4); color: #fde68a;"> Stoppen</button>
+                <button class="tutorial-button" id="downloadBtn" type="button" style="margin-top: 12px; display: none; background: rgba(45, 212, 191, 0.1); border-color: rgba(45, 212, 191, 0.4); color: #cbfbf4;">📥 Download</button>
+                <button class="tutorial-button" id="importBtn" type="button" style="margin-top: 12px; background: rgba(45, 212, 191, 0.1); border-color: rgba(45, 212, 191, 0.4); color: #cbfbf4;">📤 Importieren</button>
+                <a class="tutorial-button" href="sampler.html" style="margin-top: 12px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(45, 212, 191, 0.1); border-color: rgba(45, 212, 191, 0.4); color: #cbfbf4;">🎛️ Eigener Sampler</a>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+            </div>
         </section>
 
         <section class="board" id="board" aria-label="Runaway Soundboard Pads">
@@ -521,7 +533,7 @@
     </main>
 
     <div class="tutorial-backdrop" id="tutorialBackdrop" aria-hidden="true">
-        <section class="tutorial-card" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+        <section class="soundboard-modal-card" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
             <h2 id="tutorialTitle">Runaway spielen</h2>
             <p>Erst die Piano-Folge, dann den Beat reinwerfen und Lookatcha komplett melken.</p>
             <div class="tutorial-sequence" aria-label="Runaway Tastenfolge">
@@ -542,7 +554,7 @@
     </div>
 
     <div class="tutorial-backdrop" id="infoBackdrop" aria-hidden="true">
-        <section class="tutorial-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+        <section class="soundboard-modal-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
             <h2 id="infoTitle">Info</h2>
             <p>Made by Til 2ktyp with &lt;3</p>
             <button class="tutorial-close" id="infoClose" type="button">Stark</button>
@@ -588,19 +600,36 @@
         const lyricsAudio = new Audio(files.lyrics);
         lyricsAudio.preload = 'metadata';
         let context;
+        let masterGain = null;
         let justBeatSource = null;
         let justBeatAudio = null;
         let lastTouchEnd = 0;
         let lastVisual = 0;
         let unlockPromise = null;
         let lyricsEnabled = false;
+
+        const volumeSlider = document.getElementById('volumeSlider');
+        const recordBtn = document.getElementById('recordBtn');
+        const playBtn = document.getElementById('playBtn');
+        const playPresetBtn = document.getElementById('playPresetBtn');
+        const stopPlayBtn = document.getElementById('stopPlayBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const importBtn = document.getElementById('importBtn');
+        const importFile = document.getElementById('importFile');
+
+        let isRecording = false;
+        let isPlayingPlayback = false;
+        let recordingStartTime = 0;
+        let recordedEvents = [];
+        let playbackTimeouts = [];
+
         let settings = readSettings();
 
         function readSettings() {
             try {
-                return { spam: true, adhd: true, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
+                return { spam: true, adhd: true, volume: 0.8, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
             } catch {
-                return { spam: true, adhd: true };
+                return { spam: true, adhd: true, volume: 0.8 };
             }
         }
 
@@ -608,12 +637,29 @@
             localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
             spamToggle.checked = settings.spam;
             adhdToggle.checked = settings.adhd;
+            volumeSlider.value = settings.volume;
+            if (context && masterGain) {
+                masterGain.gain.setValueAtTime(settings.volume, context.currentTime);
+            }
+            fullBeat.volume = settings.volume;
+            lyricsAudio.volume = settings.volume;
+            fallbackActive.forEach(audio => {
+                audio.volume = settings.volume;
+            });
+            if (justBeatAudio) {
+                justBeatAudio.volume = settings.volume;
+            }
         }
 
         function audioContext() {
             if (!context) {
                 const Ctx = window.AudioContext || window.webkitAudioContext;
-                if (Ctx) context = new Ctx({ latencyHint: 'interactive' });
+                if (Ctx) {
+                    context = new Ctx({ latencyHint: 'interactive' });
+                    masterGain = context.createGain();
+                    masterGain.gain.setValueAtTime(settings.volume !== undefined ? settings.volume : 0.8, context.currentTime);
+                    masterGain.connect(context.destination);
+                }
             }
             return context;
         }
@@ -626,7 +672,11 @@
                     const silent = ctx.createBuffer(1, 1, 22050);
                     const source = ctx.createBufferSource();
                     source.buffer = silent;
-                    source.connect(ctx.destination);
+                    if (masterGain) {
+                        source.connect(masterGain);
+                    } else {
+                        source.connect(ctx.destination);
+                    }
                     source.start(0);
                     return true;
                 }).catch(() => false).finally(() => {
@@ -707,7 +757,11 @@
                 source.loopStart = 0.002;
                 source.loopEnd = Math.max(source.loopStart + 0.05, buffer.duration - 0.018);
             }
-            source.connect(ctx.destination);
+            if (masterGain) {
+                source.connect(masterGain);
+            } else {
+                source.connect(ctx.destination);
+            }
             source._soundId = id;
             source.onended = () => active.delete(source);
             active.add(source);
@@ -718,6 +772,7 @@
 
         function playFallback(id, loop = false) {
             const audio = new Audio(files[id]);
+            audio.volume = settings.volume;
             audio.loop = loop;
             audio.preload = 'auto';
             audio._soundId = id;
@@ -775,6 +830,7 @@
 
         function playSound(id) {
             if (id === 'fullbeat') {
+                fullBeat.volume = settings.volume;
                 fullBeat.currentTime = 0;
                 fullBeat.play().catch(() => {});
                 return;
@@ -784,6 +840,7 @@
                 lyricsEnabled = !lyricsEnabled;
                 padByKey.r?.classList.toggle('toggle-on', lyricsEnabled);
                 if (lyricsEnabled) {
+                    lyricsAudio.volume = settings.volume;
                     lyricsAudio.currentTime = 0;
                     lyricsAudio.play().catch(() => {});
                     statusEl.textContent = 'Kanye West Lyrics an';
@@ -820,7 +877,13 @@
                     return;
                 }
                 justBeatSource = playBuffer(id, true) || null;
-                if (!justBeatSource) statusEl.textContent = 'Just Beat lädt noch kurz...';
+                if (!justBeatSource) {
+                    justBeatAudio = new Audio(files.justbeat);
+                    justBeatAudio.volume = settings.volume;
+                    justBeatAudio.loop = true;
+                    justBeatAudio.play().catch(() => { justBeatAudio = null; });
+                    if (!justBeatAudio) statusEl.textContent = 'Just Beat lädt noch kurz...';
+                }
                 return;
             }
 
@@ -856,21 +919,36 @@
             }
         }
 
-        function hitPad(pad, event) {
+        function hitPad(pad, event, isPlayback = false) {
+            if (isRecording && !isPlayback) {
+                const key = pad.dataset.key;
+                if (key) {
+                    recordedEvents.push({
+                        key: key,
+                        time: performance.now() - recordingStartTime
+                    });
+                }
+            }
             visual(pad, event);
             unlockAudio();
             if (pad.dataset.sound) playSound(pad.dataset.sound);
-            if (pad.dataset.action === 'stop') stopAll();
+            if (pad.dataset.action === 'stop') {
+                stopAll();
+                if (isPlayingPlayback) stopPlayback();
+            }
             if (pad.dataset.action === 'lyrics') playSound('lyrics');
             if (pad.dataset.action === 'info') openInfo();
         }
 
-        pads.forEach(pad => {
-            pad.addEventListener('pointerdown', event => {
+        // Event Delegation on Board container
+        const boardEl = document.getElementById('board');
+        boardEl.addEventListener('pointerdown', event => {
+            const pad = event.target.closest('.pad');
+            if (pad) {
                 event.preventDefault();
                 hitPad(pad, event);
-            }, { passive: false });
-        });
+            }
+        }, { passive: false });
 
         document.addEventListener('keydown', event => {
             if (event.repeat && !settings.spam) return;
@@ -889,6 +967,255 @@
         adhdToggle.addEventListener('change', () => {
             settings.adhd = adhdToggle.checked;
             saveSettings();
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            settings.volume = parseFloat(volumeSlider.value);
+            saveSettings();
+        });
+
+        // Recording Assistant Methods
+        function startRecording() {
+            isRecording = true;
+            recordedEvents = [];
+            recordingStartTime = performance.now();
+            recordBtn.textContent = '⏹ Aufnahme beenden';
+            recordBtn.style.background = 'rgba(229, 169, 59, 0.3)';
+            playBtn.style.display = 'none';
+            downloadBtn.style.display = 'none';
+            stopPlayBtn.style.display = 'none';
+            statusEl.textContent = 'Aufnahme läuft... Drücke Tasten/Pads!';
+        }
+
+        function stopRecording() {
+            isRecording = false;
+            recordBtn.textContent = '⏺ Aufnehmen';
+            recordBtn.style.background = 'rgba(229, 169, 59, 0.1)';
+            if (recordedEvents.length > 0) {
+                playBtn.style.display = 'inline-block';
+                downloadBtn.style.display = 'inline-block';
+                statusEl.textContent = `Aufnahme beendet. ${recordedEvents.length} Töne aufgenommen.`;
+            } else {
+                playBtn.style.display = 'none';
+                downloadBtn.style.display = 'none';
+                statusEl.textContent = 'Aufnahme beendet. Keine Töne aufgenommen.';
+            }
+        }
+
+        const presetEvents = [
+          { "key": "a", "time": 1125 },
+          { "key": "a", "time": 2381 },
+          { "key": "s", "time": 3494 },
+          { "key": "d", "time": 4659 },
+          { "key": "d", "time": 5762 },
+          { "key": "d", "time": 6937 },
+          { "key": "f", "time": 8057.000000000015 },
+          { "key": "g", "time": 9085 },
+          { "key": "g", "time": 10245 },
+          { "key": "g", "time": 11375 },
+          { "key": "h", "time": 12453.000000000015 },
+          { "key": "j", "time": 13573 },
+          { "key": "j", "time": 14791 },
+          { "key": "k", "time": 15928 },
+          { "key": "a", "time": 17098 },
+          { "key": "y", "time": 17627 },
+          { "key": "c", "time": 20168 },
+          { "key": "c", "time": 20851 },
+          { "key": "c", "time": 21540 },
+          { "key": "c", "time": 22257 },
+          { "key": "c", "time": 24300 },
+          { "key": "c", "time": 24971 },
+          { "key": "c", "time": 25645 },
+          { "key": "c", "time": 26350 },
+          { "key": "c", "time": 27025 },
+          { "key": "c", "time": 27685.000000000015 },
+          { "key": "c", "time": 31175 },
+          { "key": "c", "time": 31741 },
+          { "key": "c", "time": 32437 },
+          { "key": "c", "time": 33132 },
+          { "key": "c", "time": 33391 },
+          { "key": "c", "time": 33527 },
+          { "key": "c", "time": 33679.000000000015 },
+          { "key": "c", "time": 33840.000000000015 },
+          { "key": "c", "time": 34511 },
+          { "key": "c", "time": 34644 },
+          { "key": "c", "time": 34800 },
+          { "key": "c", "time": 34967 },
+          { "key": "c", "time": 35123 },
+          { "key": "c", "time": 35284 },
+          { "key": "c", "time": 35479 },
+          { "key": "c", "time": 35659 },
+          { "key": "c", "time": 35827 },
+          { "key": "c", "time": 36034 },
+          { "key": "c", "time": 36182.000000000015 },
+          { "key": "c", "time": 36370 },
+          { "key": "c", "time": 36528 },
+          { "key": "c", "time": 36700.000000000015 },
+          { "key": "c", "time": 36850 },
+          { "key": "x", "time": 37009 },
+          { "key": "c", "time": 37033 },
+          { "key": "c", "time": 37202 },
+          { "key": "c", "time": 37359 },
+          { "key": "c", "time": 37544 },
+          { "key": "c", "time": 37719 },
+          { "key": "c", "time": 37871 },
+          { "key": "x", "time": 37994 },
+          { "key": "c", "time": 38052 },
+          { "key": "x", "time": 38184 },
+          { "key": "c", "time": 38245 },
+          { "key": "x", "time": 38357 },
+          { "key": "c", "time": 38425 },
+          { "key": "x", "time": 38543 },
+          { "key": "c", "time": 38593.000000000015 },
+          { "key": "c", "time": 38750 },
+          { "key": "x", "time": 38831.000000000015 },
+          { "key": "c", "time": 38923.000000000015 },
+          { "key": "x", "time": 39026 },
+          { "key": "c", "time": 39093.000000000015 },
+          { "key": "x", "time": 39184 },
+          { "key": "c", "time": 39244 },
+          { "key": "x", "time": 39365 },
+          { "key": "c", "time": 39401 },
+          { "key": "c", "time": 39559 },
+          { "key": "c", "time": 39707 },
+          { "key": "r", "time": 42000 },
+          { "key": "c", "time": 67679.00000000001 },
+          { "key": "c", "time": 67824 },
+          { "key": "c", "time": 67980.00000000001 },
+          { "key": "c", "time": 69861.00000000001 },
+          { "key": "c", "time": 70019 },
+          { "key": "c", "time": 70177.99999999999 },
+          { "key": "c", "time": 70328 },
+          { "key": "c", "time": 70503 },
+          { "key": "c", "time": 70662 },
+          { "key": "c", "time": 70805 },
+          { "key": "c", "time": 70955 },
+          { "key": "c", "time": 71127 },
+          { "key": "c", "time": 71288 },
+          { "key": "c", "time": 71460 },
+          { "key": "c", "time": 71637 },
+          { "key": "c", "time": 71779.00000000003 },
+          { "key": "c", "time": 71922.00000000003 }
+        ];
+
+        function startPlayback(events = recordedEvents, isPreset = false) {
+            if (events.length === 0) return;
+            isPlayingPlayback = true;
+            playBtn.style.display = 'none';
+            downloadBtn.style.display = 'none';
+            importBtn.style.display = 'none';
+            playPresetBtn.style.display = 'none';
+            stopPlayBtn.style.display = 'inline-block';
+            recordBtn.style.display = 'none';
+            statusEl.textContent = isPreset ? 'Spiele Preset ab...' : 'Spiele Aufnahme ab...';
+
+            playbackTimeouts = [];
+            let maxTime = 0;
+
+            events.forEach(evt => {
+                if (evt.time > maxTime) maxTime = evt.time;
+                const timeoutId = setTimeout(() => {
+                    const pad = padByKey[evt.key];
+                    if (pad) {
+                        const rect = pad.getBoundingClientRect();
+                        hitPad(pad, { clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 }, true);
+                    }
+                }, evt.time);
+                playbackTimeouts.push(timeoutId);
+            });
+
+            const endTimeoutId = setTimeout(() => {
+                stopPlayback();
+            }, maxTime + 100);
+            playbackTimeouts.push(endTimeoutId);
+        }
+
+        function stopPlayback() {
+            isPlayingPlayback = false;
+            playbackTimeouts.forEach(id => clearTimeout(id));
+            playbackTimeouts = [];
+            
+            if (recordedEvents.length > 0) {
+                playBtn.style.display = 'inline-block';
+                downloadBtn.style.display = 'inline-block';
+            } else {
+                playBtn.style.display = 'none';
+                downloadBtn.style.display = 'none';
+            }
+            
+            importBtn.style.display = 'inline-block';
+            playPresetBtn.style.display = 'inline-block';
+            stopPlayBtn.style.display = 'none';
+            recordBtn.style.display = 'inline-block';
+            statusEl.textContent = 'Wiedergabe beendet.';
+        }
+
+        recordBtn.addEventListener('click', () => {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                if (isPlayingPlayback) stopPlayback();
+                startRecording();
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (recordedEvents.length === 0) return;
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(recordedEvents, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "aufnahme.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        });
+
+        importBtn.addEventListener('click', () => {
+            importFile.click();
+        });
+
+        importFile.addEventListener('change', event => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data) && data.every(evt => evt.key !== undefined && evt.time !== undefined)) {
+                        recordedEvents = data;
+                        playBtn.style.display = 'inline-block';
+                        downloadBtn.style.display = 'inline-block';
+                        statusEl.textContent = `Aufnahme erfolgreich importiert: ${recordedEvents.length} Töne geladen.`;
+                    } else {
+                        statusEl.textContent = 'Fehler: Ungültiges Aufnahme-Format in der JSON-Datei.';
+                    }
+                } catch (err) {
+                    statusEl.textContent = 'Fehler beim Lesen der JSON-Datei.';
+                }
+            };
+            reader.readAsText(file);
+            importFile.value = ''; // Reset file input
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (isPlayingPlayback) {
+                stopPlayback();
+            } else {
+                startPlayback(recordedEvents, false);
+            }
+        });
+
+        playPresetBtn.addEventListener('click', () => {
+            if (isPlayingPlayback) {
+                stopPlayback();
+            } else {
+                startPlayback(presetEvents, true);
+            }
+        });
+
+        stopPlayBtn.addEventListener('click', () => {
+            stopPlayback();
         });
 
         let tutorialCloseTimer = 0;
@@ -964,5 +1291,6 @@
             statusEl.textContent = 'Fallback bereit';
         });
     </script>
+    <script src="../tutorial.js" defer></script>
 </body>
 </html>

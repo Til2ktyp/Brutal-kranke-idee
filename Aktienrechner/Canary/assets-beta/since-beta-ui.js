@@ -1,5 +1,7 @@
         let _statusDismissTimeout = null;
         let _statusExitTimeout = null;
+        // Set to true during period-only recalculations so the canvas fade is skipped
+        let isPeriodUpdate = false;
 
         function showStatus(message, type = 'success') {
             const banner = document.getElementById('statusBanner');
@@ -98,6 +100,9 @@
 
             if (!chartContainer) return;
 
+            // Skip canvas fade during period-only recalculations — chart stays visible
+            if (isPeriodUpdate) return;
+
             if (isLoading) {
                 chartContainer.classList.remove('chart-data-enter');
                 chartContainer.classList.add('chart-data-loading');
@@ -138,6 +143,14 @@
             popup.style.top = `${Math.max(12, top)}px`;
         }
         function selectStock(ticker, name, shouldLoad = false) {
+            // Bei Auswahl einer einzelnen Aktie den Portfolio-Modus deaktivieren
+            isPortfolioMode = false;
+            localStorage.setItem('isPortfolioMode', 'false');
+            const toggle = document.getElementById('portfolioModeToggle');
+            if (toggle) toggle.checked = false;
+            const managerSection = document.getElementById('portfolioManagerSection');
+            if (managerSection) managerSection.style.display = 'none';
+
             stockInput.value = ticker;
             if (autocompleteList) {
                 autocompleteList.classList.remove('show');
@@ -158,6 +171,37 @@
             if (shouldLoad) {
                 loadData();
             }
+        }
+
+        function toggleHamburgerMenu(forceState) {
+            const btn = document.querySelector('.hamburger-menu-btn');
+            const dropdown = document.getElementById('hamburgerDropdown');
+            if (!btn || !dropdown) return;
+            
+            const isShow = forceState !== undefined ? forceState : !dropdown.classList.contains('show');
+            
+            if (isShow) {
+                btn.classList.add('open');
+                dropdown.classList.add('show');
+            } else {
+                btn.classList.remove('open');
+                dropdown.classList.remove('show');
+            }
+        }
+
+        function togglePortfolioDrawerFromMenu() {
+            toggleHamburgerMenu(false);
+            togglePortfolioDrawer();
+        }
+
+        function toggleGraphSettingsPanelFromMenu() {
+            toggleHamburgerMenu(false);
+            toggleGraphSettingsPanel();
+        }
+
+        function toggleAppSettingsPanelFromMenu() {
+            toggleHamburgerMenu(false);
+            toggleAppSettingsPanel();
         }
 
         function toggleGraphSettingsPanel() {
@@ -410,27 +454,8 @@
                 function updatePeriodDisplay() {
             const periodDisplay = document.getElementById('periodDisplay');
             if (!periodDisplay) return;
-
             const nextText = currentPeriod === 1 ? '1 Jahr' : `${currentPeriod} Jahre`;
-            const prevText = periodDisplay.textContent.trim();
-
-            if (prevText === nextText) {
-                periodDisplay.innerText = nextText;
-                return;
-            }
-
-            // Phase 1: flip out
-            periodDisplay.classList.remove('changed');
-            periodDisplay.classList.add('changing');
-
-            setTimeout(() => {
-                periodDisplay.innerText = nextText;
-                periodDisplay.classList.remove('changing');
-                // Phase 2: spring pop-in (force reflow so animation re-triggers)
-                void periodDisplay.offsetWidth;
-                periodDisplay.classList.add('changed');
-                setTimeout(() => periodDisplay.classList.remove('changed'), 520);
-            }, 110);
+            periodDisplay.innerText = nextText;
         }
 
         function syncPeriodDropdownSelection() {
@@ -598,6 +623,39 @@
             applyMobileXRange(range.min + offset, range.max + offset);
         }
 
+        function applyInvestmentPreset(presetName) {
+            let ticker = 'NVDA';
+            let amount = 100;
+            let divMode = 'reinvest';
+
+            if (presetName === 'tech') {
+                ticker = 'NVDA';
+                amount = 150;
+                divMode = 'reinvest';
+            } else if (presetName === 'dividend') {
+                ticker = 'KO';
+                amount = 250;
+                divMode = 'payout';
+            } else if (presetName === 'allweather') {
+                ticker = 'MSFT';
+                amount = 100;
+                divMode = 'reinvest';
+            }
+
+            document.getElementById('stock').value = ticker;
+            document.getElementById('monthlyAmount').value = amount;
+
+            setDividendMode(divMode);
+            loadData();
+
+            const panel = document.getElementById('appSettingsPanel');
+            if (panel) {
+                panel.classList.remove('show');
+            }
+
+            showStatus(`Profil "${presetName === 'tech' ? 'Tech Growth' : presetName === 'dividend' ? 'Dividend Focus' : 'All-Weather'}" geladen: ${ticker}, €${amount}/Monat.`, 'success');
+        }
+
         const stockInput = document.getElementById('stock');
         const autocompleteList = document.getElementById('autocompleteList');
 
@@ -620,11 +678,178 @@
                 settingsPanel.classList.remove('show');
             }
 
+            const portfolioDrawer = document.getElementById('portfolioDrawer');
+            const portfolioButton = document.querySelector('.portfolio-settings-btn');
+            if (portfolioDrawer && portfolioButton && !portfolioDrawer.contains(e.target) && !portfolioButton.contains(e.target)) {
+                portfolioDrawer.classList.remove('show');
+            }
+
             const periodSelector = document.querySelector('.period-selector');
             if (periodSelector && !periodSelector.contains(e.target)) {
                 closePeriodDropdown();
             }
+
+            // Hamburger Dropdown schließen bei Klick außerhalb
+            const hamburgerDropdown = document.getElementById('hamburgerDropdown');
+            const hamburgerButton = document.querySelector('.hamburger-menu-btn');
+            if (hamburgerDropdown && hamburgerButton && !hamburgerDropdown.contains(e.target) && !hamburgerButton.contains(e.target)) {
+                toggleHamburgerMenu(false);
+            }
         });
+
+        // --- Portfolio UI-Controller ---
+        function togglePortfolioDrawer() {
+            const drawer = document.getElementById('portfolioDrawer');
+            if (!drawer) return;
+            drawer.classList.toggle('show');
+            if (drawer.classList.contains('show')) {
+                syncPortfolioDrawerUI();
+            }
+        }
+
+        function syncPortfolioDrawerUI() {
+            const toggle = document.getElementById('portfolioModeToggle');
+            if (toggle) {
+                toggle.checked = isPortfolioMode;
+            }
+            const managerSection = document.getElementById('portfolioManagerSection');
+            if (managerSection) {
+                managerSection.style.display = isPortfolioMode ? 'block' : 'none';
+            }
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+        }
+
+        function togglePortfolioMode(isEnabled) {
+            isPortfolioMode = isEnabled;
+            localStorage.setItem('isPortfolioMode', isPortfolioMode);
+            const managerSection = document.getElementById('portfolioManagerSection');
+            if (managerSection) {
+                managerSection.style.display = isPortfolioMode ? 'block' : 'none';
+            }
+            if (isPortfolioMode && portfolioAssets.length === 0) {
+                // Standardmäßig NVDA & AAPL eintragen
+                portfolioAssets = [
+                    { symbol: 'NVDA', weight: 50 },
+                    { symbol: 'AAPL', weight: 50 }
+                ];
+                localStorage.setItem('portfolioAssets', JSON.stringify(portfolioAssets));
+            }
+            syncPortfolioDrawerUI();
+        }
+
+        function addStockToPortfolio() {
+            const input = document.getElementById('portfolioSearchInput');
+            if (!input) return;
+            const ticker = normalizeTickerInput(input.value);
+            if (!ticker) {
+                showStatus('Bitte einen Ticker eingeben.', 'error');
+                return;
+            }
+            if (portfolioAssets.some(asset => asset.symbol === ticker)) {
+                showStatus(`${ticker} ist bereits im Portfolio.`, 'error');
+                return;
+            }
+            
+            // Neues Asset mit 0% Gewichtung hinzufügen
+            portfolioAssets.push({ symbol: ticker, weight: 0 });
+            input.value = '';
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+            showStatus(`${ticker} zum Portfolio hinzugefügt.`, 'success');
+        }
+
+        function removeStockFromPortfolio(symbol) {
+            portfolioAssets = portfolioAssets.filter(asset => asset.symbol !== symbol);
+            localStorage.setItem('portfolioAssets', JSON.stringify(portfolioAssets));
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+        }
+
+        function updateAssetWeight(symbol, value) {
+            const asset = portfolioAssets.find(a => a.symbol === symbol);
+            if (asset) {
+                asset.weight = parseInt(value, 10) || 0;
+                const display = document.getElementById(`weight-val-${symbol}`);
+                if (display) {
+                    display.textContent = `${asset.weight}%`;
+                }
+                updatePortfolioTotalWeight();
+            }
+        }
+
+        function updatePortfolioTotalWeight() {
+            const total = portfolioAssets.reduce((sum, asset) => sum + asset.weight, 0);
+            const weightBadge = document.getElementById('portfolioTotalWeight');
+            if (weightBadge) {
+                weightBadge.textContent = `${total}%`;
+                if (total === 100) {
+                    weightBadge.className = 'weight-badge success';
+                } else {
+                    weightBadge.className = 'weight-badge error';
+                }
+            }
+        }
+
+        function renderPortfolioAssetsList() {
+            const container = document.getElementById('portfolioAssetsList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            portfolioAssets.forEach(asset => {
+                const item = document.createElement('div');
+                item.className = 'portfolio-asset-item';
+                item.innerHTML = `
+                    <div class="portfolio-asset-info">
+                        <span class="portfolio-asset-name">${asset.symbol}</span>
+                        <button class="portfolio-asset-remove" type="button" onclick="removeStockFromPortfolio('${asset.symbol}')">Entfernen</button>
+                    </div>
+                    <div class="portfolio-slider-container">
+                        <input type="range" min="0" max="100" value="${asset.weight}" oninput="updateAssetWeight('${asset.symbol}', this.value)" onchange="savePortfolioAssetsToStorage()">
+                        <span class="portfolio-weight-value" id="weight-val-${asset.symbol}">${asset.weight}%</span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function savePortfolioAssetsToStorage() {
+            localStorage.setItem('portfolioAssets', JSON.stringify(portfolioAssets));
+        }
+
+        function equalizePortfolioWeights() {
+            if (portfolioAssets.length === 0) return;
+            const share = Math.floor(100 / portfolioAssets.length);
+            let remainder = 100 - (share * portfolioAssets.length);
+
+            portfolioAssets.forEach((asset, idx) => {
+                asset.weight = share + (idx < remainder ? 1 : 0);
+            });
+
+            savePortfolioAssetsToStorage();
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+        }
+
+        function clearPortfolioAssets() {
+            portfolioAssets = [];
+            savePortfolioAssetsToStorage();
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+            showStatus('Portfolio geleert.', 'success');
+        }
+
+        function saveAndApplyPortfolio() {
+            const total = portfolioAssets.reduce((sum, asset) => sum + asset.weight, 0);
+            if (total !== 100) {
+                showStatus('Die Gesamtgewichtung muss genau 100% betragen!', 'error');
+                return;
+            }
+            savePortfolioAssetsToStorage();
+            togglePortfolioDrawer();
+            loadData();
+        }
+
 
         window.addEventListener('resize', updateZoomControls);
 

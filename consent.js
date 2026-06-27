@@ -61,17 +61,17 @@
                 width: min(960px, calc(100% - 32px));
                 margin: 0 auto;
                 padding: 18px;
-                border: 1px solid rgba(255, 255, 255, 0.18);
+                border: 1px solid rgba(255, 255, 255, 0.14);
                 border-radius: 18px;
                 background:
-                    radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.24), transparent 30%),
-                    radial-gradient(circle at 92% 18%, rgba(251, 197, 49, 0.22), transparent 28%),
-                    linear-gradient(145deg, rgba(15, 23, 42, 0.97), rgba(49, 46, 129, 0.94));
+                    radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                    radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                    linear-gradient(145deg, rgba(11, 15, 25, 0.97), rgba(7, 42, 58, 0.94));
                 color: #ffffff;
                 box-shadow:
                     0 26px 80px rgba(0, 0, 0, 0.42),
-                    0 0 42px rgba(56, 189, 248, 0.12),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+                    0 0 42px rgba(45, 212, 191, 0.12),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.14);
                 backdrop-filter: blur(22px);
                 isolation: isolate;
                 overflow: hidden;
@@ -102,7 +102,7 @@
                 z-index: -2;
                 border-radius: 17px;
                 background:
-                    linear-gradient(90deg, rgba(56, 189, 248, 0.34), rgba(251, 197, 49, 0.34), rgba(251, 113, 133, 0.26), rgba(56, 189, 248, 0.34));
+                    linear-gradient(90deg, rgba(45, 212, 191, 0.34), rgba(229, 169, 59, 0.34), rgba(244, 63, 94, 0.2), rgba(45, 212, 191, 0.34));
                 background-size: 240% 100%;
                 opacity: 0.38;
                 filter: blur(14px);
@@ -115,8 +115,8 @@
                 width: 7px;
                 height: 7px;
                 border-radius: 999px;
-                background: var(--bb-spark, #fbc531);
-                box-shadow: 0 0 14px var(--bb-spark, #fbc531), 0 0 24px rgba(255, 255, 255, 0.3);
+                background: var(--bb-spark, #e5a93b);
+                box-shadow: 0 0 14px var(--bb-spark, #e5a93b), 0 0 24px rgba(255, 255, 255, 0.3);
                 opacity: 0.86;
                 pointer-events: none;
                 animation: bbConsentFloat var(--bb-time, 3.8s) ease-in-out infinite alternate;
@@ -133,7 +133,7 @@
                 font-size: 1rem;
                 font-weight: 950;
                 line-height: 1.2;
-                text-shadow: 0 0 20px rgba(251, 197, 49, 0.26);
+                text-shadow: 0 0 20px rgba(229, 169, 59, 0.26);
             }
 
             .bb-consent-text {
@@ -144,7 +144,7 @@
             }
 
             .bb-consent-text a {
-                color: #38bdf8;
+                color: #2dd4bf;
                 font-weight: 850;
             }
 
@@ -179,9 +179,9 @@
             }
 
             .bb-consent-btn.accept {
-                background: linear-gradient(135deg, #fbc531, #38bdf8);
+                background: linear-gradient(135deg, #e5a93b, #2dd4bf);
                 color: #07111f;
-                box-shadow: 0 12px 30px rgba(56, 189, 248, 0.24), 0 0 24px rgba(251, 197, 49, 0.16);
+                box-shadow: 0 12px 30px rgba(45, 212, 191, 0.24), 0 0 24px rgba(229, 169, 59, 0.16);
                 animation: bbConsentButtonPulse 2.8s ease-in-out infinite;
             }
 
@@ -196,8 +196,8 @@
                 right: 14px;
                 bottom: 14px;
                 z-index: 2147482999;
-                border: 1px solid rgba(251, 197, 49, 0.24);
-                background: rgba(15, 23, 42, 0.76);
+                border: 1px solid rgba(229, 169, 59, 0.24);
+                background: rgba(11, 15, 25, 0.86);
                 color: #fde68a;
                 box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
                 backdrop-filter: blur(18px);
@@ -265,7 +265,7 @@
                 }
                 50% {
                     filter: saturate(1.28) brightness(1.08);
-                    box-shadow: 0 16px 38px rgba(56, 189, 248, 0.32), 0 0 30px rgba(251, 197, 49, 0.24);
+                    box-shadow: 0 16px 38px rgba(45, 212, 191, 0.32), 0 0 30px rgba(229, 169, 59, 0.24);
                 }
             }
 
@@ -337,7 +337,7 @@
     }
 
     function showSettingsButton() {
-        if (document.getElementById('bbConsentSettings')) return;2
+        if (document.getElementById('bbConsentSettings')) return;
 
         const button = document.createElement('button');
         button.id = 'bbConsentSettings';
@@ -357,9 +357,9 @@
         banner.className = 'bb-consent-banner';
         banner.setAttribute('aria-label', 'Cookie-Einstellungen');
         banner.innerHTML = `
-            <span class="bb-consent-spark" style="left: 24px; top: 18px; --bb-spark: #38bdf8; --bb-x: 18px; --bb-y: -10px; --bb-time: 3.2s;"></span>
-            <span class="bb-consent-spark" style="left: 52%; top: 10px; --bb-spark: #fbc531; --bb-x: -14px; --bb-y: 16px; --bb-time: 4.1s;"></span>
-            <span class="bb-consent-spark" style="right: 34px; bottom: 16px; --bb-spark: #fb7185; --bb-x: -20px; --bb-y: -14px; --bb-time: 3.7s;"></span>
+            <span class="bb-consent-spark" style="left: 24px; top: 18px; --bb-spark: #2dd4bf; --bb-x: 18px; --bb-y: -10px; --bb-time: 3.2s;"></span>
+            <span class="bb-consent-spark" style="left: 52%; top: 10px; --bb-spark: #e5a93b; --bb-x: -14px; --bb-y: 16px; --bb-time: 4.1s;"></span>
+            <span class="bb-consent-spark" style="right: 34px; bottom: 16px; --bb-spark: #f43f5e; --bb-x: -20px; --bb-y: -14px; --bb-time: 3.7s;"></span>
             <div class="bb-consent-copy">
                 <p class="bb-consent-title">Cookies und Anzeigen</p>
                 <p class="bb-consent-text">

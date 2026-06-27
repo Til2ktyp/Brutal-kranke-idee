@@ -1,17 +1,22 @@
         :root {
-            --bg-1: #0f172a;
-            --bg-2: #312e81;
+            --bg-1: #0b0f19;
+            --bg-2: #072a3a;
+            --bg-3: #043e4f;
             --panel: rgba(15, 23, 42, 0.76);
             --panel-soft: rgba(255, 255, 255, 0.075);
-            --border: rgba(255, 255, 255, 0.13);
-            --text: #f8fafc;
-            --muted: rgba(248, 250, 252, 0.7);
-            --accent: #fbc531;
+            --border: rgba(255, 255, 255, 0.14);
+            --text: #ffffff;
+            --muted: rgba(204, 251, 241, 0.65);
+            --accent: #e5a93b;
             --accent-hover: #fda502;
-            --blue: #38bdf8;
-            --green: #22c55e;
-            --red: #ef4444;
+            --blue: #2dd4bf;
+            --green: #10b981;
+            --red: #f43f5e;
             --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+            /* Apple easing tokens */
+            --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
         }
 
         * {
@@ -35,9 +40,13 @@
         body {
             font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             background:
-                radial-gradient(circle at top left, rgba(56, 189, 248, 0.3), transparent 34%),
-                radial-gradient(circle at top right, rgba(251, 197, 49, 0.22), transparent 28%),
-                linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                radial-gradient(circle at 78% 70%, rgba(244, 63, 94, 0.16), transparent 26%),
+                radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
+            background-size: 140% 140%;
+            animation: backgroundDrift 16s ease-in-out infinite alternate;
             color: var(--text);
             margin: 0;
             min-height: 100vh;
@@ -46,14 +55,43 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        @keyframes backgroundDrift {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
         body::before {
             content: "";
             position: fixed;
             inset: 0;
             pointer-events: none;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-            background-size: 42px 42px;
-            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent 72%);
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 46px 46px;
+            mask-image: radial-gradient(circle at center, black, transparent 78%);
+            opacity: 0.13;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            right: -120px;
+            bottom: -110px;
+            width: 360px;
+            height: 360px;
+            border-radius: 999px;
+            pointer-events: none;
+            filter: blur(10px);
+            opacity: 0.36;
+            z-index: 0;
+            background: radial-gradient(circle, rgba(229, 169, 59, 0.3), transparent 68%);
+            animation: floatOrb 14s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-30px, -20px); }
         }
 
         .container {
@@ -141,12 +179,23 @@
             box-shadow: none;
             font-size: 13px;
             font-weight: 900;
+            transition:
+                background 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .market-ticker-btn:hover {
-            background: rgba(255, 255, 255, 0.16);
-            transform: translateY(-1px);
-            box-shadow: none;
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+        }
+
+        .market-ticker-btn:active {
+            transform: scale(0.93) translateY(0) !important;
+            transition-duration: 0.08s !important;
         }
 
         .controls {
@@ -173,6 +222,8 @@
             background: var(--panel-soft);
             border: 1px solid var(--border);
             border-radius: 22px;
+            position: relative;
+            z-index: 10;
         }
 
         .quick-amounts {
@@ -327,12 +378,25 @@
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
+            transition:
+                background 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .reality-mode-btn:active {
+            transform: scale(0.93) !important;
+            transition-duration: 0.08s !important;
         }
 
         .reality-mode-btn.active {
             background: #fbc531;
             color: #1e272e;
             border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 22px rgba(251, 197, 49, 0.42), 0 4px 14px rgba(251, 197, 49, 0.22);
+            animation: realityModeActivate 0.46s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         .control-group {
@@ -456,6 +520,7 @@
 
         .period-selector {
             position: relative;
+            z-index: 2000;
         }
 
         .period-dropdown {
@@ -476,6 +541,7 @@
 
         .period-dropdown.show {
             display: grid;
+            animation: dropdownIn 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         .period-option {
@@ -716,15 +782,15 @@
         }
 
         .stat-char-old {
-            animation: statDigitOld 0.791s cubic-bezier(0.16, 0.84, 0.24, 1) both;
+            animation: statDigitOld 0.46s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .stat-char-new {
-            animation: statDigitNew 0.791s cubic-bezier(0.16, 0.84, 0.24, 1) both;
+            animation: statDigitNew 0.54s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
 
         .stat-char-fade {
-            animation: statValueChange 0.791s cubic-bezier(0.16, 0.84, 0.24, 1);
+            animation: statValueChange 0.52s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes statDigitOld {
@@ -736,21 +802,21 @@
 
             to {
                 opacity: 0;
-                transform: translateY(105%) scale(0.98);
-                filter: blur(2px);
+                transform: translateY(120%) scale(0.88);
+                filter: blur(3.5px);
             }
         }
 
         @keyframes statDigitNew {
             from {
                 opacity: 0;
-                transform: translateY(-105%) scale(0.98);
-                filter: blur(2px);
+                transform: translateY(-120%) scale(0.88);
+                filter: blur(3.5px);
             }
 
-            55% {
+            46% {
                 opacity: 1;
-                transform: translateY(9%) scale(1.015);
+                transform: translateY(7%) scale(1.03);
                 filter: blur(0);
             }
 
@@ -763,14 +829,14 @@
 
         @keyframes statValueChange {
             from {
-                opacity: 0.45;
-                transform: translateY(9px) scale(0.98);
-                filter: blur(1.5px);
+                opacity: 0.28;
+                transform: translateY(14px) scale(0.94);
+                filter: blur(3px);
             }
 
-            55% {
+            46% {
                 opacity: 1;
-                transform: translateY(-2px) scale(1.015);
+                transform: translateY(-3px) scale(1.025);
                 filter: blur(0);
             }
 
@@ -823,6 +889,12 @@
 
         .status-banner.show {
             display: block;
+            animation: statusBannerIn 0.44s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .status-banner.exiting {
+            display: block;
+            animation: statusBannerOut 0.32s cubic-bezier(0.7, 0, 0.84, 0) forwards;
         }
 
         .status-banner.error {
@@ -889,27 +961,7 @@
             margin-left: 5px;
         }
 
-        .back-home-btn {
-            position: fixed;
-            top: 20px;
-            left: -190px;
-            z-index: 1002;
-            background: #fbc531;
-            color: #1e272e;
-            border: none;
-            border-radius: 0 14px 14px 0;
-            padding: 14px 18px;
-            font-weight: bold;
-            text-decoration: none;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-            display: inline-flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            min-width: 200px;
-            overflow: hidden;
-            transition: left 0.28s ease, background 0.28s ease;
-        }
+
 
         .back-home-btn:hover {
             left: 0;
@@ -944,12 +996,49 @@
             opacity: 0;
         }
 
-        .graph-settings-btn {
+        /* --- Floating Actions Container & Buttons --- */
+        .floating-actions {
             position: fixed;
             top: 18px;
             right: 18px;
             z-index: 1002;
-            background: rgba(156, 136, 255, 0.92);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none; /* Verhindert, dass die unsichtbare Navigations-Box Klicks abfängt */
+        }
+
+        .floating-actions button {
+            pointer-events: auto; /* Klicks auf Buttons erlauben */
+        }
+
+        .back-home-btn {
+            position: fixed !important;
+            top: 20px;
+            left: -190px;
+            z-index: 1002;
+            background: #fbc531;
+            color: #1e272e;
+            border: none;
+            border-radius: 0 14px 14px 0;
+            padding: 14px 18px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 200px;
+            overflow: hidden;
+            transition: left 0.28s ease, background 0.28s ease;
+            pointer-events: auto;
+        }
+
+        .portfolio-settings-btn,
+        .graph-settings-btn,
+        .app-settings-btn {
+            position: static !important;
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.14);
             border-radius: 14px;
@@ -958,15 +1047,126 @@
             cursor: pointer;
             box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
             backdrop-filter: blur(12px);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
+        .portfolio-settings-btn {
+            background: rgba(45, 212, 191, 0.9);
+        }
+        .portfolio-settings-btn:hover {
+            background: #0d9488;
+        }
+
+        .graph-settings-btn {
+            background: rgba(156, 136, 255, 0.92);
+        }
         .graph-settings-btn:hover {
             background: #8c7ae6;
         }
 
+        .app-settings-btn {
+            background: rgba(56, 189, 248, 0.9);
+        }
+        .app-settings-btn:hover {
+            background: #0ea5e9;
+        }
+
+        /* Hamburger Menu Styling */
+        .hamburger-menu-btn {
+            position: static !important;
+            background: rgba(15, 23, 42, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 14px;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(12px);
+            transition: border-color 0.22s ease, background-color 0.22s ease, transform 0.2s ease;
+            pointer-events: auto;
+        }
+
+        .hamburger-menu-btn:hover {
+            border-color: rgba(255, 255, 255, 0.35);
+            background: rgba(30, 41, 59, 0.85);
+            transform: translateY(-1px);
+        }
+
+        .hamburger-bar {
+            width: 20px;
+            height: 2px;
+            background-color: white;
+            border-radius: 2px;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+        }
+
+        .hamburger-menu-btn.open .bar-1 {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-menu-btn.open .bar-2 {
+            opacity: 0;
+        }
+
+        .hamburger-menu-btn.open .bar-3 {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .hamburger-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 18px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 210px;
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.44);
+            backdrop-filter: blur(16px);
+            z-index: 1003;
+            transform-origin: top right;
+            visibility: hidden;
+            opacity: 0;
+            transform: scale(0.92) translateY(-10px);
+            transition:
+                visibility 0s 0.22s,
+                opacity 0.22s ease,
+                transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .hamburger-dropdown.show {
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: auto;
+        }
+
+        .hamburger-dropdown button {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+            border-radius: 12px !important;
+            padding: 12px 16px;
+            font-size: 13px;
+        }
+
         .graph-settings-panel {
             position: fixed;
-            top: 70px;
+            top: 122px;
             right: 18px;
             width: 290px;
             background: rgba(15, 23, 42, 0.97);
@@ -975,12 +1175,173 @@
             padding: 18px;
             z-index: 1003;
             box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
-            display: none;
             backdrop-filter: blur(16px);
+            /* Animated visibility */
+            visibility: hidden;
+            opacity: 0;
+            transform: scale(0.91) translateY(-10px);
+            filter: blur(7px);
+            pointer-events: none;
+            transform-origin: top right;
+            transition:
+                visibility 0s 0.30s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .graph-settings-panel.show {
-            display: block;
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+            pointer-events: auto;
+            transition:
+                visibility 0s 0s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .app-settings-panel {
+            position: fixed;
+            top: 70px;
+            right: 18px;
+            width: min(420px, calc(100vw - 24px));
+            max-height: calc(100vh - 92px);
+            overflow: auto;
+            background: rgba(15, 23, 42, 0.98);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            z-index: 1004;
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
+            backdrop-filter: blur(16px);
+            /* Animated visibility */
+            visibility: hidden;
+            opacity: 0;
+            transform: scale(0.91) translateY(-10px);
+            filter: blur(7px);
+            pointer-events: none;
+            transform-origin: top right;
+            transition:
+                visibility 0s 0.30s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .app-settings-panel.show {
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+            pointer-events: auto;
+            transition:
+                visibility 0s 0s,
+                opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .app-settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .app-settings-title {
+            font-size: 18px;
+            font-weight: 950;
+            color: var(--accent);
+        }
+
+        .app-settings-close {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .settings-section {
+            padding: 14px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+        }
+
+        .settings-label,
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .settings-toggle {
+            cursor: pointer;
+        }
+
+        .settings-toggle input {
+            width: 17px;
+            height: 17px;
+        }
+
+        .settings-section select,
+        .settings-section input[type="password"] {
+            width: 100%;
+            min-height: 42px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            padding: 0 12px;
+            font-weight: 800;
+        }
+
+        .settings-section option {
+            color: #111827;
+        }
+
+        .settings-hint {
+            margin-top: 8px;
+            color: rgba(226, 232, 240, 0.64);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .cache-summary {
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 850;
+        }
+
+        .settings-button-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .settings-action-btn {
+            min-height: 40px;
+            padding: 0 12px;
+            border-radius: 12px;
+            background: rgba(56, 189, 248, 0.16);
+            color: white;
+            font-size: 13px;
+        }
+
+        .settings-action-btn.danger {
+            background: rgba(239, 68, 68, 0.18);
         }
 
         .graph-settings-title {
@@ -1047,6 +1408,32 @@
 
             .back-home-btn-text {
                 font-size: 14px;
+            }
+
+            .floating-actions {
+                top: 14px;
+                right: 14px;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .hamburger-dropdown {
+                top: 56px;
+                right: 0;
+            }
+
+            .graph-settings-panel,
+            .app-settings-panel,
+            .portfolio-drawer {
+                top: 185px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+            }
+
+            .settings-button-row {
+                grid-template-columns: 1fr;
             }
 
             .top-action-row {
@@ -1370,3 +1757,463 @@
                 filter: none;
             }
         }
+
+        body.performance-mode *,
+        body.performance-mode *::before,
+        body.performance-mode *::after {
+            animation: none !important;
+            transition: none !important;
+            scroll-behavior: auto !important;
+        }
+
+        body.performance-mode .reality-text-exit,
+        body.performance-mode .reality-text-enter,
+        body.performance-mode .stat-char-old,
+        body.performance-mode .stat-char-new,
+        body.performance-mode .stat-char-fade {
+            transform: none !important;
+            filter: none !important;
+        }
+
+        body.performance-mode .stat-char-old {
+            display: none !important;
+        }
+
+        body.performance-mode .stat-char-new {
+            position: static !important;
+            opacity: 1 !important;
+        }
+
+        body.performance-mode .stat-char-roller {
+            overflow: visible !important;
+        }
+
+        /* =====================================================================
+           APPLE-STYLE ANIMATION SYSTEM — EXTENDED
+           ===================================================================== */
+
+        /* --- Global button active press feel --- */
+        button:active:not(.bb-hyper-toggle):not(.app-settings-close) {
+            transform: scale(0.95) !important;
+            filter: brightness(0.94) !important;
+            transition: transform 0.08s ease, filter 0.08s ease !important;
+        }
+
+        /* --- Status banner keyframes --- */
+        @keyframes statusBannerIn {
+            from {
+                opacity: 0;
+                transform: translateY(-14px) scale(0.97);
+                filter: blur(5px);
+            }
+            58% {
+                opacity: 1;
+                transform: translateY(3px) scale(1.005);
+                filter: blur(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes statusBannerOut {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.97);
+                filter: blur(4px);
+            }
+        }
+
+        /* --- Dropdown pop-in --- */
+        @keyframes dropdownIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.86) translateY(-12px);
+                filter: blur(5px);
+            }
+            58% {
+                transform: translateX(-50%) scale(1.03) translateY(0);
+                filter: blur(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* --- Ticker button active (green spring) --- */
+        .market-ticker-btn.ticker-active {
+            background: rgba(34, 197, 94, 0.22) !important;
+            border-color: #22c55e !important;
+            color: #4ade80 !important;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.34), inset 0 0 10px rgba(34, 197, 94, 0.1) !important;
+            animation: tickerActivate 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes tickerActivate {
+            0%   { transform: scale(0.82); opacity: 0.5; }
+            55%  { transform: scale(1.1);  }
+            100% { transform: scale(1);   }
+        }
+
+        /* --- Reality mode button spring pop --- */
+        @keyframes realityModeActivate {
+            0%   { transform: scale(0.78); opacity: 0.55; }
+            58%  { transform: scale(1.1);  }
+            100% { transform: scale(1);   }
+        }
+
+        /* --- Period display flip --- */
+        .period-display.changing {
+            animation: periodOut 0.11s cubic-bezier(0.7, 0, 0.84, 0) both;
+        }
+
+        .period-display.changed {
+            animation: periodIn 0.44s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes periodOut {
+            to {
+                opacity: 0.35;
+                transform: translateY(6px) scale(0.92);
+                filter: blur(2.5px);
+            }
+        }
+
+        @keyframes periodIn {
+            from {
+                opacity: 0.25;
+                transform: translateY(-12px) scale(0.88);
+                filter: blur(4px);
+            }
+            55% {
+                transform: translateY(3px) scale(1.05);
+                filter: blur(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* --- Chart period-update sweep (replaces old pulse) --- */
+
+        /* Register the sweep angle as an animatable CSS property */
+        @property --chart-sweep-angle {
+            syntax: '<angle>';
+            inherits: false;
+            initial-value: 0deg;
+        }
+
+        /* The sweep runs on a pseudo-element layered just inside the border */
+        .chart-container.chart-updating::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 23px; /* matches container radius + 1px */
+            z-index: 20;
+            pointer-events: none;
+
+            /* conic-gradient from current angle: bright teal leading edge, amber mid, fades out */
+            background: conic-gradient(
+                from var(--chart-sweep-angle),
+                transparent            0deg,
+                rgba(45, 212, 191, 0)  2deg,
+                rgba(45, 212, 191, 0.55) 8deg,
+                rgba(125, 240, 220, 0.95) 14deg,
+                rgba(255, 255, 255, 0.85) 18deg,
+                rgba(229, 169, 59, 0.75) 24deg,
+                rgba(229, 169, 59, 0.35) 30deg,
+                transparent            42deg,
+                transparent            360deg
+            );
+
+            /* Mask: only 2px border ring visible, centre cut out */
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 2px;
+
+            animation: chartSweep 1.2s cubic-bezier(0.4, 0, 0.3, 1) forwards;
+        }
+
+        @keyframes chartSweep {
+            0%   {
+                --chart-sweep-angle: 0deg;
+                opacity: 1;
+            }
+            80%  {
+                --chart-sweep-angle: 360deg;
+                opacity: 1;
+            }
+            100% {
+                --chart-sweep-angle: 360deg;
+                opacity: 0;
+            }
+        }
+
+        /* --- Section stagger fade-in (page load) --- */
+        @keyframes sectionFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+                filter: blur(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .hero        { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.04s  both; }
+        .market-strip { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.10s  both; }
+        .controls    { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.16s  both; }
+        .top-action-row { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both; }
+        .zoom-controls  { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.27s both; }
+        .info-row    { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.31s  both; }
+        .chart-container { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.36s both; }
+        .stats       { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.43s  both; }
+        .reality-check { animation: sectionFadeIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.50s both; }
+
+        /* --- Stat box hover lift --- */
+        .stat-box {
+            transition:
+                transform 0.30s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .stat-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(251, 197, 49, 0.14);
+        }
+
+        /* --- Info pill hover lift --- */
+        .info-pill {
+            transition:
+                transform 0.30s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .info-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
+        }
+
+        /* --- Reduced motion: disable all new animations --- */
+        @media (prefers-reduced-motion: reduce) {
+            .hero, .market-strip, .controls, .top-action-row,
+            .zoom-controls, .info-row, .chart-container, .stats, .reality-check,
+            .market-ticker-btn.ticker-active, .reality-mode-btn.active,
+            .period-display.changing, .period-display.changed,
+            .chart-container.chart-updating::before,
+            .status-banner.show, .status-banner.exiting,
+            .period-dropdown.show {
+                animation: none !important;
+                transition: none !important;
+                filter: none !important;
+                transform: none !important;
+            }
+        }
+
+        /* --- Performance mode: disable new animations --- */
+        body.performance-mode .hero,
+        body.performance-mode .market-strip,
+        body.performance-mode .controls,
+        body.performance-mode .top-action-row,
+        body.performance-mode .zoom-controls,
+        body.performance-mode .info-row,
+        body.performance-mode .stats,
+        body.performance-mode .reality-check,
+        body.performance-mode .stat-box,
+        body.performance-mode .info-pill,
+        body.performance-mode .market-ticker-btn,
+        body.performance-mode .reality-mode-btn,
+        body.performance-mode .period-display,
+        body.performance-mode .status-banner,
+        body.performance-mode .chart-container,
+        body.performance-mode .chart-container.chart-updating::before {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        /* --- Portfolio Drawer Panel --- */
+        .portfolio-drawer {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100vh;
+            z-index: 10000;
+            background: rgba(10, 15, 30, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text);
+        }
+
+        .portfolio-drawer.show {
+            right: 0;
+        }
+
+        .portfolio-drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 14px;
+        }
+
+        .portfolio-drawer-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--blue);
+            letter-spacing: -0.5px;
+        }
+
+        .portfolio-drawer-close {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+            transition: color 0.2s;
+        }
+
+        .portfolio-drawer-close:hover {
+            color: #fff;
+        }
+
+        .portfolio-drawer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .portfolio-add-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .portfolio-assets-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 6px;
+            margin-top: 10px;
+        }
+
+        .portfolio-assets-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .portfolio-assets-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 99px;
+        }
+
+        .portfolio-asset-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .portfolio-asset-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .portfolio-asset-name {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .portfolio-asset-remove {
+            background: none;
+            border: none;
+            color: var(--red);
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        .portfolio-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .portfolio-slider-container input[type="range"] {
+            flex: 1;
+            accent-color: var(--blue);
+            cursor: pointer;
+        }
+
+        .portfolio-weight-value {
+            font-weight: 800;
+            font-size: 13px;
+            min-width: 42px;
+            text-align: right;
+            color: var(--accent);
+        }
+
+        .portfolio-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-weight: 700;
+        }
+
+        .weight-badge {
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 800;
+            transition: all 0.3s;
+        }
+
+        .weight-badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+
+        .weight-badge.error {
+            background: rgba(244, 63, 148, 0.2);
+            color: var(--red);
+        }
+
+        @media (max-width: 480px) {
+            .portfolio-drawer {
+                width: 100%;
+                right: -100%;
+            }
+        }
+

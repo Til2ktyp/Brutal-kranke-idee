@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0d0618">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Ye Custom Sampler</title>
+    <style>
+        :root {
+            --red: #e5a93b;
+            --purple: #2dd4bf;
+            --violet: #2dd4bf;
+            --cyan: #2dd4bf;
+            --gold: #e5a93b;
+            --text: #ffffff;
+            --muted: rgba(204, 251, 241, 0.65);
+            --panel: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.14);
+            --bg-1: #0b0f19;
+            --bg-2: #072a3a;
+            --bg-3: #043e4f;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            min-height: 100%;
+            margin: 0;
+            background: var(--bg-1);
+            touch-action: manipulation;
+            overscroll-behavior-x: none;
+            -webkit-text-size-adjust: 100%;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
+            overflow-x: hidden;
+        }
+
+        .back-home {
+            position: fixed;
+            left: max(14px, env(safe-area-inset-left));
+            top: max(14px, env(safe-area-inset-top));
+            z-index: 10;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 14px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: white;
+            text-decoration: none;
+            font-weight: 900;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(18px);
+            transition: background 0.15s ease;
+        }
+
+        .back-home:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .shell {
+            width: min(1000px, calc(100% - 24px));
+            margin: 0 auto;
+            padding: 72px 0 34px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .kicker {
+            display: inline-flex;
+            min-height: 30px;
+            align-items: center;
+            padding: 0 12px;
+            border: 1px solid rgba(229, 169, 59, 0.42);
+            border-radius: 999px;
+            color: #fde68a;
+            background: rgba(229, 169, 59, 0.1);
+            font-size: 0.75rem;
+            font-weight: 950;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 10px 0 7px;
+            color: var(--red);
+            font-size: clamp(2.2rem, 6vw, 4.4rem);
+            line-height: 0.95;
+            font-weight: 950;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 26px rgba(229, 169, 59, 0.26);
+        }
+
+        .subtitle {
+            max-width: 690px;
+            margin: 0 auto 12px;
+            color: var(--muted);
+            font-weight: 750;
+            line-height: 1.45;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(18px);
+            font-weight: 950;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn.primary {
+            background: rgba(229, 169, 59, 0.15);
+            border-color: rgba(229, 169, 59, 0.42);
+            color: #fde68a;
+        }
+
+        .btn.primary:hover {
+            background: rgba(229, 169, 59, 0.25);
+        }
+
+        .btn.danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .btn.danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 0fr;
+            gap: 0;
+            width: 100%;
+            transition: grid-template-columns 0.4s cubic-bezier(0.25, 1, 0.5, 1), gap 0.4s ease;
+        }
+
+        .main-layout.sidebar-open {
+            grid-template-columns: 1.2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 860px) {
+            .main-layout.sidebar-open {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sampler Board Styles */
+        .board-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+            transition: max-width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .main-layout.sidebar-open .board-container {
+            max-width: 100%;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(45, 212, 191, 0.15), transparent 35%),
+                radial-gradient(circle at 84% 8%, rgba(229, 169, 59, 0.12), transparent 30%),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(22px);
+        }
+
+        .pad {
+            aspect-ratio: 1 / 1;
+            min-height: clamp(80px, 10vw, 120px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            padding: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            color: white;
+            background: rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+        }
+
+        .pad.has-sound {
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .pad.selected {
+            border-color: var(--red);
+            box-shadow: 0 0 15px rgba(229, 169, 59, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            background: rgba(229, 169, 59, 0.08);
+        }
+
+        .pad.drag-over {
+            border-color: var(--purple);
+            background: rgba(45, 212, 191, 0.15);
+            transform: scale(1.02);
+        }
+
+        .pad.playing {
+            border-color: var(--purple);
+            background: linear-gradient(145deg, rgba(45, 212, 191, 0.25), rgba(255, 255, 255, 0.05));
+            box-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+            transform: scale(0.98);
+        }
+
+        .pad-key {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 350;
+            line-height: 1;
+            opacity: 0.5;
+            transition: opacity 0.15s ease;
+        }
+
+        .pad.has-sound .pad-key {
+            opacity: 0.95;
+            color: var(--red);
+            font-weight: 850;
+        }
+
+        .pad-label {
+            width: 100%;
+            font-size: 0.72rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pad.has-sound .pad-label {
+            color: #ffffff;
+        }
+
+        /* Sidebar Control Panel */
+        .controls-card {
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 22px;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(45, 212, 191, 0.12), transparent 40%),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(22px);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            
+            /* Animations */
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+            overflow: hidden;
+            height: fit-content;
+        }
+
+        .main-layout.sidebar-open .controls-card {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .controls-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 12px;
+        }
+
+        .controls-title {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--red);
+        }
+
+        .controls-subtitle {
+            margin: 4px 0 0;
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-label {
+            font-size: 0.88rem;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .control-value {
+            font-size: 0.88rem;
+            font-weight: 900;
+            color: var(--purple);
+            font-family: monospace;
+        }
+
+        .slider-input {
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            outline: none;
+            accent-color: var(--purple);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .slider-input:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 40px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-weight: 700;
+            outline: none;
+        }
+
+        .text-input:focus {
+            border-color: var(--purple);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-height: 250px;
+            text-align: center;
+            color: var(--muted);
+            font-weight: 700;
+            gap: 12px;
+        }
+
+        .empty-icon {
+            font-size: 2.6rem;
+            opacity: 0.7;
+        }
+
+        /* Help Info block */
+        .instruction-box {
+            margin-top: 14px;
+            padding: 14px;
+            border: 1px solid rgba(45, 212, 191, 0.22);
+            background: rgba(45, 212, 191, 0.05);
+            border-radius: 14px;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            color: var(--muted);
+            font-weight: 800;
+        }
+
+        .instruction-box strong {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <a class="back-home" href="../index.html">← Startseite</a>
+
+    <main class="shell">
+        <section class="hero">
+            <span class="kicker">Ye Sampler</span>
+            <h1>Eigener Sampler</h1>
+            <p class="subtitle">Ziehe deine eigenen Sounds auf die Pads und pass sie mit Echtzeit-Effekten an.</p>
+            
+            <div class="action-buttons">
+                <button class="btn primary" id="exportBtn" type="button">📥 Setup Exportieren</button>
+                <button class="btn primary" id="importBtn" type="button">📤 Setup Importieren</button>
+                <button class="btn danger" id="clearAllBtn" type="button">🗑️ Alle leeren</button>
+                <a class="btn" href="index.html">🎹 Runaway Board</a>
+            </div>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+            <input type="file" id="padFileSelect" accept="audio/*" style="display: none;">
+        </section>
+
+        <div class="main-layout">
+            <!-- Sampler Board -->
+            <div class="board-container">
+                <div class="board" id="board">
+                    <!-- Pad 1-4 -->
+                    <button class="pad" data-index="0" data-key="1"><span class="pad-key">1</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="1" data-key="2"><span class="pad-key">2</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="2" data-key="3"><span class="pad-key">3</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="3" data-key="4"><span class="pad-key">4</span><span class="pad-label">Leer</span></button>
+                    
+                    <!-- Pad 5-8 -->
+                    <button class="pad" data-index="4" data-key="q"><span class="pad-key">Q</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="5" data-key="w"><span class="pad-key">W</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="6" data-key="e"><span class="pad-key">E</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="7" data-key="r"><span class="pad-key">R</span><span class="pad-label">Leer</span></button>
+                    
+                    <!-- Pad 9-12 -->
+                    <button class="pad" data-index="8" data-key="a"><span class="pad-key">A</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="9" data-key="s"><span class="pad-key">S</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="10" data-key="d"><span class="pad-key">D</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="11" data-key="f"><span class="pad-key">F</span><span class="pad-label">Leer</span></button>
+                    
+                    <!-- Pad 13-16 -->
+                    <button class="pad" data-index="12" data-key="y"><span class="pad-key">Y</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="13" data-key="x"><span class="pad-key">X</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="14" data-key="c"><span class="pad-key">C</span><span class="pad-label">Leer</span></button>
+                    <button class="pad" data-index="15" data-key="v"><span class="pad-key">V</span><span class="pad-label">Leer</span></button>
+                </div>
+
+                <div class="instruction-box">
+                    <strong>Tipp:</strong> Klicke auf ein Pad, um es auszuwählen und eine Audiodatei manuell hochzuladen. Du kannst auch jederzeit Musikdateien per <strong>Drag & Drop</strong> direkt auf ein Pad ziehen.
+                </div>
+            </div>
+
+            <!-- Effect Controls Panel -->
+            <div class="controls-card" id="controlsCard">
+                <div id="controlsForm">
+                    <div class="controls-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h2 class="controls-title" id="activePadTitle">Pad Einstellungen</h2>
+                            <p class="controls-subtitle" id="activePadKey">Taste: Q</p>
+                        </div>
+                        <button class="btn" id="closeSidebarBtn" type="button" style="min-height: 32px; padding: 0 10px; font-size: 0.8rem;">✕ Schließen</button>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 18px; margin-top: 14px;">
+                        <!-- Name -->
+                        <div class="control-group">
+                            <div class="control-header">
+                                <label class="control-label" for="soundNameInput">Sound Name</label>
+                            </div>
+                            <input class="text-input" type="text" id="soundNameInput" placeholder="Name des Sounds">
+                        </div>
+
+                        <!-- Speed / PlaybackRate -->
+                        <div class="control-group">
+                            <div class="control-header">
+                                <span class="control-label">Geschwindigkeit (Tempo)</span>
+                                <span class="control-value" id="speedValue">1.00x</span>
+                            </div>
+                            <input class="slider-input" type="range" id="speedSlider" min="0.25" max="4.0" step="0.05" value="1.0">
+                        </div>
+
+                        <!-- Pitch / Detune -->
+                        <div class="control-group">
+                            <div class="control-header">
+                                <span class="control-label">Tonhöhe (Pitch)</span>
+                                <span class="control-value" id="pitchValue">0 Cents</span>
+                            </div>
+                            <input class="slider-input" type="range" id="pitchSlider" min="-1200" max="1200" step="50" value="0">
+                        </div>
+
+                        <!-- Reverb Mix -->
+                        <div class="control-group">
+                            <div class="control-header">
+                                <span class="control-label">Hall-Effekt (Reverb)</span>
+                                <span class="control-value" id="reverbValue">0%</span>
+                            </div>
+                            <input class="slider-input" type="range" id="reverbSlider" min="0" max="100" step="5" value="0">
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button class="btn primary" id="triggerSoundBtn" type="button" style="flex: 1; justify-content: center;">▶ Sound testen</button>
+                            <button class="btn danger" id="clearPadBtn" type="button">🗑️ Pad leeren</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // IndexedDB Configuration
+        const DB_NAME = 'YeSamplerDB';
+        const STORE_NAME = 'sampler_sounds';
+        let db = null;
+
+        // Audio Engine Configuration
+        let audioContext = null;
+        let reverbImpulseResponse = null;
+
+        // Sampler State
+        let selectedPadIndex = null;
+        const padsState = Array.from({ length: 16 }, (_, i) => ({
+            index: i,
+            key: document.querySelectorAll('.pad')[i].dataset.key,
+            name: '',
+            audioBuffer: null, // AudioBuffer format decoded at runtime
+            fileData: null,    // ArrayBuffer format stored in IndexedDB
+            fileName: '',
+            pitch: 0,          // cents detune (-1200 to 1200)
+            speed: 1.0,        // playbackRate (0.25 to 4.0)
+            reverbMix: 0       // 0 to 100 percentage
+        }));
+
+        // DOM elements
+        const padElements = Array.from(document.querySelectorAll('.pad'));
+        const emptyStateEl = document.getElementById('emptyState');
+        const controlsFormEl = document.getElementById('controlsForm');
+        const activePadTitleEl = document.getElementById('activePadTitle');
+        const activePadKeyEl = document.getElementById('activePadKey');
+        const soundNameInput = document.getElementById('soundNameInput');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedValue = document.getElementById('speedValue');
+        const pitchSlider = document.getElementById('pitchSlider');
+        const pitchValue = document.getElementById('pitchValue');
+        const reverbSlider = document.getElementById('reverbSlider');
+        const reverbValue = document.getElementById('reverbValue');
+        
+        const padFileSelect = document.getElementById('padFileSelect');
+        const clearPadBtn = document.getElementById('clearPadBtn');
+        const triggerSoundBtn = document.getElementById('triggerSoundBtn');
+        const clearAllBtn = document.getElementById('clearAllBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
+        const importFile = document.getElementById('importFile');
+
+        // ─── Audio Engine (low-latency, mirrors ye-soundboard/index.html) ───
+        let masterGain = null;
+        let unlockPromise = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                audioContext = new Ctx({ latencyHint: 'interactive' });
+                masterGain = audioContext.createGain();
+                masterGain.gain.setValueAtTime(0.85, audioContext.currentTime);
+                masterGain.connect(audioContext.destination);
+                // Synthesize reverb impulse response
+                reverbImpulseResponse = createReverbImpulseResponse(audioContext, 2.5, 3.5);
+            }
+        }
+
+        // Plays a tiny silent buffer to wake up the AudioContext immediately
+        function unlockAudio() {
+            initAudio();
+            if (audioContext.state === 'running') return Promise.resolve(true);
+            if (!unlockPromise) {
+                unlockPromise = audioContext.resume().then(() => {
+                    const silent = audioContext.createBuffer(1, 1, 22050);
+                    const src = audioContext.createBufferSource();
+                    src.buffer = silent;
+                    src.connect(masterGain);
+                    src.start(0);
+                    return true;
+                }).catch(() => false).finally(() => { unlockPromise = null; });
+            }
+            return unlockPromise;
+        }
+
+        // Finds how many seconds of silence are at the start of a buffer
+        function findTrimOffset(buffer) {
+            const threshold = 0.006;
+            const maxScan = Math.min(buffer.length, Math.floor(buffer.sampleRate * 0.18));
+            for (let i = 0; i < maxScan; i++) {
+                for (let ch = 0; ch < buffer.numberOfChannels; ch++) {
+                    if (Math.abs(buffer.getChannelData(ch)[i]) > threshold) {
+                        return Math.max(0, i / buffer.sampleRate - 0.002);
+                    }
+                }
+            }
+            return 0;
+        }
+
+        // Decodes ArrayBuffer to AudioBuffer (clones first so original stays intact)
+        function decodeAudioData(arrayBuffer) {
+            initAudio();
+            const clone = arrayBuffer.slice(0);
+            return new Promise((resolve, reject) => {
+                const result = audioContext.decodeAudioData(clone, resolve, reject);
+                if (result?.then) result.then(resolve).catch(reject);
+            });
+        }
+
+        // Reverb generator function (lush stereo noise decay)
+        function createReverbImpulseResponse(context, duration, decay) {
+            const sampleRate = context.sampleRate;
+            const length = sampleRate * duration;
+            const impulse = context.createBuffer(2, length, sampleRate);
+            const left = impulse.getChannelData(0);
+            const right = impulse.getChannelData(1);
+
+            for (let i = 0; i < length; i++) {
+                const percent = i / length;
+                const env = Math.exp(-percent * decay);
+                left[i] = (Math.random() * 2 - 1) * env;
+                right[i] = (Math.random() * 2 - 1) * env;
+            }
+            return impulse;
+        }
+
+        // ─── IndexedDB ───
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains(STORE_NAME)) {
+                        database.createObjectStore(STORE_NAME, { keyPath: 'index' });
+                    }
+                };
+
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve(db);
+                };
+
+                request.onerror = (e) => {
+                    console.error('IndexedDB error:', e.target.error);
+                    reject(e.target.error);
+                };
+            });
+        }
+
+        // Save pad info to IndexedDB
+        async function savePadToDB(padState) {
+            if (!db) return;
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            
+            // We store fileData (ArrayBuffer) directly.
+            // Note: audioBuffer (decoded) cannot be stored in IDB.
+            const record = {
+                index: padState.index,
+                key: padState.key,
+                name: padState.name,
+                fileName: padState.fileName,
+                fileData: padState.fileData,
+                pitch: padState.pitch,
+                speed: padState.speed,
+                reverbMix: padState.reverbMix
+            };
+            store.put(record);
+        }
+
+        // Delete pad info from IndexedDB
+        async function deletePadFromDB(index) {
+            if (!db) return;
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            store.delete(index);
+        }
+
+        // Clear all IndexedDB store
+        async function clearAllDB() {
+            if (!db) return;
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            store.clear();
+        }
+
+        // Load all data from IndexedDB
+        async function loadSamplerData() {
+            if (!db) return;
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            
+            return new Promise((resolve) => {
+                const request = store.getAll();
+                request.onsuccess = async (e) => {
+                    const records = e.target.result || [];
+                    for (const record of records) {
+                        const state = padsState[record.index];
+                        if (state) {
+                            state.name = record.name || '';
+                            state.fileName = record.fileName || '';
+                            state.fileData = record.fileData || null;
+                            state.pitch = typeof record.pitch === 'number' ? record.pitch : 0;
+                            state.speed = typeof record.speed === 'number' ? record.speed : 1.0;
+                            state.reverbMix = typeof record.reverbMix === 'number' ? record.reverbMix : 0;
+                        }
+                    }
+                    updatePadsUI();
+                    // Pre-decode all loaded buffers in the background after first user interaction
+                    document.addEventListener('pointerdown', preDecode, { once: true });
+                    resolve();
+                };
+            });
+        }
+
+        // Pre-decode all loaded pads eagerly after first interaction
+        async function preDecode() {
+            initAudio();
+            for (const state of padsState) {
+                if (state.fileData && !state.audioBuffer) {
+                    try {
+                        state.audioBuffer = await decodeAudioData(state.fileData);
+                    } catch (e) {
+                        console.warn('Pre-decode failed for pad', state.index, e);
+                    }
+                }
+            }
+        }
+
+        // Decodes ArrayBuffer to AudioBuffer
+        async function decodeAudioData(arrayBuffer) {
+            initAudio();
+            // clone arrayBuffer because decodeAudioData consumes it
+            const clone = arrayBuffer.slice(0);
+            return new Promise((resolve, reject) => {
+                audioContext.decodeAudioData(clone, resolve, reject);
+            });
+        }
+
+        // Update the UI of all pads
+        function updatePadsUI() {
+            padsState.forEach((state, i) => {
+                const padEl = padElements[i];
+                const labelEl = padEl.querySelector('.pad-label');
+                
+                if (state.fileData) {
+                    padEl.classList.add('has-sound');
+                    labelEl.textContent = state.name || state.fileName || 'Sound geladen';
+                } else {
+                    padEl.classList.remove('has-sound');
+                    labelEl.textContent = 'Leer';
+                }
+
+                if (selectedPadIndex === i) {
+                    padEl.classList.add('selected');
+                } else {
+                    padEl.classList.remove('selected');
+                }
+            });
+        }
+
+        // Select a pad and load settings to the side panel
+        function selectPad(index) {
+            selectedPadIndex = index;
+            updatePadsUI();
+
+            if (selectedPadIndex === null) return;
+
+            const state = padsState[selectedPadIndex];
+
+            activePadTitleEl.textContent = state.fileData ? (state.name || state.fileName || 'Gespielter Sound') : 'Leeres Pad';
+            activePadKeyEl.textContent = `Zugeordnete Taste: ${state.key.toUpperCase()}`;
+            
+            // Fill values
+            soundNameInput.value = state.name || state.fileName || '';
+            soundNameInput.disabled = !state.fileData;
+
+            speedSlider.value = state.speed;
+            speedValue.textContent = `${state.speed.toFixed(2)}x`;
+            speedSlider.disabled = !state.fileData;
+
+            pitchSlider.value = state.pitch;
+            pitchValue.textContent = `${state.pitch > 0 ? '+' : ''}${state.pitch} Cents`;
+            pitchSlider.disabled = !state.fileData;
+
+            reverbSlider.value = state.reverbMix;
+            reverbValue.textContent = `${state.reverbMix}%`;
+            reverbSlider.disabled = !state.fileData;
+        }
+
+        // Play the sound on a pad — fully synchronous in the hot path
+        function playPad(index) {
+            const state = padsState[index];
+            if (!state.audioBuffer) return; // not decoded yet
+
+            if (audioContext.state !== 'running') {
+                unlockAudio(); // fire-and-forget warm-up; next tap will play
+                return;
+            }
+
+            const trimOffset = findTrimOffset(state.audioBuffer);
+
+            // Create Audio source node
+            const source = audioContext.createBufferSource();
+            source.buffer = state.audioBuffer;
+            source.playbackRate.value = state.speed;
+            source.detune.value = state.pitch;
+
+            // Gain node
+            const gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(1.0, audioContext.currentTime);
+            source.connect(gainNode);
+
+            // Reverb routing
+            if (state.reverbMix > 0) {
+                const wetGain = audioContext.createGain();
+                const dryGain = audioContext.createGain();
+                const wetVal = state.reverbMix / 100;
+                wetGain.gain.setValueAtTime(wetVal, audioContext.currentTime);
+                dryGain.gain.setValueAtTime(1 - wetVal, audioContext.currentTime);
+
+                const convolver = audioContext.createConvolver();
+                convolver.buffer = reverbImpulseResponse;
+
+                gainNode.connect(dryGain);
+                gainNode.connect(convolver);
+                convolver.connect(wetGain);
+                dryGain.connect(masterGain);
+                wetGain.connect(masterGain);
+            } else {
+                gainNode.connect(masterGain);
+            }
+
+            // Visual feedback
+            const padEl = padElements[index];
+            padEl.classList.add('playing');
+            source.onended = () => padEl.classList.remove('playing');
+
+            // Start immediately, skipping silent intro
+            source.start(0, trimOffset);
+        }
+
+        // Handle file drop/upload on a pad
+        async function handleAudioFile(file, index) {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const arrayBuffer = e.target.result;
+                const state = padsState[index];
+                state.fileData = arrayBuffer;
+                state.fileName = file.name;
+                state.name = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+                state.audioBuffer = null; // Clear cached decode buffer
+
+                // Save to DB
+                await savePadToDB(state);
+
+                // Pre-decode immediately so first press is instant
+                initAudio();
+                try {
+                    state.audioBuffer = await decodeAudioData(state.fileData);
+                } catch (err) {
+                    console.warn('Pre-decode on load failed:', err);
+                }
+
+                // Update UI & Side panel if selected
+                updatePadsUI();
+                if (selectedPadIndex === index) {
+                    selectPad(index);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // UI Listeners for sliders
+        soundNameInput.addEventListener('input', (e) => {
+            if (selectedPadIndex === null) return;
+            const state = padsState[selectedPadIndex];
+            state.name = e.target.value;
+            padElements[selectedPadIndex].querySelector('.pad-label').textContent = state.name || 'Gespielter Sound';
+            activePadTitleEl.textContent = state.name || 'Gespielter Sound';
+            savePadToDB(state);
+        });
+
+        speedSlider.addEventListener('input', (e) => {
+            if (selectedPadIndex === null) return;
+            const val = parseFloat(e.target.value);
+            speedValue.textContent = `${val.toFixed(2)}x`;
+            padsState[selectedPadIndex].speed = val;
+            savePadToDB(padsState[selectedPadIndex]);
+        });
+
+        pitchSlider.addEventListener('input', (e) => {
+            if (selectedPadIndex === null) return;
+            const val = parseInt(e.target.value);
+            pitchValue.textContent = `${val > 0 ? '+' : ''}${val} Cents`;
+            padsState[selectedPadIndex].pitch = val;
+            savePadToDB(padsState[selectedPadIndex]);
+        });
+
+        reverbSlider.addEventListener('input', (e) => {
+            if (selectedPadIndex === null) return;
+            const val = parseInt(e.target.value);
+            reverbValue.textContent = `${val}%`;
+            padsState[selectedPadIndex].reverbMix = val;
+            savePadToDB(padsState[selectedPadIndex]);
+        });
+
+        // Trigger sound test button
+        triggerSoundBtn.addEventListener('click', () => {
+            if (selectedPadIndex !== null) {
+                playPad(selectedPadIndex);
+            }
+        });
+
+        // Clear pad button
+        clearPadBtn.addEventListener('click', async () => {
+            if (selectedPadIndex === null) return;
+            const state = padsState[selectedPadIndex];
+            state.name = '';
+            state.fileName = '';
+            state.fileData = null;
+            state.audioBuffer = null;
+            state.pitch = 0;
+            state.speed = 1.0;
+            state.reverbMix = 0;
+
+            await deletePadFromDB(selectedPadIndex);
+            updatePadsUI();
+            selectedPadIndex = null;
+            document.getElementById('controlsCard').style.display = 'none';
+        });
+
+        // Clear all pads
+        clearAllBtn.addEventListener('click', async () => {
+            if (!confirm('Möchtest du wirklich alle Pads leeren?')) return;
+            
+            padsState.forEach(state => {
+                state.name = '';
+                state.fileName = '';
+                state.fileData = null;
+                state.audioBuffer = null;
+                state.pitch = 0;
+                state.speed = 1.0;
+                state.reverbMix = 0;
+            });
+
+            await clearAllDB();
+            updatePadsUI();
+            selectedPadIndex = null;
+            document.getElementById('controlsCard').style.display = 'none';
+        });
+
+        // Pad interactions
+        padElements.forEach((padEl, i) => {
+            // pointerdown -> instant play (no click delay)
+            padEl.addEventListener('pointerdown', (e) => {
+                // Only primary button (no right-click)
+                if (e.button !== undefined && e.button !== 0) return;
+                unlockAudio();
+
+                if (padsState[i].fileData) {
+                    playPad(i);
+                } else {
+                    selectedPadIndex = i;
+                    padFileSelect.click();
+                }
+            });
+
+            // Double click -> select and show controls panel
+            padEl.addEventListener('dblclick', () => {
+                if (padsState[i].fileData) {
+                    selectPad(i);
+                    document.getElementById('controlsCard').style.display = 'block';
+                    document.querySelector('.main-layout').classList.add('sidebar-open');
+                }
+            });
+
+            // Drag & Drop events
+            padEl.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                padEl.classList.add('drag-over');
+            });
+
+            padEl.addEventListener('dragleave', () => {
+                padEl.classList.remove('drag-over');
+            });
+
+            padEl.addEventListener('drop', (e) => {
+                e.preventDefault();
+                padEl.classList.remove('drag-over');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('audio/')) {
+                    handleAudioFile(files[0], i);
+                } else {
+                    alert('Bitte lade eine gültige Audiodatei hoch (mp3, wav, etc.).');
+                }
+            });
+        });
+
+        // Hidden input file click listener
+        padFileSelect.addEventListener('change', (e) => {
+            if (selectedPadIndex === null) return;
+            const files = e.target.files;
+            if (files.length > 0) {
+                handleAudioFile(files[0], selectedPadIndex);
+            }
+        });
+
+        // Keyboard mapping
+        // 1 2 3 4 -> Pad 0-3
+        // Q W E R -> Pad 4-7
+        // A S D F -> Pad 8-11
+        // Y/Z X C V -> Pad 12-15
+        const keyMap = {
+            '1': 0, '2': 1, '3': 2, '4': 3,
+            'q': 4, 'w': 5, 'e': 6, 'r': 7,
+            'a': 8, 's': 9, 'd': 10, 'f': 11,
+            'y': 12, 'z': 12, 'x': 13, 'c': 14, 'v': 15
+        };
+
+        window.addEventListener('keydown', (e) => {
+            // Ignore if writing in input fields
+            if (document.activeElement.tagName === 'INPUT') return;
+
+            const key = e.key.toLowerCase();
+            if (keyMap[key] !== undefined) {
+                e.preventDefault();
+                const index = keyMap[key];
+                playPad(index);
+                
+                // Add temporary active trigger effect for keyboard
+                const padEl = padElements[index];
+                padEl.classList.add('playing');
+                setTimeout(() => {
+                    padEl.classList.remove('playing');
+                }, 120);
+            }
+        });
+
+        // Close sidebar button
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+        closeSidebarBtn.addEventListener('click', () => {
+            selectedPadIndex = null;
+            updatePadsUI();
+            document.getElementById('controlsCard').style.display = 'none';
+            document.querySelector('.main-layout').classList.remove('sidebar-open');
+        });
+
+        // Setup Export functionality (including sound binaries as Base64)
+        exportBtn.addEventListener('click', async () => {
+            const dataToExport = [];
+            
+            // Helper to convert ArrayBuffer to Base64
+            const arrayBufferToBase64 = (buffer) => {
+                let binary = '';
+                const bytes = new Uint8Array(buffer);
+                const len = bytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return window.btoa(binary);
+            };
+
+            for (const state of padsState) {
+                dataToExport.push({
+                    index: state.index,
+                    key: state.key,
+                    name: state.name,
+                    fileName: state.fileName,
+                    fileDataBase64: state.fileData ? arrayBufferToBase64(state.fileData) : null,
+                    pitch: state.pitch,
+                    speed: state.speed,
+                    reverbMix: state.reverbMix
+                });
+            }
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataToExport));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "ye_sampler_setup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        });
+
+        // Setup Import functionality
+        importBtn.addEventListener('click', () => {
+            importFile.click();
+        });
+
+        importFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                try {
+                    const importedData = JSON.parse(event.target.result);
+                    
+                    // Helper to convert Base64 to ArrayBuffer
+                    const base64ToArrayBuffer = (base64) => {
+                        const binaryString = window.atob(base64);
+                        const len = binaryString.length;
+                        const bytes = new Uint8Array(len);
+                        for (let i = 0; i < len; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        return bytes.buffer;
+                    };
+
+                    await clearAllDB(); // Clear existing setup
+
+                    for (const record of importedData) {
+                        const state = padsState[record.index];
+                        if (state) {
+                            state.name = record.name || '';
+                            state.fileName = record.fileName || '';
+                            state.fileData = record.fileDataBase64 ? base64ToArrayBuffer(record.fileDataBase64) : null;
+                            state.audioBuffer = null; // Clear cached decode
+                            state.pitch = record.pitch || 0;
+                            state.speed = record.speed || 1.0;
+                            state.reverbMix = record.reverbMix || 0;
+
+                            // Save to DB
+                            await savePadToDB(state);
+                        }
+                    }
+
+                    updatePadsUI();
+                    selectPad(null); // Reset selection
+                    alert('Setup erfolgreich importiert!');
+                } catch (err) {
+                    console.error('Import failed:', err);
+                    alert('Fehler beim Importieren der Datei. Bitte lade ein valides Setup-JSON hoch.');
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Initial setup
+        window.addEventListener('DOMContentLoaded', async () => {
+            await initDB();
+            await loadSamplerData();
+        });
+    </script>
+</body>
+</html>

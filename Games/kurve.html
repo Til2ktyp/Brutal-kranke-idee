@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><title>Kurve</title><script src="consent.js"></script>
+<head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><title>Kurve</title><script src="consent.js"></script>
 <style>
-:root{--bg-1:#0f172a;--bg-2:#312e81;--bg-3:#7c3aed;--border:rgba(255,255,255,.18);--text:#fff;--muted:rgba(255,255,255,.72);--accent:#fbc531;--accent-2:#38bdf8;--good:#26de81;--danger:#ef4444;--dark:#1e272e}*{box-sizing:border-box}button,a,[role="button"]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}body{min-height:100vh;margin:0;padding:92px 18px 48px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 18%,rgba(56,189,248,.34),transparent 28%),radial-gradient(circle at 88% 14%,rgba(251,197,49,.25),transparent 24%),radial-gradient(circle at 50% 100%,rgba(168,85,247,.33),transparent 33%),linear-gradient(135deg,var(--bg-1),var(--bg-2) 52%,var(--bg-3));overflow-x:hidden}body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.13;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(circle at center,#000,transparent 78%)}.back-home-btn{position:fixed;top:20px;left:20px;z-index:2;background:var(--accent);color:var(--dark);padding:12px 18px;border-radius:12px;font-weight:900;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25)}
-.shell{position:relative;z-index:1;width:min(1000px,100%);margin:0 auto}.hero{text-align:center;margin-bottom:20px}.eyebrow{display:inline-flex;margin-bottom:10px;padding:7px 12px;border-radius:999px;background:rgba(251,197,49,.16);color:#fde68a;border:1px solid rgba(251,197,49,.22);font-size:.8rem;font-weight:950;text-transform:uppercase}h1{margin:0;color:var(--accent);font-size:clamp(2.4rem,8vw,5rem);line-height:.95;font-weight:950}.subtitle{max-width:720px;margin:12px auto 0;color:var(--muted);line-height:1.55}.box{padding:22px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.07));box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(18px)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.stat{padding:13px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.08);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.stat strong{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase}.stat span{display:block;margin-top:5px;font-size:1.45rem;font-weight:950}.stat.bump{transform:translateY(-2px) scale(1.03);border-color:rgba(251,197,49,.46);box-shadow:0 16px 34px rgba(251,197,49,.16)}.chart{position:relative;height:320px;border-radius:20px;border:1px solid var(--border);background:radial-gradient(circle at 18% 0%,rgba(56,189,248,.14),transparent 36%),rgba(5,10,20,.48);overflow:hidden}.chart:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-100%);animation:scan 3.4s linear infinite}.chart.flash-up{animation:flashUp .32s ease}.chart.flash-down{animation:flashDown .32s ease}.chart.flash-buy{animation:flashBuy .45s ease}.chart.flash-sell{animation:flashSell .45s ease}.trade-ring{position:absolute;z-index:2;width:54px;height:54px;border:2px solid rgba(251,197,49,.9);border-radius:999px;pointer-events:none;animation:tradeRing .62s ease-out forwards}canvas{position:relative;z-index:1;width:100%;height:100%}.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}button{min-height:52px;border:0;border-radius:14px;padding:12px;background:linear-gradient(135deg,var(--accent-2),#2563eb);color:#07111f;cursor:pointer;font:inherit;font-weight:950;box-shadow:0 10px 24px rgba(37,99,235,.26);transition:transform .16s ease,filter .16s ease,box-shadow .16s ease}button:hover{transform:translateY(-2px);filter:brightness(1.06)}button.action-pop{animation:buttonPop .34s ease}button.sell{background:linear-gradient(135deg,var(--good),#20bf6b)}button.hold{background:linear-gradient(135deg,var(--accent),#f59e0b)}button.secondary{background:rgba(255,255,255,.12);color:var(--text);border:1px solid var(--border);box-shadow:none}.log{min-height:34px;margin-top:12px;text-align:center;color:var(--muted);font-weight:850;transition:color .18s ease,transform .18s ease}.log.pop{color:#fde68a;transform:scale(1.03)}@keyframes scan{to{transform:translateX(100%)}}@keyframes flashUp{50%{box-shadow:0 0 38px rgba(38,222,129,.34);border-color:rgba(38,222,129,.42)}}@keyframes flashDown{50%{box-shadow:0 0 38px rgba(239,68,68,.3);border-color:rgba(239,68,68,.42)}}@keyframes flashBuy{45%{box-shadow:0 0 54px rgba(251,197,49,.42);border-color:rgba(251,197,49,.58);filter:saturate(1.45)}}@keyframes flashSell{45%{box-shadow:0 0 54px rgba(38,222,129,.42);border-color:rgba(38,222,129,.58);filter:saturate(1.45)}}@keyframes tradeRing{to{transform:scale(3.1);opacity:0}}@keyframes buttonPop{45%{transform:translateY(-3px) scale(1.06);box-shadow:0 18px 42px rgba(251,197,49,.25)}}@media(max-width:760px){body{padding-top:86px}.stats,.actions{grid-template-columns:repeat(2,1fr)}}
-</style><style>.dopamine-burst{position:fixed;z-index:9999;left:0;top:0;width:14px;height:14px;border:2px solid rgba(251,197,49,.95);border-radius:999px;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineRing .55s ease-out forwards}.dopamine-spark{position:fixed;z-index:9999;left:0;top:0;width:7px;height:7px;border-radius:999px;background:#fbc531;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineSpark .58s ease-out forwards}.dopamine-hit{animation:dopamineHit .22s ease}@keyframes dopamineRing{to{width:110px;height:110px;opacity:0}}@keyframes dopamineSpark{to{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.2);opacity:0}}@keyframes dopamineHit{50%{filter:brightness(1.35) saturate(1.4);transform:scale(1.035)}}</style><style id="bb-touch-zoom-guard-style">
+:root{--bg-1:#0b0f19;--bg-2:#072a3a;--bg-3:#043e4f;--border:rgba(255,255,255,.14);--text:#fff;--muted:rgba(204, 251, 241, 0.65);--accent:#e5a93b;--accent-2:#2dd4bf;--good:#10b981;--danger:#f43f5e;--dark:#0b0f19}*{box-sizing:border-box}button,a,[role="button"]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}body{min-height:100vh;margin:0;padding:92px 18px 48px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 18%,rgba(45,212,191,0.3),transparent 28%),radial-gradient(circle at 88% 14%,rgba(229,169,59,0.22),transparent 24%),radial-gradient(circle at 50% 100%,rgba(14,165,233,0.25),transparent 33%),linear-gradient(135deg,var(--bg-1),var(--bg-2) 48%,var(--bg-3));overflow-x:hidden}body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.13;background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(circle at center,#000,transparent 78%)}.back-home-btn{position:fixed;top:20px;left:20px;z-index:2;background:var(--accent);color:var(--dark);padding:12px 18px;border-radius:12px;font-weight:900;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.shell{position:relative;z-index:1;width:min(1000px,100%);margin:0 auto}.hero{text-align:center;margin-bottom:20px}.eyebrow{display:inline-flex;margin-bottom:10px;padding:7px 12px;border-radius:999px;background:rgba(229,169,59,.22);color:#fef3c7;border:1px solid rgba(229,169,59,.35);font-size:.8rem;font-weight:950;text-transform:uppercase}h1{margin:0;color:var(--accent);font-size:clamp(2.4rem,8vw,5rem);line-height:.95;font-weight:950}.subtitle{max-width:720px;margin:12px auto 0;color:var(--muted);line-height:1.55}.box{padding:22px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04));box-shadow:0 12px 40px rgba(0,0,0,.35);backdrop-filter:blur(18px)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.stat{padding:13px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.05);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.stat strong{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase}.stat span{display:block;margin-top:5px;font-size:1.45rem;font-weight:950}.stat.bump{transform:translateY(-2px) scale(1.03);border-color:var(--accent);box-shadow:0 0 20px rgba(229,169,59,.25)}.chart{position:relative;height:320px;border-radius:20px;border:1px solid var(--border);background:radial-gradient(circle at 10% 10%,rgba(229,169,59,.08),transparent 45%),rgba(5,10,20,.6);overflow:hidden}.chart:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:translateX(-100%);animation:scan 3.4s linear infinite}.chart.flash-up{animation:flashUp .4s ease}.chart.flash-down{animation:flashDown .4s ease}.chart.flash-buy{animation:flashBuy .5s ease}.chart.flash-sell{animation:flashSell .5s ease}.trade-ring{position:absolute;z-index:2;width:64px;height:64px;border:3px solid var(--accent);border-radius:999px;pointer-events:none;animation:tradeRing .7s ease-out forwards}canvas{position:relative;z-index:1;width:100%;height:100%}.game-container {display: grid;grid-template-columns: 1fr 300px;gap: 18px;align-items: start;}@media(max-width:860px){.game-container {grid-template-columns: 1fr;}}.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}button{min-height:52px;border:0;border-radius:14px;padding:12px;background:linear-gradient(135deg,var(--accent-2),#2563eb);color:#07111f;cursor:pointer;font:inherit;font-weight:950;box-shadow:0 10px 24px rgba(37,99,235,.26);transition:transform .16s ease,filter .16s ease,box-shadow .16s ease}button:hover{transform:translateY(-2px);filter:brightness(1.06)}button.action-pop{animation:buttonPop .34s ease}button.sell{background:linear-gradient(135deg,var(--good),#059669)}button.hold{background:linear-gradient(135deg,var(--accent),#d97706)}button.secondary{background:rgba(255,255,255,.12);color:var(--text);border:1px solid var(--border);box-shadow:none}.log{min-height:34px;margin-top:12px;text-align:center;color:var(--muted);font-weight:850;transition:color .18s ease,transform .18s ease}.log.pop{color:#fde68a;transform:scale(1.03)}@keyframes scan{to{transform:translateX(100%)}}@keyframes flashUp{50%{box-shadow:inset 0 0 40px rgba(16,185,129,.25);border-color:rgba(16,185,129,.5)}}@keyframes flashDown{50%{box-shadow:inset 0 0 40px rgba(244,63,94,.25);border-color:rgba(244,63,94,.5)}}@keyframes flashBuy{50%{box-shadow:inset 0 0 60px rgba(229,169,59,.4);border-color:var(--accent)}}@keyframes flashSell{50%{box-shadow:inset 0 0 60px rgba(16,185,129,.4);border-color:var(--good)}}@keyframes tradeRing{to{transform:scale(2.5);opacity:0}}@keyframes buttonPop{45%{transform:translateY(-3px) scale(1.06);box-shadow:0 18px 42px rgba(229,169,59,.25)}}@media(max-width:760px){body{padding-top:86px}.stats,.actions{grid-template-columns:repeat(2,1fr)}}
+</style><style>.dopamine-burst{position:fixed;z-index:9999;left:0;top:0;width:14px;height:14px;border:2px solid rgba(229,169,59,.95);border-radius:999px;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineRing .55s ease-out forwards}.dopamine-spark{position:fixed;z-index:9999;left:0;top:0;width:7px;height:7px;border-radius:999px;background:var(--accent);pointer-events:none;transform:translate(-50%,-50%);animation:dopamineSpark .58s ease-out forwards}.dopamine-hit{animation:dopamineHit .22s ease}@keyframes dopamineRing{to{width:110px;height:110px;opacity:0}}@keyframes dopamineSpark{to{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.2);opacity:0}}@keyframes dopamineHit{50%{filter:brightness(1.35) saturate(1.4);transform:scale(1.035)}}</style><style id="bb-touch-zoom-guard-style">
     html,
     body {
         touch-action: manipulation;
@@ -14,37 +17,426 @@
     }
 </style>
 <style id="bb-hyper-style">
-.bb-hyper-toggle{position:fixed;top:20px;right:18px;z-index:12000;width:48px;height:48px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:linear-gradient(145deg,rgba(15,23,42,.86),rgba(99,102,241,.72));color:#fff;font-size:1.25rem;font-weight:950;display:grid;place-items:center;cursor:pointer;box-shadow:0 16px 42px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(18px);-webkit-tap-highlight-color:transparent;touch-action:manipulation}.bb-hyper-toggle:hover{transform:translateY(-2px);filter:brightness(1.08)}.bb-hyper-toggle.is-on{background:linear-gradient(135deg,#fbc531,#38bdf8 52%,#a855f7);box-shadow:0 0 28px rgba(251,197,49,.35),0 18px 48px rgba(56,189,248,.28)}.bb-hyper-panel{position:fixed;top:76px;right:18px;z-index:12001;width:min(340px,calc(100vw - 36px));padding:16px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(49,46,129,.88));color:#fff;box-shadow:0 28px 80px rgba(0,0,0,.44);backdrop-filter:blur(24px);display:none;transform:scale(.92) translateY(-8px);opacity:0;filter:blur(10px)}.bb-hyper-panel.show{display:block;animation:bbHyperPanelIn .28s cubic-bezier(.18,.9,.24,1) forwards}.bb-hyper-panel.closing{display:block;animation:bbHyperPanelOut .2s ease forwards}.bb-hyper-title{margin:0 0 4px;font-size:1rem;font-weight:950;color:#fde68a}.bb-hyper-subtitle{margin:0 0 14px;color:rgba(255,255,255,.72);font-size:.84rem;line-height:1.35}.bb-hyper-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.08);margin-top:10px}.bb-hyper-row span{font-size:.92rem;font-weight:850}.bb-hyper-switch{position:relative;width:56px;height:31px;flex:0 0 auto}.bb-hyper-switch input{position:absolute;opacity:0;inset:0}.bb-hyper-slider{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transition:.2s}.bb-hyper-slider:before{content:"";position:absolute;width:25px;height:25px;left:3px;top:3px;border-radius:999px;background:#fff;box-shadow:0 5px 12px rgba(0,0,0,.25);transition:.22s cubic-bezier(.18,.9,.24,1)}.bb-hyper-switch input:checked + .bb-hyper-slider{background:linear-gradient(135deg,#fbc531,#38bdf8)}.bb-hyper-switch input:checked + .bb-hyper-slider:before{transform:translateX(25px)}.bb-hyper-note{margin:12px 0 0;color:rgba(255,255,255,.62);font-size:.78rem;line-height:1.35}.bb-hyper-on h1,.bb-hyper-on .hero h1{animation:bbHyperTitle 2.2s ease-in-out infinite;text-shadow:0 0 18px rgba(251,197,49,.55),0 0 34px rgba(56,189,248,.34)}.bb-hyper-on button:not(.bb-hyper-toggle),.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill{animation:bbHyperBreath 1.9s ease-in-out infinite}.bb-hyper-on .chart,.bb-hyper-on .chart-container,.bb-hyper-on canvas,.bb-hyper-on .progress-bar-container,.bb-hyper-on .track,.bb-hyper-on .card{filter:saturate(1.28);box-shadow:0 0 34px rgba(56,189,248,.22),0 0 54px rgba(251,197,49,.14)}.bb-hyper-on::after{content:"";position:fixed;inset:-20%;z-index:11990;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,rgba(255,255,255,.14) 44%,transparent 52% 100%);mix-blend-mode:screen;transform:translateX(-120%);animation:bbHyperSweep 2.8s linear infinite}.bb-hyper-spark{position:fixed;z-index:11999;left:0;top:0;width:8px;height:8px;border-radius:999px;pointer-events:none;background:var(--bb-c,#fbc531);box-shadow:0 0 16px var(--bb-c,#fbc531),0 0 28px rgba(255,255,255,.34);transform:translate(-50%,-50%);animation:bbHyperSpark .9s ease-out forwards}.bb-hyper-star{position:fixed;z-index:11998;left:0;top:0;width:5px;height:5px;border-radius:999px;background:#fff;pointer-events:none;box-shadow:0 0 14px #fff,0 0 28px rgba(251,197,49,.72);animation:bbHyperFall 1.9s linear forwards}.bb-hyper-toast{position:fixed;z-index:12002;left:50%;bottom:22px;transform:translateX(-50%) scale(.92);padding:10px 14px;border-radius:999px;background:rgba(15,23,42,.86);border:1px solid rgba(255,255,255,.18);color:#fde68a;font-weight:950;box-shadow:0 18px 44px rgba(0,0,0,.35);opacity:0;pointer-events:none;animation:bbHyperToast .9s ease forwards}@keyframes bbHyperPanelIn{to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}@keyframes bbHyperPanelOut{from{opacity:1;transform:scale(1);filter:blur(0)}to{opacity:0;transform:scale(.94) translateY(-8px);filter:blur(10px)}}@keyframes bbHyperTitle{0%,100%{filter:hue-rotate(0) saturate(1)}50%{filter:hue-rotate(55deg) saturate(1.8);transform:translateY(-1px) scale(1.012)}}@keyframes bbHyperBreath{0%,100%{filter:saturate(1);box-shadow:inherit}50%{filter:saturate(1.35) brightness(1.08);box-shadow:0 0 26px rgba(251,197,49,.18),0 0 42px rgba(56,189,248,.14)}}@keyframes bbHyperSweep{from{transform:translateX(-120%)}to{transform:translateX(120%)}}@keyframes bbHyperSpark{to{transform:translate(calc(-50% + var(--bb-x)),calc(-50% + var(--bb-y))) scale(.18) rotate(240deg);opacity:0}}@keyframes bbHyperFall{to{transform:translate(var(--bb-x),120vh) rotate(260deg);opacity:0}}@keyframes bbHyperToast{20%,78%{opacity:1;transform:translateX(-50%) scale(1)}to{opacity:0;transform:translateX(-50%) scale(.96) translateY(8px)}}.bb-canary-page .bb-hyper-toggle{top:76px}.bb-canary-page .bb-hyper-panel{top:132px}@media(max-width:720px){.bb-hyper-toggle{top:72px;right:12px;width:44px;height:44px}.bb-hyper-panel{top:124px;right:12px;width:calc(100vw - 24px)}}@media(prefers-reduced-motion:reduce){.bb-hyper-on h1,.bb-hyper-on .hero h1,.bb-hyper-on button,.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill,.bb-hyper-on::after,.bb-hyper-spark,.bb-hyper-star,.bb-hyper-toast{animation:none!important}}
+.bb-hyper-toggle{position:fixed;top:20px;right:18px;z-index:12000;width:48px;height:48px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:linear-gradient(145deg,rgba(15,23,42,.86),rgba(99,102,241,.72));color:#fff;font-size:1.25rem;font-weight:950;display:grid;place-items:center;cursor:pointer;box-shadow:0 16px 42px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(18px);-webkit-tap-highlight-color:transparent;touch-action:manipulation}.bb-hyper-toggle:hover{transform:translateY(-2px);filter:brightness(1.08)}.bb-hyper-toggle.is-on{background:linear-gradient(135deg,var(--accent),var(--accent-2) 52%,#a855f7);box-shadow:0 0 28px rgba(229,169,59,.35),0 18px 48px rgba(45,212,191,.28)}.bb-hyper-panel{position:fixed;top:76px;right:18px;z-index:12001;width:min(340px,calc(100vw - 36px));padding:16px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(49,46,129,.88));color:#fff;box-shadow:0 28px 80px rgba(0,0,0,.44);backdrop-filter:blur(24px);display:none;transform:scale(.92) translateY(-8px);opacity:0;filter:blur(10px)}.bb-hyper-panel.show{display:block;animation:bbHyperPanelIn .28s cubic-bezier(.18,.9,.24,1) forwards}.bb-hyper-panel.closing{display:block;animation:bbHyperPanelOut .2s ease forwards}.bb-hyper-title{margin:0 0 4px;font-size:1rem;font-weight:950;color:#fde68a}.bb-hyper-subtitle{margin:0 0 14px;color:rgba(255,255,255,.72);font-size:.84rem;line-height:1.35}.bb-hyper-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.08);margin-top:10px}.bb-hyper-row span{font-size:.92rem;font-weight:850}.bb-hyper-switch{position:relative;width:56px;height:31px;flex:0 0 auto}.bb-hyper-switch input{position:absolute;opacity:0;inset:0}.bb-hyper-slider{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transition:.2s}.bb-hyper-slider:before{content:"";position:absolute;width:25px;height:25px;left:3px;top:3px;border-radius:999px;background:#fff;box-shadow:0 5px 12px rgba(0,0,0,.25);transition:.22s cubic-bezier(.18,.9,.24,1)}.bb-hyper-switch input:checked + .bb-hyper-slider{background:linear-gradient(135deg,var(--accent),var(--accent-2))}.bb-hyper-switch input:checked + .bb-hyper-slider:before{transform:translateX(25px)}.bb-hyper-note{margin:12px 0 0;color:rgba(255,255,255,.62);font-size:.78rem;line-height:1.35}.bb-hyper-on h1,.bb-hyper-on .hero h1{animation:bbHyperTitle 2.2s ease-in-out infinite;text-shadow:0 0 18px rgba(229,169,59,.55),0 0 34px rgba(45,212,191,.34)}.bb-hyper-on button:not(.bb-hyper-toggle),.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill{animation:bbHyperBreath 1.9s ease-in-out infinite}.bb-hyper-on .chart,.bb-hyper-on .chart-container,.bb-hyper-on canvas,.bb-hyper-on .progress-bar-container,.bb-hyper-on .track,.bb-hyper-on .card{filter:saturate(1.28);box-shadow:0 0 34px rgba(45,212,191,.22),0 0 54px rgba(229,169,59,.14)}.bb-hyper-on::after{content:"";position:fixed;inset:-20%;z-index:11990;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,rgba(255,255,255,.14) 44%,transparent 52% 100%);mix-blend-mode:screen;transform:translateX(-120%);animation:bbHyperSweep 2.8s linear infinite}.bb-hyper-spark{position:fixed;z-index:11999;left:0;top:0;width:8px;height:8px;border-radius:999px;pointer-events:none;background:var(--bb-c,var(--accent));box-shadow:0 0 16px var(--bb-c,var(--accent)),0 0 28px rgba(255,255,255,.34);transform:translate(-50%,-50%);animation:bbHyperSpark .9s ease-out forwards}.bb-hyper-star{position:fixed;z-index:11998;left:0;top:0;width:5px;height:5px;border-radius:999px;background:#fff;pointer-events:none;box-shadow:0 0 14px #fff,0 0 28px rgba(229,169,59,.72);animation:bbHyperFall 1.9s linear forwards}.bb-hyper-toast{position:fixed;z-index:12002;left:50%;bottom:22px;transform:translateX(-50%) scale(.92);padding:10px 14px;border-radius:999px;background:rgba(15,23,42,.86);border:1px solid rgba(255,255,255,.18);color:#fde68a;font-weight:950;box-shadow:0 18px 44px rgba(0,0,0,.35);opacity:0;pointer-events:none;animation:bbHyperToast .9s ease forwards}@keyframes bbHyperPanelIn{to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}@keyframes bbHyperPanelOut{from{opacity:1;transform:scale(1);filter:blur(0)}to{opacity:0;transform:scale(.94) translateY(-8px);filter:blur(10px)}}@keyframes bbHyperTitle{0%,100%{filter:hue-rotate(0) saturate(1)}50%{filter:hue-rotate(55deg) saturate(1.8);transform:translateY(-1px) scale(1.012)}}@keyframes bbHyperBreath{0%,100%{filter:saturate(1);box-shadow:inherit}50%{filter:saturate(1.35) brightness(1.08);box-shadow:0 0 26px rgba(229,169,59,.18),0 0 42px rgba(45,212,191,.14)}}@keyframes bbHyperSweep{from{transform:translateX(-120%)}to{transform:translateX(120%)}}@keyframes bbHyperSpark{to{transform:translate(calc(-50% + var(--bb-x)),calc(-50% + var(--bb-y))) scale(.18) rotate(240deg);opacity:0}}@keyframes bbHyperFall{to{transform:translate(var(--bb-x),120vh) rotate(260deg);opacity:0}}@keyframes bbHyperToast{20%,78%{opacity:1;transform:translateX(-50%) scale(1)}to{opacity:0;transform:translateX(-50%) scale(.96) translateY(8px)}}.bb-canary-page .bb-hyper-toggle{top:76px}.bb-canary-panel{top:132px}@media(max-width:720px){.bb-hyper-toggle{top:72px;right:12px;width:44px;height:44px}.bb-hyper-panel{top:124px;right:12px;width:calc(100vw - 24px)}}@media(prefers-reduced-motion:reduce){.bb-hyper-on h1,.bb-hyper-on .hero h1,.bb-hyper-on button,.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill,.bb-hyper-on::after,.bb-hyper-spark,.bb-hyper-star,.bb-hyper-toast{animation:none!important}}
 </style>
-
 <style id="bb-hyper-button-fix">
 .bb-hyper-toggle{border:0!important;display:grid!important;place-items:center!important;text-align:center!important;line-height:1!important;padding:0!important;box-shadow:0 10px 24px rgba(56,189,248,.24)!important}.bb-hyper-toggle::before,.bb-hyper-toggle::after{display:none!important}.bb-hyper-toggle svg,.bb-hyper-toggle img,.bb-hyper-toggle span{display:block;margin:auto}.bb-hyper-toggle:focus-visible{outline:2px solid rgba(255,255,255,.55);outline-offset:3px}@media(max-width:720px){.bb-hyper-toggle{font-size:1.12rem!important}}
 </style>
-
+<link rel="stylesheet" href="../tutorial.css">
 </head>
 <body><button class="bb-hyper-toggle" id="bbHyperToggle" type="button" aria-label="Hyperaktivitäts-Einstellungen" aria-expanded="false">⚙</button><div class="bb-hyper-panel" id="bbHyperPanel" aria-hidden="true"><p class="bb-hyper-title" id="bbHyperTitle">Hyper-Einstellungen</p><p class="bb-hyper-subtitle">Dopamin-Spikes, Glitzer, Pop und Klick-Explosionen. Kann jederzeit wieder ruhig gestellt werden.</p><label class="bb-hyper-row"><span>Hyperaktivitätsmodus</span><span class="bb-hyper-switch"><input id="bbHyperMode" type="checkbox"><span class="bb-hyper-slider"></span></span></label><label class="bb-hyper-row"><span>Klick-Explosionen</span><span class="bb-hyper-switch"><input id="bbHyperClicks" type="checkbox"><span class="bb-hyper-slider"></span></span></label><label class="bb-hyper-row"><span>Glitzerregen</span><span class="bb-hyper-switch"><input id="bbHyperAmbient" type="checkbox"><span class="bb-hyper-slider"></span></span></label><p class="bb-hyper-note">Die Einstellung wird pro Seite gespeichert.</p></div>
-<a class="back-home-btn" href="https://blopperbold.org">← BlopperBold</a><main class="shell"><section class="hero"><div class="eyebrow">Risiko-Klicker</div><h1>Kurve</h1><p class="subtitle">Kaufen, halten, verkaufen. Die Linie lockt, der Rücksetzer lauert. Kurze Runden, schnelle Entscheidungen.</p></section><section class="box"><div class="stats"><div class="stat"><strong>Cash</strong><span id="cash">1000</span></div><div class="stat"><strong>Position</strong><span id="pos">0</span></div><div class="stat"><strong>Preis</strong><span id="price">50</span></div><div class="stat"><strong>Best</strong><span id="best">1000</span></div></div><div class="chart" id="chart"><canvas id="canvas"></canvas></div><div class="actions"><button id="buy">Kaufen</button><button class="sell" id="sell">Verkaufen</button><button class="hold" id="hold">Weiter</button><button class="secondary" id="reset">Reset</button></div><div class="log" id="log">Ziel: Wert am Ende maximieren. 80 Ticks.</div></section></main>
+<a class="back-home-btn" href="../index.html">← BlopperBold</a>
+<main class="shell">
+  <section class="hero">
+    <div class="eyebrow">Risiko-Klicker</div>
+    <h1>Kurve</h1>
+    <p class="subtitle">Kaufen, halten, verkaufen. Die Linie lockt, der Rücksetzer lauert. Kurze Runden, schnelle Entscheidungen.</p>
+  </section>
+  <div class="game-container">
+    <section class="box">
+      <div class="stats">
+        <div class="stat"><strong>Cash</strong><span id="cash">1000</span></div>
+        <div class="stat"><strong>Position</strong><span id="pos">0</span></div>
+        <div class="stat"><strong>Preis</strong><span id="price">50</span></div>
+        <div class="stat"><strong>Best</strong><span id="best">1000</span></div>
+      </div>
+      <div class="chart" id="chart">
+        <canvas id="canvas"></canvas>
+      </div>
+      <div class="actions">
+        <button id="buy">Kaufen</button>
+        <button class="sell" id="sell">Verkaufen</button>
+        <button class="hold" id="hold">Weiter</button>
+        <button class="secondary" id="reset">Reset</button>
+      </div>
+      <div class="log" id="log">Ziel: Wert am Ende maximieren. 80 Ticks.</div>
+    </section>
+    
+    <section class="box transaction-log-container" style="display: flex; flex-direction: column;">
+      <h3 style="font-size:0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; margin-top: 0;">Transaktionsverlauf</h3>
+      <div id="txLog" style="height: 380px; overflow-y: auto; font-size: 0.82rem; line-height: 1.6; border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: rgba(5,10,20,0.5); text-align: left; scrollbar-width: thin;">
+      </div>
+    </section>
+  </div>
+</main>
 <script>
-const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d'),chart=document.getElementById('chart'),cashEl=document.getElementById('cash'),posEl=document.getElementById('pos'),priceEl=document.getElementById('price'),bestEl=document.getElementById('best'),logEl=document.getElementById('log'),buyBtn=document.getElementById('buy'),sellBtn=document.getElementById('sell');let cash=1000,pos=0,price=50,tick=0,prices=[],trend=0,best=Number(localStorage.getItem('kurveBest')||1000),segmentProgress=1,particles=[],lastPrice=50;bestEl.textContent=best;
-function size(){canvas.width=canvas.clientWidth*devicePixelRatio;canvas.height=canvas.clientHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);segmentProgress=1;draw()}window.addEventListener('resize',size);
-function saveState(){localStorage.setItem('kurveState',JSON.stringify({cash,pos,price,tick,prices,trend,best,log:logEl.textContent}))}
-function render(){cashEl.textContent=Math.round(cash);posEl.textContent=pos;priceEl.textContent=price.toFixed(1);bestEl.textContent=Math.round(best)}
-function update(){render();saveState()}
-function loadState(){const raw=localStorage.getItem('kurveState');if(!raw){reset();return}try{const state=JSON.parse(raw);cash=state.cash||1000;pos=state.pos||0;price=state.price||50;tick=state.tick||0;prices=Array.isArray(state.prices)&&state.prices.length?state.prices:[price];trend=state.trend||0;best=state.best||best;logEl.textContent=state.log||logEl.textContent;lastPrice=price;render();segmentProgress=1;draw()}catch(error){reset()}}
-function pointFor(index,p,min,max,w,h){return{x:index/79*w,y:h-((p-min)/(max-min))*h}}
-function makePath(limit,min,max,w,h){ctx.beginPath();prices.slice(0,limit).forEach((p,i)=>{const pt=pointFor(i,p,min,max,w,h);if(i===0)ctx.moveTo(pt.x,pt.y);else ctx.lineTo(pt.x,pt.y)});if(prices.length>1&&limit===prices.length-1){const from=pointFor(prices.length-2,prices[prices.length-2],min,max,w,h),to=pointFor(prices.length-1,prices[prices.length-1],min,max,w,h);ctx.lineTo(from.x+(to.x-from.x)*segmentProgress,from.y+(to.y-from.y)*segmentProgress)}}
-function draw(){const w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);const pulse=Math.sin(Date.now()/280)*.5+.5;ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;for(let i=1;i<5;i++){ctx.beginPath();ctx.moveTo(0,h*i/5);ctx.lineTo(w,h*i/5);ctx.stroke()}ctx.fillStyle='rgba(56,189,248,.05)';ctx.fillRect(0,0,w*(tick/80),h);if(prices.length>=2){const min=Math.min(...prices)-4,max=Math.max(...prices)+4,limit=prices.length-1,gradient=ctx.createLinearGradient(0,0,w,0);gradient.addColorStop(0,'#38bdf8');gradient.addColorStop(.55,'#fbc531');gradient.addColorStop(1,'#26de81');ctx.lineWidth=10;ctx.strokeStyle='rgba(56,189,248,.12)';makePath(limit,min,max,w,h);ctx.stroke();ctx.lineWidth=4;ctx.strokeStyle=gradient;ctx.shadowColor='rgba(56,189,248,.65)';ctx.shadowBlur=18;makePath(limit,min,max,w,h);ctx.stroke();ctx.shadowBlur=0;const from=pointFor(prices.length-2,prices[prices.length-2],min,max,w,h),to=pointFor(prices.length-1,prices[prices.length-1],min,max,w,h),last={x:from.x+(to.x-from.x)*segmentProgress,y:from.y+(to.y-from.y)*segmentProgress};ctx.fillStyle=`rgba(251,197,49,${.72+pulse*.28})`;ctx.beginPath();ctx.arc(last.x,last.y,7+pulse*3,0,Math.PI*2);ctx.fill()}particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life-=.025;ctx.fillStyle=`rgba(${p.color},${p.life})`;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill()})}
-function animateSegment(){segmentProgress=0;const start=performance.now();function frame(now){segmentProgress=Math.min(1,(now-start)/280);draw();if(segmentProgress<1||particles.length)requestAnimationFrame(frame)}requestAnimationFrame(frame)}
-function popStat(el){el.parentElement.classList.add('bump');setTimeout(()=>el.parentElement.classList.remove('bump'),220)}
-function popLog(){logEl.classList.add('pop');setTimeout(()=>logEl.classList.remove('pop'),220)}
-function burst(kind,hyper=false){const w=canvas.clientWidth,h=canvas.clientHeight,min=Math.min(...prices)-4,max=Math.max(...prices)+4,last=pointFor(Math.max(0,prices.length-1),price,min,max,w,h),color=kind==='down'?'239,68,68':kind==='sell'?'38,222,129':kind==='buy'?'251,197,49':'56,189,248',amount=hyper?52:18,power=hyper?8:5;for(let i=0;i<amount;i++)particles.push({x:last.x,y:last.y,vx:(Math.random()-.5)*power,vy:(Math.random()-.5)*power,size:(hyper?2.4:2)+Math.random()*(hyper?4:3),life:hyper?1:.8,color});if(hyper){const ring=document.createElement('span');ring.className='trade-ring';ring.style.left=last.x-27+'px';ring.style.top=last.y-27+'px';ring.style.borderColor=kind==='sell'?'rgba(38,222,129,.95)':'rgba(251,197,49,.95)';chart.append(ring);setTimeout(()=>ring.remove(),680)}chart.classList.add(kind==='down'?'flash-down':kind==='buy'?'flash-buy':kind==='sell'?'flash-sell':'flash-up');setTimeout(()=>chart.classList.remove('flash-down','flash-up','flash-buy','flash-sell'),450);popLog();draw();if(particles.length)requestAnimationFrame(function frame(){draw();if(particles.length)requestAnimationFrame(frame)})}
-function step(){if(tick>=80){finish();return}lastPrice=price;trend+=Math.random()*.8-.38;trend*=.88;price=Math.max(4,price+trend+(Math.random()*4-1.8));prices.push(price);tick++;let effect=price>=lastPrice?'up':'down';if(Math.random()<.07){price*=Math.random()<.5?.78:1.24;prices[prices.length-1]=price;effect=price>=lastPrice?'up':'down';logEl.textContent=effect==='up'?'Spike.':'Dip.';burst(effect)}else logEl.textContent='Tick '+tick+'/80';update();popStat(priceEl);animateSegment()}
-function buy(){if(tick>=80)return;const amount=Math.floor(cash/price);if(amount<=0){logEl.textContent='Kein Cash.';popLog();return}pos+=amount;cash-=amount*price;buyBtn.classList.add('action-pop');setTimeout(()=>buyBtn.classList.remove('action-pop'),360);burst('buy',true);step()}
-function sell(){if(pos<=0){logEl.textContent='Keine Position.';popLog();step();return}cash+=pos*price;pos=0;sellBtn.classList.add('action-pop');setTimeout(()=>sellBtn.classList.remove('action-pop'),360);burst('sell',true);step()}
-function finish(){const total=cash+pos*price;if(total>best){best=total;localStorage.setItem('kurveBest',String(best));logEl.textContent='Neuer Bestwert: '+Math.round(best);burst('sell')}else logEl.textContent='Endwert: '+Math.round(total);pos=0;cash=total;update()}
-function reset(){cash=1000;pos=0;price=50;tick=0;prices=[price];trend=0;particles=[];segmentProgress=1;lastPrice=price;logEl.textContent='Neue Kurve.';update();draw()}
-document.getElementById('buy').addEventListener('click',buy);document.getElementById('sell').addEventListener('click',sell);document.getElementById('hold').addEventListener('click',step);document.getElementById('reset').addEventListener('click',()=>{localStorage.removeItem('kurveState');reset()});document.addEventListener('contextmenu',event=>{if(event.target.closest('button, a, [role="button"]'))event.preventDefault()});size();loadState();
-document.addEventListener('click',event=>{if(!document.body.classList.contains('bb-hyper-clicks-on'))return;const target=event.target.closest('button,a,[role="button"]');if(!target)return;target.classList.remove('dopamine-hit');void target.offsetWidth;target.classList.add('dopamine-hit');const ring=document.createElement('span');ring.className='dopamine-burst';ring.style.left=event.clientX+'px';ring.style.top=event.clientY+'px';document.body.append(ring);setTimeout(()=>ring.remove(),620);for(let i=0;i<12;i++){const spark=document.createElement('span');spark.className='dopamine-spark';spark.style.left=event.clientX+'px';spark.style.top=event.clientY+'px';spark.style.background=i%3===0?'#38bdf8':i%3===1?'#fbc531':'#26de81';const angle=Math.random()*Math.PI*2,dist=32+Math.random()*42;spark.style.setProperty('--x',Math.cos(angle)*dist+'px');spark.style.setProperty('--y',Math.sin(angle)*dist+'px');document.body.append(spark);setTimeout(()=>spark.remove(),650)}});
+const DOM = {
+  canvas: document.getElementById('canvas'),
+  chart: document.getElementById('chart'),
+  cash: document.getElementById('cash'),
+  pos: document.getElementById('pos'),
+  price: document.getElementById('price'),
+  best: document.getElementById('best'),
+  log: document.getElementById('log'),
+  buyBtn: document.getElementById('buy'),
+  sellBtn: document.getElementById('sell'),
+  holdBtn: document.getElementById('hold'),
+  resetBtn: document.getElementById('reset'),
+  txLog: document.getElementById('txLog')
+};
+
+const ctx = DOM.canvas.getContext('2d');
+let cash = 1000, pos = 0, price = 50, tick = 0, prices = [], trend = 0;
+let best = Number(localStorage.getItem('kurveBest') || 1000);
+let segmentProgress = 1, particles = [], lastPrice = 50;
+let buyValue = 0;
+let txHistory = [];
+let animFrameId = null;
+let offscreenCanvas = null;
+let offscreenCtx = null;
+
+DOM.best.textContent = Math.round(best);
+
+function size(){
+  DOM.canvas.width = DOM.canvas.clientWidth * devicePixelRatio;
+  DOM.canvas.height = DOM.canvas.clientHeight * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+
+  offscreenCanvas = document.createElement('canvas');
+  offscreenCanvas.width = DOM.canvas.width;
+  offscreenCanvas.height = DOM.canvas.height;
+  offscreenCtx = offscreenCanvas.getContext('2d');
+  offscreenCtx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+
+  const w = DOM.canvas.clientWidth;
+  const h = DOM.canvas.clientHeight;
+  offscreenCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+  offscreenCtx.lineWidth = 1;
+  for(let i=1; i<5; i++){
+    offscreenCtx.beginPath();
+    offscreenCtx.moveTo(0, h * i / 5);
+    offscreenCtx.lineTo(w, h * i / 5);
+    offscreenCtx.stroke();
+  }
+
+  segmentProgress = 1;
+  draw();
+}
+window.addEventListener('resize', size);
+
+function saveState(){
+  try {
+    localStorage.setItem('kurveState', JSON.stringify({
+      cash, pos, price, tick, prices, trend, best,
+      log: DOM.log.textContent, buyValue, txHistory
+    }));
+  } catch(e) {}
+}
+
+function render(){
+  DOM.cash.textContent = Math.round(cash);
+  DOM.pos.textContent = pos;
+  DOM.price.textContent = price.toFixed(1);
+  DOM.best.textContent = Math.round(best);
+}
+
+function update(){
+  render();
+  saveState();
+}
+
+function addTxLog(text) {
+  txHistory.push(text);
+  renderTxLog();
+}
+
+function renderTxLog() {
+  if (!DOM.txLog) return;
+  DOM.txLog.innerHTML = txHistory.map(tx => `<div style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">${tx}</div>`).join('');
+  DOM.txLog.scrollTop = DOM.txLog.scrollHeight;
+}
+
+function loadState(){
+  const raw = localStorage.getItem('kurveState');
+  if(!raw){
+    reset();
+    return;
+  }
+  try {
+    const state = JSON.parse(raw);
+    cash = state.cash || 1000;
+    pos = state.pos || 0;
+    price = state.price || 50;
+    tick = state.tick || 0;
+    prices = Array.isArray(state.prices) && state.prices.length ? state.prices : [price];
+    trend = state.trend || 0;
+    best = state.best || best;
+    DOM.log.textContent = state.log || DOM.log.textContent;
+    buyValue = state.buyValue || 0;
+    txHistory = Array.isArray(state.txHistory) ? state.txHistory : [];
+    lastPrice = price;
+    render();
+    renderTxLog();
+    segmentProgress = 1;
+    draw();
+  } catch(error) {
+    reset();
+  }
+}
+
+function pointFor(index, p, min, max, w, h){
+  return { x: index / 79 * w, y: h - ((p - min) / (max - min)) * h };
+}
+
+function makePath(limit, min, max, w, h){
+  ctx.beginPath();
+  prices.slice(0, limit).forEach((p, i) => {
+    const pt = pointFor(i, p, min, max, w, h);
+    if(i === 0) ctx.moveTo(pt.x, pt.y);
+    else ctx.lineTo(pt.x, pt.y);
+  });
+  if(prices.length > 1 && limit === prices.length - 1){
+    const from = pointFor(prices.length - 2, prices[prices.length - 2], min, max, w, h);
+    const to = pointFor(prices.length - 1, prices[prices.length - 1], min, max, w, h);
+    ctx.lineTo(from.x + (to.x - from.x) * segmentProgress, from.y + (to.y - from.y) * segmentProgress);
+  }
+}
+
+function draw(){
+  const w = DOM.canvas.clientWidth, h = DOM.canvas.clientHeight;
+  ctx.clearRect(0, 0, w, h);
+  
+  if (offscreenCanvas) {
+    ctx.drawImage(offscreenCanvas, 0, 0, w, h);
+  }
+
+  const pulse = Math.sin(Date.now() / 280) * 0.5 + 0.5;
+  ctx.fillStyle = 'rgba(56,189,248,0.04)';
+  ctx.fillRect(0, 0, w * (tick / 80), h);
+
+  if(prices.length >= 2){
+    const min = Math.min(...prices) - 4;
+    const max = Math.max(...prices) + 4;
+    const limit = prices.length - 1;
+    const gradient = ctx.createLinearGradient(0, 0, w, 0);
+    gradient.addColorStop(0, '#2dd4bf');
+    gradient.addColorStop(0.55, '#e5a93b');
+    gradient.addColorStop(1, '#26de81');
+
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = 'rgba(45,212,191,0.1)';
+    makePath(limit, min, max, w, h);
+    ctx.stroke();
+
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = gradient;
+    ctx.shadowColor = 'rgba(45,212,191,0.6)';
+    ctx.shadowBlur = 18;
+    makePath(limit, min, max, w, h);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    const from = pointFor(prices.length - 2, prices[prices.length - 2], min, max, w, h);
+    const to = pointFor(prices.length - 1, prices[prices.length - 1], min, max, w, h);
+    const last = {
+      x: from.x + (to.x - from.x) * segmentProgress,
+      y: from.y + (to.y - from.y) * segmentProgress
+    };
+    ctx.fillStyle = `rgba(229,169,59,${0.72 + pulse * 0.28})`;
+    ctx.beginPath();
+    ctx.arc(last.x, last.y, 7 + pulse * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.025;
+    ctx.fillStyle = `rgba(${p.color},${p.life})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function animateSegment(){
+  segmentProgress = 0;
+  const start = performance.now();
+  if (animFrameId) cancelAnimationFrame(animFrameId);
+  function frame(now){
+    segmentProgress = Math.min(1, (now - start) / 280);
+    draw();
+    if(segmentProgress < 1 || particles.length) {
+      animFrameId = requestAnimationFrame(frame);
+    }
+  }
+  animFrameId = requestAnimationFrame(frame);
+}
+
+function popStat(el){
+  el.parentElement.classList.add('bump');
+  setTimeout(() => el.parentElement.classList.remove('bump'), 220);
+}
+
+function popLog(){
+  DOM.log.classList.add('pop');
+  setTimeout(() => DOM.log.classList.remove('pop'), 220);
+}
+
+function burst(kind, hyper=false){
+  const w = DOM.canvas.clientWidth, h = DOM.canvas.clientHeight;
+  const min = Math.min(...prices) - 4;
+  const max = Math.max(...prices) + 4;
+  const last = pointFor(Math.max(0, prices.length - 1), price, min, max, w, h);
+  const color = kind === 'down' ? '239,68,68' : kind === 'sell' ? '38,222,129' : kind === 'buy' ? '251,197,49' : '56,189,248';
+  const amount = hyper ? 52 : 18;
+  const power = hyper ? 8 : 5;
+
+  for(let i=0; i<amount; i++) {
+    particles.push({
+      x: last.x,
+      y: last.y,
+      vx: (Math.random() - 0.5) * power,
+      vy: (Math.random() - 0.5) * power,
+      size: (hyper ? 2.4 : 2) + Math.random() * (hyper ? 4 : 3),
+      life: hyper ? 1 : 0.8,
+      color
+    });
+  }
+
+  if(hyper){
+    const ring = document.createElement('span');
+    ring.className = 'trade-ring';
+    ring.style.left = last.x - 27 + 'px';
+    ring.style.top = last.y - 27 + 'px';
+    ring.style.borderColor = kind === 'sell' ? 'rgba(38,222,129,.95)' : 'rgba(251,197,49,.95)';
+    DOM.chart.append(ring);
+    setTimeout(() => ring.remove(), 680);
+  }
+
+  DOM.chart.classList.add(kind === 'down' ? 'flash-down' : kind === 'buy' ? 'flash-buy' : kind === 'sell' ? 'flash-sell' : 'flash-up');
+  setTimeout(() => DOM.chart.classList.remove('flash-down', 'flash-up', 'flash-buy', 'flash-sell'), 450);
+  popLog();
+  draw();
+
+  if (animFrameId) cancelAnimationFrame(animFrameId);
+  animFrameId = requestAnimationFrame(function frame(){
+    draw();
+    if(particles.length) animFrameId = requestAnimationFrame(frame);
+  });
+}
+
+function step(){
+  if(tick >= 80){
+    finish();
+    return;
+  }
+  lastPrice = price;
+  trend += Math.random() * 0.8 - 0.38;
+  trend *= 0.88;
+  price = Math.max(4, price + trend + (Math.random() * 4 - 1.8));
+  prices.push(price);
+  tick++;
+
+  let effect = price >= lastPrice ? 'up' : 'down';
+  if(Math.random() < 0.07){
+    price *= Math.random() < 0.5 ? 0.78 : 1.24;
+    prices[prices.length - 1] = price;
+    effect = price >= lastPrice ? 'up' : 'down';
+    DOM.log.textContent = effect === 'up' ? 'Spike.' : 'Dip.';
+    burst(effect);
+  } else {
+    DOM.log.textContent = 'Tick ' + tick + '/80';
+  }
+
+  update();
+  popStat(DOM.price);
+  animateSegment();
+}
+
+function buy(){
+  if(tick >= 80) return;
+  const amount = Math.floor(cash / price);
+  if(amount <= 0){
+    DOM.log.textContent = 'Kein Cash.';
+    popLog();
+    return;
+  }
+  pos += amount;
+  cash -= amount * price;
+  buyValue += amount * price;
+  addTxLog(`Tick ${tick}: Kauf von ${amount} Anteilen bei ${price.toFixed(1)} €`);
+
+  DOM.buyBtn.classList.add('action-pop');
+  setTimeout(() => DOM.buyBtn.classList.remove('action-pop'), 360);
+  burst('buy', true);
+  step();
+}
+
+function sell(){
+  if(pos <= 0){
+    DOM.log.textContent = 'Keine Position.';
+    popLog();
+    step();
+    return;
+  }
+  const profit = pos * price - buyValue;
+  const sign = profit >= 0 ? '+' : '';
+  addTxLog(`Tick ${tick}: Verkauf von ${pos} Anteilen bei ${price.toFixed(1)} € (${sign}${Math.round(profit)} €)`);
+  cash += pos * price;
+  pos = 0;
+  buyValue = 0;
+
+  DOM.sellBtn.classList.add('action-pop');
+  setTimeout(() => DOM.sellBtn.classList.remove('action-pop'), 360);
+  burst('sell', true);
+  step();
+}
+
+function finish(){
+  if (animFrameId) cancelAnimationFrame(animFrameId);
+  const total = cash + pos * price;
+  if(total > best){
+    best = total;
+    localStorage.setItem('kurveBest', String(best));
+    DOM.log.textContent = 'Neuer Bestwert: ' + Math.round(best);
+    addTxLog(`Tick ${tick}: Spiel beendet. Neuer Rekord: ${Math.round(best)} €!`);
+    burst('sell');
+  } else {
+    DOM.log.textContent = 'Endwert: ' + Math.round(total);
+    addTxLog(`Tick ${tick}: Spiel beendet. Endwert: ${Math.round(total)} €.`);
+  }
+  pos = 0;
+  cash = total;
+  buyValue = 0;
+  update();
+}
+
+function reset(){
+  if (animFrameId) cancelAnimationFrame(animFrameId);
+  cash = 1000;
+  pos = 0;
+  price = 50;
+  tick = 0;
+  prices = [price];
+  trend = 0;
+  particles = [];
+  segmentProgress = 1;
+  lastPrice = price;
+  buyValue = 0;
+  txHistory = [];
+  DOM.log.textContent = 'Neue Kurve.';
+  renderTxLog();
+  update();
+  draw();
+}
+
+DOM.buyBtn.addEventListener('click', buy);
+DOM.sellBtn.addEventListener('click', sell);
+DOM.holdBtn.addEventListener('click', step);
+DOM.resetBtn.addEventListener('click', () => {
+  localStorage.removeItem('kurveState');
+  reset();
+});
+
+document.addEventListener('contextmenu', event => {
+  if(event.target.closest('button, a, [role="button"]')) event.preventDefault();
+});
+
+size();
+loadState();
+document.addEventListener('click',event=>{if(!document.body.classList.contains('bb-hyper-clicks-on'))return;const target=event.target.closest('button,a,[role="button"]');if(!target)return;target.classList.remove('dopamine-hit');void target.offsetWidth;target.classList.add('dopamine-hit');const ring=document.createElement('span');ring.className='dopamine-burst';ring.style.left=event.clientX+'px';ring.style.top=event.clientY+'px';document.body.append(ring);setTimeout(()=>ring.remove(),620);for(let i=0;i<12;i++){const spark=document.createElement('span');spark.className='dopamine-spark';spark.style.left=event.clientX+'px';spark.style.top=event.clientY+'px';spark.style.background=i%3===0?'#2dd4bf':i%3===1?'#e5a93b':'#26de81';const angle=Math.random()*Math.PI*2,dist=32+Math.random()*42;spark.style.setProperty('--x',Math.cos(angle)*dist+'px');spark.style.setProperty('--y',Math.sin(angle)*dist+'px');document.body.append(spark);setTimeout(()=>spark.remove(),650)}});
 </script><script id="bb-touch-zoom-guard">
 (function() {
     if (window.__bbTouchZoomGuard) return;
@@ -101,7 +493,7 @@ document.addEventListener('click',event=>{if(!document.body.classList.contains('
   function apply(){document.body.classList.toggle('bb-hyper-on',!!state.mode);document.body.classList.toggle('bb-hyper-clicks-on',!!state.mode&&!!state.clicks);gear.classList.toggle('is-on',!!state.mode);mode.checked=!!state.mode;clicks.checked=!!state.clicks;ambient.checked=!!state.ambient;save()}
   function openPanel(){clearTimeout(closeTimer);panel.classList.remove('closing');panel.classList.add('show');panel.setAttribute('aria-hidden','false');gear.setAttribute('aria-expanded','true')}
   function closePanel(){if(!panel.classList.contains('show'))return;clearTimeout(closeTimer);panel.classList.remove('show');panel.classList.add('closing');panel.setAttribute('aria-hidden','true');gear.setAttribute('aria-expanded','false');closeTimer=setTimeout(()=>panel.classList.remove('closing'),220)}
-  function burst(x,y,amount){if(!state.mode||!state.clicks)return;const colors=['#fbc531','#38bdf8','#26de81','#fb7185','#a78bfa','#fff'];for(let i=0;i<amount;i++){const s=document.createElement('span');s.className='bb-hyper-spark';s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--bb-c',colors[i%colors.length]);const angle=Math.random()*Math.PI*2;const dist=38+Math.random()*96;s.style.setProperty('--bb-x',Math.cos(angle)*dist+'px');s.style.setProperty('--bb-y',Math.sin(angle)*dist+'px');document.body.append(s);setTimeout(()=>s.remove(),950)}}
+  function burst(x,y,amount){if(!state.mode||!state.clicks)return;const colors=['#e5a93b','#2dd4bf','#26de81','#fb7185','#a78bfa','#fff'];for(let i=0;i<amount;i++){const s=document.createElement('span');s.className='bb-hyper-spark';s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--bb-c',colors[i%colors.length]);const angle=Math.random()*Math.PI*2;const dist=38+Math.random()*96;s.style.setProperty('--bb-x',Math.cos(angle)*dist+'px');s.style.setProperty('--bb-y',Math.sin(angle)*dist+'px');document.body.append(s);setTimeout(()=>s.remove(),950)}}
   gear.addEventListener('click',event=>{event.stopPropagation();panel.classList.contains('show')?closePanel():openPanel();burst(event.clientX,event.clientY,18)});
   panel.addEventListener('click',event=>event.stopPropagation());
   document.addEventListener('click',event=>{if(!panel.contains(event.target)&&event.target!==gear)closePanel()});
@@ -114,5 +506,5 @@ document.addEventListener('click',event=>{if(!document.body.classList.contains('
   apply();
 })();
 </script>
-
+<script src="../tutorial.js" defer></script>
 </body></html>

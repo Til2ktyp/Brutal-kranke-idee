@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="BlopperBold Labs - Deine Kommandozentrale für Experimente, Rechner und Web-Apps. Spiele, Portfolio-Rechner und mehr.">
-    <title>BlopperBold · Startseite</title>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description"
+        content="BlopperBold Labs - Deine Kommandozentrale für Experimente, Rechner und Web-Apps. Spiele, Portfolio-Rechner und mehr.">
+    <title>BlopperBold</title>
     <link rel="icon" type="image/x-icon" href="favicon.png">
     <link rel="icon" type="image/x-icon" href="images/favicon.png">
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
     <script src="consent.js"></script>
     <style>
         :root {
-            --bg-1: #0f172a;
-            --bg-2: #312e81;
-            --bg-3: #7c3aed;
-            --glass: rgba(255, 255, 255, 0.11);
-            --glass-strong: rgba(255, 255, 255, 0.18);
-            --border: rgba(255, 255, 255, 0.18);
+            --bg-1: #0b0f19;
+            --bg-2: #072a3a;
+            --bg-3: #043e4f;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-strong: rgba(255, 255, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.14);
             --text: #ffffff;
-            --muted: rgba(255, 255, 255, 0.72);
-            --accent: #fbc531;
-            --accent-2: #38bdf8;
-            --soft-blue-text: rgba(186, 230, 253, 0.86);
-            --shadow: rgba(0, 0, 0, 0.32);
-            --pink: #fb7185;
-            --violet: #a78bfa;
-            --green: #34d399;
+            --muted: rgba(204, 251, 241, 0.65);
+            --accent: #e5a93b;
+            --accent-2: #2dd4bf;
+            --soft-blue-text: rgba(204, 251, 241, 0.86);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --pink: #f43f5e;
+            --violet: #0ea5e9;
+            --green: #10b981;
         }
 
         * {
@@ -50,21 +56,40 @@
             min-height: 100vh;
             margin: 0;
             padding: 38px 18px 92px;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: var(--text);
-            background:
-                radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.38), transparent 28%),
-                radial-gradient(circle at 88% 14%, rgba(251, 197, 49, 0.28), transparent 24%),
-                radial-gradient(circle at 78% 70%, rgba(251, 113, 133, 0.22), transparent 26%),
-                radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.36), transparent 33%),
-                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
-            background-size: 140% 140%;
-            animation: backgroundDrift 16s ease-in-out infinite alternate;
+            background: var(--bg-1);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow-x: hidden;
             text-align: center;
+        }
+
+        .bg-gradient-layer {
+            position: fixed;
+            inset: -10%;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                radial-gradient(circle at 78% 70%, rgba(244, 63, 94, 0.16), transparent 26%),
+                radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+            animation: bgDriftTransform 16s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes bgDriftTransform {
+            from {
+                transform: translate3d(-3%, -3%, 0) scale(1.05);
+            }
+
+            to {
+                transform: translate3d(3%, 3%, 0) scale(1.05);
+            }
         }
 
         body::before,
@@ -78,20 +103,21 @@
             pointer-events: none;
             filter: blur(10px);
             opacity: 0.36;
-            z-index: 0;
+            z-index: -1;
             animation: floatOrb 11s ease-in-out infinite alternate;
+            will-change: transform;
         }
 
         body::before {
             top: -90px;
             left: -110px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.45), transparent 68%);
+            background: radial-gradient(circle, rgba(45, 212, 191, 0.4), transparent 68%);
         }
 
         body::after {
             right: -120px;
             bottom: -110px;
-            background: radial-gradient(circle, rgba(251, 197, 49, 0.38), transparent 68%);
+            background: radial-gradient(circle, rgba(229, 169, 59, 0.3), transparent 68%);
             animation-duration: 14s;
         }
 
@@ -132,6 +158,7 @@
                 radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.14), transparent 32%);
             transform: translateX(-55%);
             animation: shine 7s ease-in-out infinite;
+            will-change: transform, opacity;
         }
 
         .container::after {
@@ -153,15 +180,29 @@
             gap: 24px;
         }
 
-        .hero > * {
+        .hero>* {
             animation: heroItemEnter 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
         }
 
-        .hero > *:nth-child(1) { animation-delay: 0.04s; }
-        .hero > *:nth-child(2) { animation-delay: 0.11s; }
-        .hero > *:nth-child(3) { animation-delay: 0.18s; }
-        .hero > *:nth-child(4) { animation-delay: 0.25s; }
-        .hero > *:nth-child(5) { animation-delay: 0.32s; }
+        .hero>*:nth-child(1) {
+            animation-delay: 0.04s;
+        }
+
+        .hero>*:nth-child(2) {
+            animation-delay: 0.11s;
+        }
+
+        .hero>*:nth-child(3) {
+            animation-delay: 0.18s;
+        }
+
+        .hero>*:nth-child(4) {
+            animation-delay: 0.25s;
+        }
+
+        .hero>*:nth-child(5) {
+            animation-delay: 0.32s;
+        }
 
         .eyebrow-row {
             display: flex;
@@ -212,12 +253,14 @@
 
         .gradient-text {
             display: inline-block;
-            background: linear-gradient(90deg, #ffffff, #bae6fd, #fde68a, #ffffff);
+            white-space: nowrap;
+            background: linear-gradient(90deg, #ffffff, #2dd4bf, #e5a93b, #ffffff);
             background-size: 220% auto;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: textGlow 5.5s ease-in-out infinite alternate;
+            animation: textGlowGPU 8s linear infinite;
+            will-change: filter;
         }
 
         .subtitle {
@@ -526,6 +569,93 @@
 
         .more-games-grid .app-card {
             min-height: 150px;
+        }
+
+        .ye-soundboard-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 25;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, 0.42);
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(0);
+            transition: opacity 0.2s ease, backdrop-filter 0.28s ease;
+        }
+
+        .ye-soundboard-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+            backdrop-filter: blur(14px);
+        }
+
+        .ye-soundboard-widget {
+            width: min(560px, 100%);
+            padding: clamp(20px, 5vw, 30px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background:
+                radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.2), transparent 34%),
+                radial-gradient(circle at 86% 18%, rgba(251, 197, 49, 0.16), transparent 30%),
+                rgba(15, 23, 42, 0.92);
+            box-shadow: 0 32px 110px rgba(0, 0, 0, 0.48);
+            transform: scale(0.88) translateY(20px);
+            filter: blur(10px);
+            transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.28s ease;
+        }
+
+        .ye-soundboard-backdrop.show .ye-soundboard-widget {
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
+
+        .ye-soundboard-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: start;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .ye-soundboard-title {
+            margin: 0;
+            color: #ffffff;
+            font-size: clamp(1.4rem, 4vw, 1.88rem);
+            font-weight: 900;
+        }
+
+        .ye-soundboard-close {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font: inherit;
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .ye-soundboard-close:hover,
+        .ye-soundboard-close:focus-visible {
+            outline: none;
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .ye-soundboard-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 480px) {
+            .ye-soundboard-options {
+                grid-template-columns: 1fr;
+            }
         }
 
         .version-menu-backdrop {
@@ -876,7 +1006,9 @@
             background: var(--green);
             box-shadow: 0 0 18px rgba(52, 211, 153, 0.86);
             animation: pulseDot 1.8s ease-in-out infinite;
+            will-change: transform, opacity;
         }
+
         .sparkles {
             position: fixed;
             inset: 0;
@@ -894,14 +1026,44 @@
             box-shadow: 0 0 18px rgba(255, 255, 255, 0.68);
             opacity: 0.45;
             animation: sparkleFloat 7s ease-in-out infinite;
+            will-change: transform, opacity;
         }
 
-        .sparkle:nth-child(1) { left: 12%; top: 22%; animation-delay: 0s; }
-        .sparkle:nth-child(2) { left: 82%; top: 28%; animation-delay: 1.1s; }
-        .sparkle:nth-child(3) { left: 18%; top: 76%; animation-delay: 2.2s; }
-        .sparkle:nth-child(4) { left: 72%; top: 78%; animation-delay: 3.1s; }
-        .sparkle:nth-child(5) { left: 50%; top: 12%; animation-delay: 4.2s; }
-        .sparkle:nth-child(6) { left: 92%; top: 58%; animation-delay: 5.4s; }
+        .sparkle:nth-child(1) {
+            left: 12%;
+            top: 22%;
+            animation-delay: 0s;
+        }
+
+        .sparkle:nth-child(2) {
+            left: 82%;
+            top: 28%;
+            animation-delay: 1.1s;
+        }
+
+        .sparkle:nth-child(3) {
+            left: 18%;
+            top: 76%;
+            animation-delay: 2.2s;
+        }
+
+        .sparkle:nth-child(4) {
+            left: 72%;
+            top: 78%;
+            animation-delay: 3.1s;
+        }
+
+        .sparkle:nth-child(5) {
+            left: 50%;
+            top: 12%;
+            animation-delay: 4.2s;
+        }
+
+        .sparkle:nth-child(6) {
+            left: 92%;
+            top: 58%;
+            animation-delay: 5.4s;
+        }
 
         .keycap {
             display: inline-flex;
@@ -983,6 +1145,7 @@
             box-shadow: 0 8px 24px rgba(251, 197, 49, 0.12);
             transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
             animation: impressumPulse 2.8s ease-in-out infinite;
+            will-change: transform;
         }
 
         .impressum-trigger::before {
@@ -1149,7 +1312,9 @@
         }
 
         @keyframes shine {
-            0%, 58% {
+
+            0%,
+            58% {
                 transform: translateX(-70%) skewX(-10deg);
                 opacity: 0;
             }
@@ -1164,23 +1329,13 @@
             }
         }
 
-        @keyframes textGlow {
-            from {
-                background-position: 0% center;
+        @keyframes textGlowGPU {
+            0% {
+                filter: hue-rotate(0deg);
             }
 
-            to {
-                background-position: 100% center;
-            }
-        }
-
-        @keyframes backgroundDrift {
-            from {
-                background-position: 0% 0%;
-            }
-
-            to {
-                background-position: 100% 100%;
+            100% {
+                filter: hue-rotate(360deg);
             }
         }
 
@@ -1213,7 +1368,9 @@
         }
 
         @keyframes pulseDot {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
                 opacity: 0.72;
             }
@@ -1225,7 +1382,9 @@
         }
 
         @keyframes sparkleFloat {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0) scale(1);
                 opacity: 0.28;
             }
@@ -1265,12 +1424,14 @@
         }
 
         @keyframes impressumPulse {
-            0%, 100% {
-                box-shadow: 0 8px 24px rgba(251, 197, 49, 0.12);
+
+            0%,
+            100% {
+                transform: scale(1);
             }
 
             50% {
-                box-shadow: 0 8px 28px rgba(56, 189, 248, 0.18), 0 0 18px rgba(251, 197, 49, 0.16);
+                transform: scale(1.05);
             }
         }
 
@@ -1356,15 +1517,954 @@
             }
 
             .quick-hint span:last-child::after {
-                content: "Portfolio-Rechner halten, um Alt, Aktiv oder Canary zu öffnen.";
+                content: "Portfolio-Rechner halten, um Aktiv oder Canary zu öffnen.";
                 font-size: 0.9rem;
             }
         }
 
+        /* Beta Popup Styles */
+        .beta-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483100;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, 0.54);
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(0);
+            transition: opacity 0.24s ease, backdrop-filter 0.3s ease;
+        }
+
+        .beta-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+            backdrop-filter: blur(18px);
+        }
+
+        .beta-widget {
+            width: min(480px, 100%);
+            padding: clamp(22px, 5vw, 34px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 12% 0%, rgba(229, 169, 59, 0.25), transparent 36%),
+                radial-gradient(circle at 86% 18%, rgba(45, 212, 191, 0.12), transparent 30%),
+                rgba(15, 23, 42, 0.92);
+            box-shadow: 0 34px 115px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            transform: scale(0.86) translateY(22px);
+            filter: blur(12px);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
+            text-align: center;
+        }
+
+        .beta-backdrop.show .beta-widget {
+            transform: scale(1) translateY(0);
+            filter: blur(0);
+        }
+
+        .beta-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 22px;
+            display: grid;
+            place-items: center;
+            font-size: 2.2rem;
+            margin: 0 auto 20px;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.34), transparent 32%),
+                rgba(229, 169, 59, 0.16);
+            border: 1px solid rgba(229, 169, 59, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 8px 24px rgba(229, 169, 59, 0.15);
+        }
+
+        .beta-title {
+            margin: 0 0 12px 0;
+            color: #ffffff;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            text-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .beta-desc {
+            margin: 0 0 24px 0;
+            color: var(--soft-blue-text);
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        .beta-desc strong {
+            color: #ffffff;
+        }
+
+        .beta-btn {
+            width: 100%;
+            min-height: 52px;
+            border: 0;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--accent), #f59e0b);
+            color: #0b0f19;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 950;
+            font-size: 1.05rem;
+            box-shadow: 0 10px 24px rgba(229, 169, 59, 0.2);
+            transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .beta-btn:hover,
+        .beta-btn:focus-visible {
+            outline: none;
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 12px 28px rgba(229, 169, 59, 0.3);
+        }
+
+        .beta-btn:active {
+            transform: translateY(0);
+        }
+
+        /* --- APPLE OVER-ANIMATION OVERHAUL STYLES --- */
+        .cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(45, 212, 191, 0.15) 0%, rgba(229, 169, 59, 0.1) 40%, rgba(14, 165, 233, 0.05) 60%, transparent 80%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate3d(-50%, -50%, 0);
+            opacity: 0;
+            will-change: transform;
+            transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        body.has-mouse .cursor-glow {
+            opacity: 1;
+        }
+
+        .app-card {
+            transform-style: preserve-3d;
+            perspective: 1200px;
+            will-change: transform, box-shadow;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.24s ease,
+                background 0.24s ease,
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.24s ease;
+        }
+
+        .card-sheen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.03) 50%, transparent 80%);
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            transform: translate3d(-50%, -50%, 0);
+            will-change: transform;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            mix-blend-mode: overlay;
+        }
+
+        .app-card:hover .card-sheen {
+            opacity: 1;
+        }
+
+        .char-span {
+            display: inline-block;
+            transition: transform 0.5s cubic-bezier(0.34, 1.75, 0.64, 1),
+                color 0.3s ease,
+                -webkit-text-fill-color 0.3s ease,
+                text-shadow 0.3s ease;
+            cursor: default;
+            transform-origin: bottom center;
+            will-change: transform;
+            white-space: pre;
+        }
+
+        .char-span.space {
+            width: 0.26em;
+        }
+
+        .gradient-text .char-span {
+            background: linear-gradient(90deg, #ffffff, #2dd4bf, #e5a93b, #ffffff);
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            animation: textGlowGPU 8s linear infinite;
+            will-change: filter;
+        }
+
+        .char-span:hover {
+            transform: scale(1.35) translateY(-14px) rotate(6deg);
+            color: var(--accent-2) !important;
+            -webkit-text-fill-color: var(--accent-2) !important;
+            text-shadow: 0 12px 24px rgba(45, 212, 191, 0.65), 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .char-span.sibling-1 {
+            transform: scale(1.18) translateY(-6px) rotate(3deg);
+            color: rgba(255, 255, 255, 0.95) !important;
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        .char-span.sibling-2 {
+            transform: scale(1.08) translateY(-2px) rotate(1deg);
+            color: rgba(255, 255, 255, 0.85) !important;
+            -webkit-text-fill-color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        .eyebrow-row {
+            transition: transform 0.5s cubic-bezier(0.34, 1.75, 0.64, 1);
+        }
+
+        .eyebrow-row:hover {
+            transform: scale(1.04) translateY(-1px);
+        }
+
+        .eyebrow-row:active {
+            transform: scale(0.96) translateY(1px);
+        }
+
+        .eyebrow-row .pill {
+            transition: transform 0.4s cubic-bezier(0.34, 1.75, 0.64, 1), background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .eyebrow-row .pill:hover {
+            transform: scale(1.08) translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        #clickCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483647;
+            pointer-events: none;
+        }
+
+        /* Apple-style Slide-to-Unlock for Beta widget */
+        .apple-unlock-container {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.25);
+            user-select: none;
+            -webkit-user-select: none;
+            margin-top: 10px;
+        }
+
+        .apple-unlock-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .apple-unlock-shimmer {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.45);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0.4) 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerText 2.2s infinite linear;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes shimmerText {
+            0% {
+                background-position: -150% 0;
+            }
+
+            100% {
+                background-position: 150% 0;
+            }
+        }
+
+        .apple-unlock-handle {
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            display: grid;
+            place-items: center;
+            cursor: grab;
+            z-index: 10;
+            touch-action: none;
+        }
+
+        .apple-unlock-handle:active {
+            cursor: grabbing;
+            background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+        }
+
+        .apple-unlock-arrow {
+            color: #0b0f19;
+            font-size: 1.15rem;
+            font-weight: 900;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .apple-unlock-container.unlocked {
+            animation: unlockPulse 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes unlockPulse {
+            0% {
+                transform: scale(1);
+                background: rgba(45, 212, 191, 0.22);
+                border-color: rgba(45, 212, 191, 0.45);
+            }
+
+            50% {
+                transform: scale(1.04);
+                background: rgba(45, 212, 191, 0.45);
+                border-color: rgba(45, 212, 191, 0.7);
+            }
+
+            100% {
+                transform: scale(0.96);
+                opacity: 0;
+            }
+        }
+
+        .shake-modal {
+            animation: shakeModalAnimation 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        @keyframes shakeModalAnimation {
+
+            10%,
+            90% {
+                transform: translate3d(-2px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(4px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-6px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(6px, 0, 0);
+            }
+        }
+
+        /* Easter Eggs Styles */
+        /* Macintosh 1984 Retro Mode */
+        body.retro-mode {
+            filter: grayscale(1) contrast(1.3) brightness(1.05) !important;
+            background: #121212 !important;
+        }
+
+        body.retro-mode * {
+            font-family: Monaco, Consolas, "Courier New", monospace !important;
+            border-radius: 0px !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            backdrop-filter: none !important;
+            background-image: none !important;
+        }
+
+        body.retro-mode .container {
+            border: 4px double #ffffff !important;
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        body.retro-mode .app-card {
+            border: 2px solid #ffffff !important;
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        body.retro-mode .pill {
+            border: 2px solid #ffffff !important;
+            background: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        .crt-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483645;
+            pointer-events: none;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.015), rgba(0, 0, 255, 0.05));
+            background-size: 100% 4px, 6px 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.retro-mode .crt-overlay {
+            opacity: 1;
+        }
+
+        /* Siri Voice Wave Assist */
+        .siri-wave-container {
+            position: fixed;
+            left: 50%;
+            bottom: -200px;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 600px;
+            height: 140px;
+            z-index: 2147483630;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: bottom 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .siri-wave-container.show {
+            bottom: 0px;
+        }
+
+        .siri-wave-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        .siri-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .siri-path {
+            transform-origin: center center;
+            will-change: transform;
+        }
+
+        .siri-path.path-1 {
+            animation: siriWaveMotion1 3s infinite linear;
+        }
+
+        .siri-path.path-2 {
+            animation: siriWaveMotion2 2.4s infinite linear;
+        }
+
+        .siri-path.path-3 {
+            animation: siriWaveMotion3 3.6s infinite linear;
+        }
+
+        .siri-path.path-4 {
+            animation: siriWaveMotion4 1.8s infinite linear;
+        }
+
+        @keyframes siriWaveMotion1 {
+            0% {
+                transform: scaleY(0.8) scaleX(1) translateY(0);
+            }
+
+            50% {
+                transform: scaleY(1.3) scaleX(0.95) translateY(-4px);
+            }
+
+            100% {
+                transform: scaleY(0.8) scaleX(1) translateY(0);
+            }
+        }
+
+        @keyframes siriWaveMotion2 {
+            0% {
+                transform: scaleY(1.2) scaleX(0.9) translateY(3px);
+            }
+
+            50% {
+                transform: scaleY(0.7) scaleX(1.04) translateY(-2px);
+            }
+
+            100% {
+                transform: scaleY(1.2) scaleX(0.9) translateY(3px);
+            }
+        }
+
+        @keyframes siriWaveMotion3 {
+            0% {
+                transform: scaleY(0.6) scaleX(1.04) translateY(-2px);
+            }
+
+            50% {
+                transform: scaleY(1.1) scaleX(0.9) translateY(4px);
+            }
+
+            100% {
+                transform: scaleY(0.6) scaleX(1.04) translateY(-2px);
+            }
+        }
+
+        @keyframes siriWaveMotion4 {
+            0% {
+                transform: scaleY(1) scaleX(1) translateY(0);
+            }
+
+            50% {
+                transform: scaleY(1.5) scaleX(0.85) translateY(2px);
+            }
+
+            100% {
+                transform: scaleY(1) scaleX(1) translateY(0);
+            }
+        }
+
+        .siri-glow-bg {
+            position: absolute;
+            width: 70%;
+            height: 60%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, rgba(14, 165, 233, 0.14) 40%, rgba(236, 72, 153, 0.08) 70%, transparent 100%);
+            filter: blur(24px);
+            z-index: -1;
+            animation: siriGlowPulse 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes siriGlowPulse {
+            0% {
+                transform: scale(1) translate3d(0, 0, 0);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: scale(1.25) translate3d(10px, -5px, 0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) translate3d(0, 0, 0);
+                opacity: 0.7;
+            }
+        }
+
+        /* iPhone Crash Alert */
+        .crash-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483642;
+            background: rgba(15, 23, 42, 0.98);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            text-align: center;
+            color: #ffffff;
+            padding: 24px;
+        }
+
+        .crash-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+            animation: crashFlashing 1s infinite alternate;
+        }
+
+        @keyframes crashFlashing {
+            from {
+                background: rgba(15, 23, 42, 0.98);
+            }
+
+            to {
+                background: rgba(153, 27, 27, 0.98);
+            }
+        }
+
+        .crash-title {
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            font-weight: 900;
+            color: #fca5a5;
+            margin-bottom: 16px;
+            letter-spacing: -0.04em;
+        }
+
+        .crash-desc {
+            font-size: 1.14rem;
+            line-height: 1.5;
+            max-width: 500px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 38px;
+        }
+
+        .crash-timer {
+            font-size: 6rem;
+            font-weight: 950;
+            color: #ffffff;
+            margin-bottom: 40px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .crash-cancel-btn {
+            min-height: 58px;
+            padding: 0 44px;
+            border-radius: 999px;
+            border: 0;
+            background: #ffffff;
+            color: #0f172a;
+            font: inherit;
+            font-weight: 950;
+            font-size: 1.14rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .crash-cancel-btn:hover {
+            transform: scale(1.05);
+            background: #e2e8f0;
+        }
+
+        /* iOS Toast Notification (iToast) */
+        .itoast-container {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(420px, calc(100vw - 32px));
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2147483646;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: top 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: left;
+            pointer-events: auto;
+        }
+
+        .itoast-container.show {
+            top: 20px;
+        }
+
+        .itoast-icon {
+            width: 42px;
+            height: 42px;
+            background: #000;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .itoast-body {
+            min-width: 0;
+        }
+
+        .itoast-title {
+            display: block;
+            font-weight: 850;
+            color: #ffffff;
+            font-size: 0.94rem;
+            margin-bottom: 2px;
+        }
+
+        .itoast-text {
+            display: block;
+            color: var(--soft-blue-text);
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .app-card.floating-card {
+            position: fixed !important;
+            z-index: 99999;
+            pointer-events: auto;
+            transition: transform 0.1s ease-out, box-shadow 0.24s ease !important;
+            cursor: grab;
+            margin: 0 !important;
+        }
+
+        .app-card.floating-card:active {
+            cursor: grabbing;
+            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6), 0 0 30px var(--accent-2) !important;
+        }
+
+        .steve-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000000;
+            z-index: 2147483640;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .steve-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .steve-spotlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, transparent 70%);
+            pointer-events: none;
+            mix-blend-mode: screen;
+            will-change: transform;
+            transform: translate3d(-250px, -250px, 0);
+            transition: transform 0.1s ease;
+        }
+
+        .steve-text {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: clamp(1.8rem, 5vw, 3.8rem);
+            font-weight: 300;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: scale(0.94);
+            transition: opacity 1.4s ease, transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.4;
+            z-index: 10;
+        }
+
+        .steve-text.reveal {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .steve-apple-logo {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: scale(0.5) rotate(-15deg);
+            transition: all 1.8s cubic-bezier(0.34, 1.75, 0.64, 1);
+            z-index: 10;
+        }
+
+        .steve-apple-logo.reveal {
+            opacity: 0.9;
+            transform: scale(1) rotate(0deg);
+        }
+
+        /* --- Idle Escalation Spam Mode CSS --- */
+        @keyframes spamFlash {
+
+            0%,
+            100% {
+                background-color: transparent;
+            }
+
+            50% {
+                background-color: rgba(239, 68, 68, 0.25);
+            }
+        }
+
+        @keyframes spamFlashFast {
+
+            0%,
+            100% {
+                background-color: transparent;
+            }
+
+            50% {
+                background-color: rgba(239, 68, 68, 0.45);
+            }
+        }
+
+        @keyframes spamFlashExtreme {
+
+            0%,
+            100% {
+                background-color: transparent;
+            }
+
+            50% {
+                background-color: rgba(239, 68, 68, 0.65);
+            }
+        }
+
+        .spam-flashing {
+            animation: spamFlash 0.4s infinite !important;
+        }
+
+        .spam-flashing-fast {
+            animation: spamFlashFast 0.2s infinite !important;
+        }
+
+        .spam-flashing-extreme {
+            animation: spamFlashExtreme 0.1s infinite !important;
+        }
+
+        @keyframes spamWobble {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            10% {
+                transform: translate(-3px, -3px) rotate(-1deg);
+            }
+
+            20% {
+                transform: translate(3px, -1px) rotate(1deg);
+            }
+
+            30% {
+                transform: translate(-1px, 3px) rotate(-0.5deg);
+            }
+
+            40% {
+                transform: translate(3px, 1px) rotate(1deg);
+            }
+
+            50% {
+                transform: translate(-2px, 3px) rotate(-1deg);
+            }
+
+            60% {
+                transform: translate(-3px, -1px) rotate(0deg);
+            }
+
+            70% {
+                transform: translate(3px, 2px) rotate(-1deg);
+            }
+
+            80% {
+                transform: translate(-1px, -2px) rotate(1deg);
+            }
+
+            90% {
+                transform: translate(2px, 3px) rotate(0.5deg);
+            }
+        }
+
+        .spam-wobble {
+            animation: spamWobble 0.15s infinite !important;
+        }
+
+        .itoast-container.spam-toast {
+            position: fixed;
+            top: auto;
+            left: auto;
+            transform: none;
+            z-index: 2147483647;
+            background: rgba(220, 38, 38, 0.95) !important;
+            border: 2px solid #ef4444 !important;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+            font-weight: 850;
+            width: min(320px, calc(100vw - 32px));
+            padding: 12px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: auto;
+            cursor: pointer;
+            animation: spawnIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.1s ease;
+        }
+
+        .itoast-container.spam-toast:hover {
+            transform: scale(1.05) !important;
+        }
+
+        .itoast-container.spam-toast .itoast-text {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .itoast-container.spam-toast .itoast-title {
+            color: #ffffff !important;
+        }
+
+        @keyframes spawnIn {
+            from {
+                transform: scale(0.4) rotate(-5deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Visibility & Offscreen Pausing optimizations */
+        body.tab-hidden *,
+        body.tab-hidden ::before,
+        body.tab-hidden ::after {
+            animation-play-state: paused !important;
+        }
+
+        .beta-backdrop:not(.show) .apple-unlock-shimmer {
+            animation: none !important;
+        }
+
+        .siri-wave-container:not(.show) .siri-path,
+        .siri-wave-container:not(.show) .siri-glow-bg {
+            animation: none !important;
+        }
+
+        /* ------------------------------------------- */
+
         @media (prefers-reduced-motion: reduce) {
+
             *,
             *::before,
-            *::after {
+            *::after,
+            .beta-backdrop,
+            .beta-widget {
                 animation: none !important;
                 transition: none !important;
                 scroll-behavior: auto !important;
@@ -1379,8 +2479,13 @@
             -webkit-text-size-adjust: 100%;
         }
     </style>
+    <link rel="stylesheet" href="tutorial.css">
 </head>
+
 <body>
+    <div class="bg-gradient-layer" aria-hidden="true"></div>
+    <canvas id="clickCanvas"></canvas>
+    <div class="cursor-glow" id="cursorGlow"></div>
     <div class="noise-layer" aria-hidden="true"></div>
     <div class="sparkles" aria-hidden="true">
         <span class="sparkle"></span>
@@ -1405,32 +2510,35 @@
             </h1>
 
             <p class="subtitle">
-                Deine kleine Kommandozentrale für Experimente, Rechner und absolut seriöse Web-App-Machenschaften. Made by Miro Adomat and Til Freitag.
+                Deine kleine Kommandozentrale für Experimente, Rechner und absolut seriöse Web-App-Machenschaften. Made
+                by Miro Adomat and Til Freitag.
             </p>
             <div class="status-strip">
                 <span class="status-dot"></span>
                 <span>System online · Experimente geladen · Design-Abteilung eskaliert</span>
             </div>
 
-            <a class="app-card" href="Games/100prozent.html">
-                <span class="card-icon">💯</span>
-                <span class="card-content">
-                    <span class="card-title">Zur 100% Seite</span>
-                    <span class="card-desc">Wenn schon unnötig, dann wenigstens komplett. Hundert Prozent halt.</span>
-                    <span class="card-badge">100%</span>
-                </span>
-            </a>
-            
-            <a class="app-card" href="Games/gambl.html">
+            <nav class="links" aria-label="Projektlinks">
+                <a class="app-card" href="Games/100prozent.html">
+                    <span class="card-icon">💯</span>
+                    <span class="card-content">
+                        <span class="card-title">Zur 100% Seite</span>
+                        <span class="card-desc">Wenn schon unnötig, dann wenigstens komplett. Hundert Prozent
+                            halt.</span>
+                        <span class="card-badge">100%</span>
+                    </span>
+                </a>
+
+                <a class="app-card" href="Games/gambl.html">
                     <span class="card-icon">🎲</span>
                     <span class="card-content">
                         <span class="card-title">Zur Glücksspiel Simulation</span>
-                        <span class="card-desc">Risiko ohne echten Finanziellen Ruin. Also quasi Finanzen auf Spielplatzmodus.</span>
+                        <span class="card-desc">Risiko ohne echten Finanziellen Ruin. Also quasi Finanzen auf
+                            Spielplatzmodus.</span>
                         <span class="card-badge">Sim</span>
                     </span>
                 </a>
-            
-            <nav class="links" aria-label="Projektlinks">
+
                 <a class="app-card" href="Games/3expo.html">
                     <span class="card-icon">🚀</span>
                     <span class="card-content">
@@ -1444,7 +2552,8 @@
                     <span class="card-icon">📈</span>
                     <span class="card-content">
                         <span class="card-title">Investment Portfolio Rechner</span>
-                        <span class="card-desc">Historische Aktien-Performance, Dividenden und Was-wäre-wenn-Rechnungen.</span>
+                        <span class="card-desc">Historische Aktien-Performance, Dividenden und
+                            Was-wäre-wenn-Rechnungen.</span>
                         <span class="card-badge">Halten für Versionen</span>
                     </span>
                 </a>
@@ -1462,17 +2571,29 @@
                 <div>
                     <span class="more-games-kicker">Extra Games</span>
                     <h2 class="more-games-title" id="moreGamesTitle">Die Dopamin-Schublade</h2>
-                    <p class="more-games-copy">Kurze Games mit Score, Flow und genug BlopperBold-Energie für eine schnelle Runde zwischendurch.</p>
+                    <p class="more-games-copy">Kurze Games mit Score, Flow und genug BlopperBold-Energie für eine
+                        schnelle Runde zwischendurch.</p>
                 </div>
-                <button class="more-games-close" type="button" id="moreGamesClose" aria-label="Mehr anzeigen schließen">×</button>
+                <button class="more-games-close" type="button" id="moreGamesClose"
+                    aria-label="Mehr anzeigen schließen">×</button>
             </div>
 
             <div class="more-games-grid">
+                <a class="app-card ye-soundboard-trigger-btn" href="javascript:void(0)">
+                    <span class="card-icon">🎹</span>
+                    <span class="card-content">
+                        <span class="card-title">Runaway Soundboard</span>
+                        <span class="card-desc">Piano hauen, Samples feuern und den Beat live melken.</span>
+                        <span class="card-badge">Ye Soundboard</span>
+                    </span>
+                </a>
+
                 <a class="app-card" href="Games/biasbingo.html">
                     <span class="card-icon">🧠</span>
                     <span class="card-content">
                         <span class="card-title">Bias Bingo</span>
-                        <span class="card-desc">Denkfehler erkennen, Hype-Schaden vermeiden und trotzdem Quatsch anklicken.</span>
+                        <span class="card-desc">Denkfehler erkennen, Hype-Schaden vermeiden und trotzdem Quatsch
+                            anklicken.</span>
                         <span class="card-badge">Schlau</span>
                     </span>
                 </a>
@@ -1481,7 +2602,8 @@
                     <span class="card-icon">⚖️</span>
                     <span class="card-content">
                         <span class="card-title">Entscheidomat</span>
-                        <span class="card-desc">Alltagsentscheidungen gegen Geld, Zeit, Energie und Zukunftswert rechnen.</span>
+                        <span class="card-desc">Alltagsentscheidungen gegen Geld, Zeit, Energie und Zukunftswert
+                            rechnen.</span>
                         <span class="card-badge">Nützlich</span>
                     </span>
                 </a>
@@ -1499,7 +2621,8 @@
                     <span class="card-icon">🎚️</span>
                     <span class="card-content">
                         <span class="card-title">Takt</span>
-                        <span class="card-desc">Triff die goldene Zone mit Space, Enter oder Button. Perfekt macht süchtig.</span>
+                        <span class="card-desc">Triff die goldene Zone mit Space, Enter oder Button. Perfekt macht
+                            süchtig.</span>
                         <span class="card-badge">Timing</span>
                     </span>
                 </a>
@@ -1517,7 +2640,8 @@
                     <span class="card-icon">📉</span>
                     <span class="card-content">
                         <span class="card-title">Kurve</span>
-                        <span class="card-desc">Kaufen, halten, verkaufen. Kleine Risiko-Kurve mit schnellen Entscheidungen.</span>
+                        <span class="card-desc">Kaufen, halten, verkaufen. Kleine Risiko-Kurve mit schnellen
+                            Entscheidungen.</span>
                         <span class="card-badge">Risk</span>
                     </span>
                 </a>
@@ -1526,13 +2650,50 @@
         </section>
     </div>
 
+    <div class="ye-soundboard-backdrop" id="yeSoundboardBackdrop" aria-hidden="true">
+        <section class="ye-soundboard-widget" role="dialog" aria-modal="true" aria-labelledby="yeSoundboardTitle">
+            <div class="ye-soundboard-header">
+                <div>
+                    <span class="more-games-kicker">Ye Soundboard</span>
+                    <h2 class="ye-soundboard-title" id="yeSoundboardTitle">Wähle deinen Modus</h2>
+                    <p class="more-games-copy" style="margin-top: 8px;">Spiele das originale Runaway-Klavier oder lade
+                        eigene Sounds in deinen persönlichen Sampler.</p>
+                </div>
+                <button class="ye-soundboard-close" type="button" id="yeSoundboardClose"
+                    aria-label="Schließen">×</button>
+            </div>
+
+            <div class="ye-soundboard-options">
+                <a class="app-card" href="ye-soundboard/index.html"
+                    style="text-align: left; margin: 0; min-height: 140px;">
+                    <span class="card-icon">🎹</span>
+                    <span class="card-content">
+                        <span class="card-title">Runaway Soundboard</span>
+                        <span class="card-desc">Piano hauen, Samples feuern und den Beat live melken.</span>
+                        <span class="card-badge">Original</span>
+                    </span>
+                </a>
+                <a class="app-card" href="ye-soundboard/sampler.html"
+                    style="text-align: left; margin: 0; min-height: 140px;">
+                    <span class="card-icon">🎛️</span>
+                    <span class="card-content">
+                        <span class="card-title">Eigener Sampler</span>
+                        <span class="card-desc">Eigene Sounds per Drag & Drop reinladen, Pitch & Reverb anpassen.</span>
+                        <span class="card-badge">Custom</span>
+                    </span>
+                </a>
+            </div>
+        </section>
+    </div>
+
     <div class="version-menu-backdrop" id="versionMenuBackdrop" aria-hidden="true">
         <div class="version-menu" role="dialog" aria-modal="true" aria-labelledby="versionMenuTitle">
             <p class="version-menu-title" id="versionMenuTitle">Portfolio-Version öffnen</p>
             <div class="version-menu-options">
-                <button class="version-menu-option" type="button" data-version-url="Aktienrechner/Alt/Since.html">Alt</button>
-                <button class="version-menu-option" type="button" data-version-url="Aktienrechner/Aktiv/Since.html">Aktiv</button>
-                <button class="version-menu-option" type="button" data-version-url="Aktienrechner/Canary/Since.html">Canary</button>
+                <button class="version-menu-option" type="button"
+                    data-version-url="Aktienrechner/Aktiv/Since.html">Aktiv</button>
+                <button class="version-menu-option" type="button"
+                    data-version-url="Aktienrechner/Canary/Since.html">Canary</button>
             </div>
             <button class="version-menu-cancel" type="button" id="versionMenuCancel">Abbrechen</button>
         </div>
@@ -1551,7 +2712,8 @@
 
             <form class="admin-pin-panel" id="adminPinForm">
                 <div class="admin-pin-row">
-                    <input class="admin-pin-input" id="adminPinInput" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="PIN">
+                    <input class="admin-pin-input" id="adminPinInput" type="password" inputmode="numeric"
+                        autocomplete="off" maxlength="4" placeholder="PIN">
                     <button class="admin-pin-submit" type="submit">Entsperren</button>
                 </div>
                 <p class="admin-error" id="adminError" aria-live="polite"></p>
@@ -1562,7 +2724,8 @@
                     <span class="admin-tool-icon">⌘</span>
                     <span>
                         <span class="admin-tool-title">Admin Dashboard</span>
-                        <span class="admin-tool-desc">CarPlay-Menü für Reset Center, Feature Flags, Backup, System Check und Storage.</span>
+                        <span class="admin-tool-desc">CarPlay-Menü für Reset Center, Feature Flags, Backup, System Check
+                            und Storage.</span>
                     </span>
                 </a>
 
@@ -1570,15 +2733,17 @@
                     <span class="admin-tool-icon">🧰</span>
                     <span>
                         <span class="admin-tool-title">Local Storage Viewer</span>
-                        <span class="admin-tool-desc">Browser-Cache ansehen, bearbeiten, exportieren oder einzelne Keys löschen.</span>
+                        <span class="admin-tool-desc">Browser-Cache ansehen, bearbeiten, exportieren oder einzelne Keys
+                            löschen.</span>
                     </span>
                 </a>
 
-                <a class="admin-tool-card" href="ye-soundboard/index.html">
+                <a class="admin-tool-card ye-soundboard-trigger-btn" href="javascript:void(0)">
                     <span class="admin-tool-icon">🎹</span>
                     <span>
                         <span class="admin-tool-title">Runaway Soundboard</span>
-                        <span class="admin-tool-desc">Experimentelles Ye-Soundboard, noch nicht öffentlich in der Startseiten-Schublade.</span>
+                        <span class="admin-tool-desc">Experimentelles Ye-Soundboard, noch nicht öffentlich in der
+                            Startseiten-Schublade.</span>
                     </span>
                 </a>
             </div>
@@ -1602,7 +2767,8 @@
                     <span class="more-games-kicker">Legal Stuff</span>
                     <h2 class="impressum-title" id="impressumTitle">Impressum</h2>
                 </div>
-                <button class="impressum-close" type="button" id="impressumClose" aria-label="Impressum schließen">×</button>
+                <button class="impressum-close" type="button" id="impressumClose"
+                    aria-label="Impressum schließen">×</button>
             </div>
 
             <div class="impressum-content">
@@ -1623,8 +2789,33 @@
                 </p>
                 <h4>Haftungsausschluss</h4>
                 <p>
-                    Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
+                    Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer
+                    Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
                 </p>
+            </div>
+        </section>
+    </div>
+
+    <div class="beta-backdrop" id="betaBackdrop" aria-hidden="true">
+        <section class="beta-widget" role="dialog" aria-modal="true" aria-labelledby="betaTitle">
+            <div class="beta-icon">🧪</div>
+            <h2 class="beta-title" id="betaTitle">Beta-Spielplatz</h2>
+            <p class="beta-desc">
+                Du betrittst die offizielle <strong>BlopperBold Beta-Seite</strong>.
+                Hier probieren wir neue Features, Games und abenteuerliche Designs aus.
+                Manche Dinge könnten wackelig sein – Feedback ist immer gern gesehen!
+            </p>
+            <button class="beta-btn" type="button" id="betaDismissBtn" style="display: none;">Verstanden &amp;
+                Weiter</button>
+            <div class="apple-unlock-container" id="betaUnlockContainer">
+                <div class="apple-unlock-track">
+                    <div class="apple-unlock-shimmer" id="betaUnlockShimmer">
+                        <span>➔ zum Eintreten wischen</span>
+                    </div>
+                    <div class="apple-unlock-handle" id="betaUnlockHandle">
+                        <span class="apple-unlock-arrow">❯</span>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -1635,9 +2826,72 @@
             <button class="impressum-trigger" type="button" id="impressumButton">Impressum</button>
             <span class="footer-easteregg">Made by Til &amp; Miro with &lt;3</span>
             <a class="impressum-trigger" href="datenschutz.html">Datenschutz</a>
-            <a class="impressum-trigger" href="https://beta.blopperbold.org">Beta</a>
         </div>
     </footer>
+
+    <div class="crt-overlay" aria-hidden="true"></div>
+
+    <div class="siri-wave-container" id="siriWaveContainer" aria-hidden="true">
+        <div class="siri-wave-wrapper">
+            <svg class="siri-svg" viewBox="0 0 400 100" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="siri-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="rgba(14, 165, 233, 0)" />
+                        <stop offset="30%" stop-color="rgba(14, 165, 233, 0.75)" />
+                        <stop offset="70%" stop-color="rgba(45, 212, 191, 0.75)" />
+                        <stop offset="100%" stop-color="rgba(45, 212, 191, 0)" />
+                    </linearGradient>
+                    <linearGradient id="siri-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="rgba(244, 63, 94, 0)" />
+                        <stop offset="40%" stop-color="rgba(244, 63, 94, 0.75)" />
+                        <stop offset="80%" stop-color="rgba(139, 92, 246, 0.75)" />
+                        <stop offset="100%" stop-color="rgba(139, 92, 246, 0)" />
+                    </linearGradient>
+                    <linearGradient id="siri-grad-3" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="rgba(236, 72, 153, 0)" />
+                        <stop offset="20%" stop-color="rgba(236, 72, 153, 0.6)" />
+                        <stop offset="60%" stop-color="rgba(59, 130, 246, 0.6)" />
+                        <stop offset="100%" stop-color="rgba(59, 130, 246, 0)" />
+                    </linearGradient>
+                    <filter id="siri-glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+                <path class="siri-path path-1" d="M 0 50 Q 100 20 200 50 T 400 50" fill="none"
+                    stroke="url(#siri-grad-1)" stroke-width="4.5" filter="url(#siri-glow)" />
+                <path class="siri-path path-2" d="M 0 50 Q 100 80 200 50 T 400 50" fill="none"
+                    stroke="url(#siri-grad-2)" stroke-width="3.5" filter="url(#siri-glow)" />
+                <path class="siri-path path-3" d="M 0 50 Q 100 35 200 55 T 400 50" fill="none"
+                    stroke="url(#siri-grad-3)" stroke-width="2.5" filter="url(#siri-glow)" />
+                <path class="siri-path path-4" d="M 0 50 Q 100 65 200 45 T 400 50" fill="none"
+                    stroke="url(#siri-grad-1)" stroke-width="2" />
+            </svg>
+            <div class="siri-glow-bg"></div>
+        </div>
+    </div>
+
+    <div class="crash-overlay" id="crashOverlay" aria-hidden="true">
+        <div class="crash-title">🚨 Unfall erkannt</div>
+        <div class="crash-desc">Es sieht so aus, als hätten Sie einen schweren Unfall gehabt. Das iPhone wird Notruf SOS
+            aktivieren.</div>
+        <div class="crash-timer" id="crashTimer">5</div>
+        <button class="crash-cancel-btn" type="button" id="crashCancelBtn">Abbrechen</button>
+    </div>
+
+    <div class="itoast-container" id="itoastContainer" role="alert" aria-live="assertive">
+        <div class="itoast-icon">💬</div>
+        <div class="itoast-body">
+            <strong class="itoast-title">Steve Jobs</strong>
+            <span class="itoast-text" id="itoastText">Stay hungry, stay foolish.</span>
+        </div>
+    </div>
+
+    <div class="steve-overlay" id="steveOverlay">
+        <div class="steve-spotlight" id="steveSpotlight"></div>
+        <div class="steve-apple-logo" id="steveAppleLogo">🍏</div>
+        <div class="steve-text" id="steveText">There is one more thing...</div>
+    </div>
 
     <script>
         const moreGamesButton = document.getElementById('moreGamesButton');
@@ -1658,6 +2912,8 @@
         const impressumButton = document.getElementById('impressumButton');
         const impressumBackdrop = document.getElementById('impressumBackdrop');
         const impressumClose = document.getElementById('impressumClose');
+        const betaBackdrop = document.getElementById('betaBackdrop');
+        const betaDismissBtn = document.getElementById('betaDismissBtn');
         let versionHoldTimer = null;
         let versionHoldTriggered = false;
         let versionHoldActive = false;
@@ -1700,15 +2956,45 @@
         impressumButton.addEventListener('click', openImpressum);
         impressumClose.addEventListener('click', closeImpressum);
 
-        moreGamesBackdrop.addEventListener('click', function(event) {
+        moreGamesBackdrop.addEventListener('click', function (event) {
             if (event.target === moreGamesBackdrop) {
                 closeMoreGames();
             }
         });
 
-        impressumBackdrop.addEventListener('click', function(event) {
+        impressumBackdrop.addEventListener('click', function (event) {
             if (event.target === impressumBackdrop) {
                 closeImpressum();
+            }
+        });
+
+        // Ye Soundboard Selection Modal
+        const yeSoundboardBackdrop = document.getElementById('yeSoundboardBackdrop');
+        const yeSoundboardClose = document.getElementById('yeSoundboardClose');
+        const yeSoundboardTriggers = document.querySelectorAll('.ye-soundboard-trigger-btn');
+
+        function openYeSoundboardChoice() {
+            // Close more games if open
+            closeMoreGames();
+
+            yeSoundboardBackdrop.classList.add('show');
+            yeSoundboardBackdrop.setAttribute('aria-hidden', 'false');
+            yeSoundboardClose.focus();
+        }
+
+        function closeYeSoundboardChoice() {
+            yeSoundboardBackdrop.classList.remove('show');
+            yeSoundboardBackdrop.setAttribute('aria-hidden', 'true');
+        }
+
+        yeSoundboardTriggers.forEach(trigger => {
+            trigger.addEventListener('click', openYeSoundboardChoice);
+        });
+
+        yeSoundboardClose.addEventListener('click', closeYeSoundboardChoice);
+        yeSoundboardBackdrop.addEventListener('click', function (event) {
+            if (event.target === yeSoundboardBackdrop) {
+                closeYeSoundboardChoice();
             }
         });
 
@@ -1828,14 +3114,14 @@
             clearAdminHold();
         }
 
-        portfolioLink.addEventListener('click', function(event) {
+        portfolioLink.addEventListener('click', function (event) {
             if (versionHoldTriggered) {
                 event.preventDefault();
                 versionHoldTriggered = false;
             }
         });
 
-        portfolioLink.addEventListener('pointerdown', function(event) {
+        portfolioLink.addEventListener('pointerdown', function (event) {
             if (event.button && event.button !== 0) return;
 
             if (event.pointerType !== 'mouse') {
@@ -1858,7 +3144,7 @@
             versionHoldTimer = window.setTimeout(openVersionMenu, 620);
         });
 
-        portfolioLink.addEventListener('pointermove', function(event) {
+        portfolioLink.addEventListener('pointermove', function (event) {
             if (!versionHoldActive) return;
 
             const movedX = Math.abs(event.clientX - versionHoldStartX);
@@ -1870,7 +3156,7 @@
             }
         });
 
-        portfolioLink.addEventListener('pointerup', function(event) {
+        portfolioLink.addEventListener('pointerup', function (event) {
             if (event.pointerType !== 'mouse') {
                 event.preventDefault();
             }
@@ -1886,24 +3172,24 @@
             }
         });
 
-        portfolioLink.addEventListener('pointerleave', function(event) {
+        portfolioLink.addEventListener('pointerleave', function (event) {
             if (event.pointerType === 'mouse') {
                 clearVersionHold();
             }
         });
         portfolioLink.addEventListener('pointercancel', clearVersionHold);
-        portfolioLink.addEventListener('contextmenu', function(event) {
+        portfolioLink.addEventListener('contextmenu', function (event) {
             event.preventDefault();
         });
 
-        versionMenuBackdrop.addEventListener('click', function(event) {
+        versionMenuBackdrop.addEventListener('click', function (event) {
             if (event.target === versionMenuBackdrop) {
                 closeVersionMenu();
             }
         });
 
         versionMenuBackdrop.querySelectorAll('[data-version-url]').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 window.location.href = button.dataset.versionUrl;
             });
         });
@@ -1915,17 +3201,17 @@
         adminMobileTrigger.addEventListener('pointermove', moveMobileAdminHold);
         adminMobileTrigger.addEventListener('pointerup', stopMobileAdminHold);
         adminMobileTrigger.addEventListener('pointercancel', stopMobileAdminHold);
-        adminMobileTrigger.addEventListener('contextmenu', function(event) {
+        adminMobileTrigger.addEventListener('contextmenu', function (event) {
             event.preventDefault();
         });
 
-        adminBackdrop.addEventListener('click', function(event) {
+        adminBackdrop.addEventListener('click', function (event) {
             if (event.target === adminBackdrop) {
                 closeAdmin();
             }
         });
 
-        adminPinForm.addEventListener('submit', function(event) {
+        adminPinForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
             if (adminPinInput.value === '7903') {
@@ -1938,11 +3224,11 @@
             adminPinInput.select();
         });
 
-        adminPinInput.addEventListener('input', function() {
+        adminPinInput.addEventListener('input', function () {
             adminPinInput.value = adminPinInput.value.replace(/\D/g, '').slice(0, 4);
         });
 
-        adminPinInput.addEventListener('keydown', function(event) {
+        adminPinInput.addEventListener('keydown', function (event) {
             const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Home', 'End'];
 
             if (allowedKeys.includes(event.key) || event.ctrlKey || event.metaKey) {
@@ -1954,12 +3240,15 @@
             }
         });
 
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.shiftKey && event.key.toLowerCase() === 'd' && !event.repeat) {
                 startAdminHold();
             }
 
             if (event.key === 'Escape') {
+                if (betaBackdrop.classList.contains('show')) {
+                    closeBetaPopup();
+                }
                 if (moreGamesBackdrop.classList.contains('show')) {
                     closeMoreGames();
                 }
@@ -1971,9 +3260,1410 @@
             }
         });
 
-        document.addEventListener('keyup', function(event) {
+        document.addEventListener('keyup', function (event) {
             if (event.key === 'Shift' || event.key.toLowerCase() === 'd') {
                 clearAdminHold();
+            }
+        });
+
+        // Beta Popup Logic
+        function openBetaPopup() {
+            betaBackdrop.classList.add('show');
+            betaBackdrop.setAttribute('aria-hidden', 'false');
+            betaDismissBtn.focus();
+        }
+
+        function closeBetaPopup() {
+            betaBackdrop.classList.remove('show');
+            betaBackdrop.setAttribute('aria-hidden', 'true');
+        }
+
+        betaDismissBtn.addEventListener('click', closeBetaPopup);
+
+        betaBackdrop.addEventListener('click', function (event) {
+            if (event.target === betaBackdrop) {
+                closeBetaPopup();
+            }
+        });
+
+        // --- APPLE OVER-ANIMATION OVERHAUL JS ENGINE ---
+
+        // 1. Split Title Letters for Elastic Wave effect
+        function splitTitleText() {
+            const title = document.getElementById('pageTitle');
+            if (!title) return;
+
+            const childNodes = Array.from(title.childNodes);
+            title.innerHTML = '';
+
+            let charIndex = 0;
+            childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent.replace(/\s+/g, ' ');
+                    const trimmed = text.trim();
+                    if (!trimmed) return;
+
+                    const finalText = (title.childNodes.length === 0) ? trimmed : text;
+                    const fragment = document.createDocumentFragment();
+                    for (let i = 0; i < finalText.length; i++) {
+                        const char = finalText[i];
+                        const span = document.createElement('span');
+                        span.className = 'char-span';
+                        if (char === ' ') {
+                            span.classList.add('space');
+                        }
+                        span.textContent = char;
+                        span.dataset.index = charIndex++;
+                        fragment.appendChild(span);
+                    }
+                    title.appendChild(fragment);
+                } else if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('gradient-text')) {
+                    const gradText = node.textContent.trim();
+                    const gradSpan = document.createElement('span');
+                    gradSpan.className = 'gradient-text';
+
+                    for (let i = 0; i < gradText.length; i++) {
+                        const char = gradText[i];
+                        const span = document.createElement('span');
+                        span.className = 'char-span';
+                        if (char === ' ') {
+                            span.classList.add('space');
+                        }
+                        span.textContent = char;
+                        span.dataset.index = charIndex++;
+                        gradSpan.appendChild(span);
+                    }
+                    title.appendChild(gradSpan);
+                } else {
+                    title.appendChild(node.cloneNode(true));
+                }
+            });
+
+            const spans = title.querySelectorAll('.char-span');
+            spans.forEach(span => {
+                span.addEventListener('pointerenter', () => {
+                    const idx = parseInt(span.dataset.index);
+                    spans.forEach(s => {
+                        const sIdx = parseInt(s.dataset.index);
+                        const diff = Math.abs(sIdx - idx);
+                        if (diff === 1) {
+                            s.classList.add('sibling-1');
+                        } else if (diff === 2) {
+                            s.classList.add('sibling-2');
+                        }
+                    });
+                });
+                span.addEventListener('pointerleave', () => {
+                    spans.forEach(s => {
+                        s.classList.remove('sibling-1', 'sibling-2');
+                    });
+                });
+            });
+        }
+
+        // 2. Lagging Background Cursor Glow (GPU translate3d + Unified throttled mouse tracker)
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let glowX = mouseX;
+        let glowY = mouseY;
+        let glowAnimationActive = false;
+
+        let lastMouseX = null;
+        let lastMouseY = null;
+        let lastMouseTime = null;
+        let shakePoints = 0;
+        let shakeTimer = null;
+
+        // Apply 'has-mouse' once and remove listener forever (removes classList checks from cursor path)
+        document.addEventListener('pointermove', () => {
+            document.body.classList.add('has-mouse');
+        }, { once: true, passive: true });
+
+        function startGlowAnimation() {
+            if (glowAnimationActive) return;
+            glowAnimationActive = true;
+            requestAnimationFrame(updateGlow);
+        }
+
+        let pointerFrameScheduled = false;
+        document.addEventListener('pointermove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            startGlowAnimation();
+
+            if (pointerFrameScheduled) return;
+            pointerFrameScheduled = true;
+            requestAnimationFrame(() => {
+                pointerFrameScheduled = false;
+
+                // Continuous sparkles when rainbow mode is active!
+                if (window.rainbowModeActive && clickCtx) {
+                    clickParticles.push(new SparkleParticle(mouseX, mouseY));
+                    startParticleAnimation();
+                }
+
+                // High-speed shake detection (iPhone Crash Detection SOS)
+                const now = Date.now();
+                if (lastMouseX !== null && lastMouseTime !== null) {
+                    const dt = now - lastMouseTime;
+                    if (dt >= 16) {
+                        const dx = mouseX - lastMouseX;
+                        const dy = mouseY - lastMouseY;
+                        const speedSq = (dx * dx + dy * dy) / (dt * dt);
+
+                        if (speedSq > 64) {
+                            shakePoints++;
+                            clearTimeout(shakeTimer);
+                            shakeTimer = setTimeout(() => { shakePoints = 0; }, 400);
+
+                            if (shakePoints > 12 && !crashActive) {
+                                shakePoints = 0;
+                                triggerCrashOverlay();
+                            }
+                        }
+                        lastMouseX = mouseX;
+                        lastMouseY = mouseY;
+                        lastMouseTime = now;
+                    }
+                } else {
+                    lastMouseX = mouseX;
+                    lastMouseY = mouseY;
+                    lastMouseTime = now;
+                }
+            });
+        }, { passive: true });
+
+        const cursorGlowEl = document.getElementById('cursorGlow');
+        function updateGlow() {
+            if (!glowAnimationActive) return;
+
+            const dx = mouseX - glowX;
+            const dy = mouseY - glowY;
+
+            glowX += dx * 0.07;
+            glowY += dy * 0.07;
+
+            if (cursorGlowEl) {
+                cursorGlowEl.style.transform = `translate3d(calc(${glowX}px - 50%), calc(${glowY}px - 50%), 0)`;
+            }
+
+            // Sleep when glow has effectively caught up to the cursor (saves massive CPU idle cycles)
+            if (Math.abs(dx) < 0.15 && Math.abs(dy) < 0.15) {
+                glowX = mouseX;
+                glowY = mouseY;
+                if (cursorGlowEl) {
+                    cursorGlowEl.style.transform = `translate3d(calc(${glowX}px - 50%), calc(${glowY}px - 50%), 0)`;
+                }
+                glowAnimationActive = false;
+                return;
+            }
+
+            requestAnimationFrame(updateGlow);
+        }
+
+        // 3. Click Canvas Sparkle Engine
+        const clickCanvas = document.getElementById('clickCanvas');
+        const clickCtx = clickCanvas ? clickCanvas.getContext('2d') : null;
+        let clickParticles = [];
+
+        let windowWidth = window.innerWidth;
+        let windowHeight = window.innerHeight;
+
+        function resizeClickCanvas() {
+            windowWidth = window.innerWidth;
+            windowHeight = window.innerHeight;
+            if (clickCanvas) {
+                clickCanvas.width = windowWidth;
+                clickCanvas.height = windowHeight;
+            }
+        }
+        window.addEventListener('resize', resizeClickCanvas);
+        resizeClickCanvas();
+
+        class SparkleParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 4 + 3;
+
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 3;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed - 1.5;
+
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.012;
+                this.gravity = 0.12;
+
+                const colors = ['#2dd4bf', '#e5a93b', '#f43f5e', '#0ea5e9', '#10b981', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                if (!clickCtx) return;
+                clickCtx.save();
+                clickCtx.fillStyle = this.color;
+
+                // Draw glowing outer halo (extremely fast compared to canvas shadows)
+                clickCtx.beginPath();
+                clickCtx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                clickCtx.globalAlpha = this.alpha * 0.22;
+                clickCtx.fill();
+
+                // Draw solid core
+                clickCtx.beginPath();
+                clickCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                clickCtx.globalAlpha = this.alpha;
+                clickCtx.fill();
+
+                clickCtx.restore();
+            }
+        }
+
+        let particleAnimationActive = false;
+
+        function startParticleAnimation() {
+            if (particleAnimationActive) return;
+            particleAnimationActive = true;
+            requestAnimationFrame(animateClickParticles);
+        }
+
+        document.addEventListener('pointerdown', (e) => {
+            if (!clickCtx) return;
+            const count = 16;
+            for (let i = 0; i < count; i++) {
+                clickParticles.push(new SparkleParticle(e.clientX, e.clientY));
+            }
+            startParticleAnimation();
+        });
+
+        function animateClickParticles() {
+            if (!particleAnimationActive) return;
+
+            if (clickCtx) {
+                clickCtx.clearRect(0, 0, clickCanvas.width, clickCanvas.height);
+                clickParticles = clickParticles.filter(p => p.alpha > 0);
+
+                if (clickParticles.length === 0) {
+                    particleAnimationActive = false;
+                    return;
+                }
+
+                clickParticles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+            }
+            requestAnimationFrame(animateClickParticles);
+        }
+
+        // 4. 3D Card Hover Tilt
+        function initCardTilts() {
+            const cards = document.querySelectorAll('.app-card');
+            cards.forEach(card => {
+                let sheen = card.querySelector('.card-sheen');
+                if (!sheen) {
+                    sheen = document.createElement('div');
+                    sheen.className = 'card-sheen';
+                    card.appendChild(sheen);
+                }
+
+                card.addEventListener('pointerenter', () => {
+                    card._rect = card.getBoundingClientRect();
+                    if (!card._sheen) {
+                        card._sheen = card.querySelector('.card-sheen');
+                    }
+                });
+
+                let tiltRaf = null;
+                card.addEventListener('pointermove', (e) => {
+                    const rect = card._rect || card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    if (tiltRaf) cancelAnimationFrame(tiltRaf);
+                    tiltRaf = requestAnimationFrame(() => {
+                        const normX = (x / rect.width) - 0.5;
+                        const normY = (y / rect.height) - 0.5;
+
+                        const tiltX = -normY * 14;
+                        const tiltY = normX * 14;
+
+                        card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.028)`;
+
+                        if (card._sheen) {
+                            card._sheen.style.transform = `translate3d(${x}px, ${y}px, 0) translate3d(-50%, -50%, 0)`;
+                        }
+                    });
+                });
+
+                card.addEventListener('pointerleave', () => {
+                    if (tiltRaf) cancelAnimationFrame(tiltRaf);
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+                    card._rect = null;
+                });
+            });
+        }
+
+        // 5. Slide to Unlock Beta dialog dismisser
+        function initSlideToUnlock() {
+            const container = document.getElementById('betaUnlockContainer');
+            const handle = document.getElementById('betaUnlockHandle');
+            const shimmer = document.getElementById('betaUnlockShimmer');
+            const dismissBtn = document.getElementById('betaDismissBtn');
+            const widget = document.querySelector('.beta-widget');
+
+            if (!container || !handle) return;
+
+            let isDragging = false;
+            let startX = 0;
+            let currentX = 0;
+
+            function onStart(e) {
+                isDragging = true;
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                startX = clientX - currentX;
+                handle.style.transition = 'none';
+                shimmer.style.transition = 'none';
+                if (handle.setPointerCapture) {
+                    handle.setPointerCapture(e.pointerId);
+                }
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                if (clientX === undefined) return;
+
+                const maxDrag = container.clientWidth - handle.clientWidth - 8;
+                let x = clientX - startX;
+                if (x < 0) x = 0;
+                if (x > maxDrag) x = maxDrag;
+
+                currentX = x;
+                handle.style.transform = `translateX(${x}px)`;
+
+                const pct = x / maxDrag;
+                shimmer.style.opacity = (1 - pct * 1.5).toFixed(2);
+            }
+
+            function onEnd(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                if (handle.releasePointerCapture) {
+                    handle.releasePointerCapture(e.pointerId);
+                }
+
+                const maxDrag = container.clientWidth - handle.clientWidth - 8;
+                if (currentX >= maxDrag * 0.88) {
+                    container.classList.add('unlocked');
+                    handle.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+                    handle.style.transform = `translateX(${maxDrag}px)`;
+
+                    const rect = handle.getBoundingClientRect();
+                    for (let i = 0; i < 32; i++) {
+                        clickParticles.push(new SparkleParticle(rect.left + 25, rect.top + 25));
+                    }
+                    startParticleAnimation();
+
+                    setTimeout(() => {
+                        dismissBtn.click();
+                    }, 350);
+                } else {
+                    currentX = 0;
+                    handle.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.75, 0.64, 1)';
+                    handle.style.transform = 'translateX(0px)';
+                    shimmer.style.transition = 'opacity 0.4s ease';
+                    shimmer.style.opacity = 1;
+
+                    if (widget) {
+                        widget.classList.add('shake-modal');
+                        setTimeout(() => widget.classList.remove('shake-modal'), 450);
+                    }
+                }
+            }
+
+            handle.addEventListener('pointerdown', onStart);
+            handle.addEventListener('pointermove', onMove);
+            handle.addEventListener('pointerup', onEnd);
+            handle.addEventListener('pointercancel', onEnd);
+        }
+
+        // --- EASTER EGGS ENGINE ---
+
+        // Easter Egg 1: Anti-Gravity Mode ("antigravity")
+        let gravityModeActive = false;
+        let floatingCards = [];
+        let physicsRaf = null;
+        let typedKeys = '';
+        let spaceTimer = null;
+        let siriActive = false;
+
+        function toggleGravityMode() {
+            gravityModeActive = !gravityModeActive;
+
+            // Burst sparks
+            if (clickCtx) {
+                for (let i = 0; i < 60; i++) {
+                    clickParticles.push(new SparkleParticle(window.innerWidth / 2, window.innerHeight / 2));
+                }
+                startParticleAnimation();
+            }
+
+            const cards = document.querySelectorAll('.app-card');
+
+            if (gravityModeActive) {
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    card.dataset.origStyle = card.getAttribute('style') || '';
+
+                    card.style.left = `${rect.left}px`;
+                    card.style.top = `${rect.top}px`;
+                    card.style.width = `${rect.width}px`;
+                    card.style.height = `${rect.height}px`;
+                    card.classList.add('floating-card');
+
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 2 + 1;
+
+                    floatingCards.push({
+                        element: card,
+                        x: rect.left,
+                        y: rect.top,
+                        w: rect.width,
+                        h: rect.height,
+                        vx: Math.cos(angle) * speed,
+                        vy: -Math.random() * 2 - 1,
+                        isGrabbed: false
+                    });
+
+                    initCardDrag(card);
+                });
+                physicsRaf = requestAnimationFrame(updatePhysics);
+            } else {
+                cancelAnimationFrame(physicsRaf);
+                floatingCards.forEach(item => {
+                    item.element.classList.remove('floating-card');
+                    item.element.setAttribute('style', item.element.dataset.origStyle);
+                });
+                floatingCards = [];
+            }
+        }
+
+        function updatePhysics() {
+            if (!gravityModeActive) return;
+            const margin = 5;
+            const rightLimit = window.innerWidth;
+            const bottomLimit = window.innerHeight;
+
+            floatingCards.forEach(card => {
+                if (card.isGrabbed) return;
+
+                card.x += card.vx;
+                card.y += card.vy;
+
+                if (card.x <= margin) {
+                    card.x = margin;
+                    card.vx *= -1;
+                } else if (card.x + card.w >= rightLimit - margin) {
+                    card.x = rightLimit - card.w - margin;
+                    card.vx *= -1;
+                }
+
+                if (card.y <= margin) {
+                    card.y = margin;
+                    card.vy *= -1;
+                } else if (card.y + card.h >= bottomLimit - margin) {
+                    card.y = bottomLimit - card.h - margin;
+                    card.vy *= -1;
+                }
+
+                card.element.style.left = `${card.x}px`;
+                card.element.style.top = `${card.y}px`;
+            });
+            physicsRaf = requestAnimationFrame(updatePhysics);
+        }
+
+        function initCardDrag(card) {
+            let grabOffsetX = 0;
+            let grabOffsetY = 0;
+            const cardObj = floatingCards.find(item => item.element === card);
+            if (!cardObj) return;
+
+            function onPointerDown(e) {
+                if (!gravityModeActive) return;
+                cardObj.isGrabbed = true;
+                grabOffsetX = e.clientX - cardObj.x;
+                grabOffsetY = e.clientY - cardObj.y;
+                card.setPointerCapture(e.pointerId);
+                e.preventDefault();
+            }
+
+            function onPointerMove(e) {
+                if (!cardObj.isGrabbed) return;
+                cardObj.x = e.clientX - grabOffsetX;
+                cardObj.y = e.clientY - grabOffsetY;
+                card.style.left = `${cardObj.x}px`;
+                card.style.top = `${cardObj.y}px`;
+            }
+
+            function onPointerUp(e) {
+                if (!cardObj.isGrabbed) return;
+                cardObj.isGrabbed = false;
+                card.releasePointerCapture(e.pointerId);
+                cardObj.vx = (Math.random() - 0.5) * 6;
+                cardObj.vy = (Math.random() - 0.5) * 6;
+            }
+
+            card.addEventListener('pointerdown', onPointerDown);
+            card.addEventListener('pointermove', onPointerMove);
+            card.addEventListener('pointerup', onPointerUp);
+            card.addEventListener('pointercancel', onPointerUp);
+
+            card.addEventListener('dblclick', () => {
+                if (gravityModeActive) toggleGravityMode();
+            });
+        }
+
+        // Easter Egg 2: "One More Thing" Steve Jobs Presentation
+        const footerEgg = document.querySelector('.footer-easteregg');
+        const steveOverlay = document.getElementById('steveOverlay');
+        const steveSpotlight = document.getElementById('steveSpotlight');
+        const steveText = document.getElementById('steveText');
+        const steveAppleLogo = document.getElementById('steveAppleLogo');
+        window.rainbowModeActive = false;
+
+        if (footerEgg) {
+            footerEgg.style.cursor = 'help';
+            footerEgg.addEventListener('click', triggerOneMoreThing);
+        }
+
+        if (steveOverlay) {
+            steveOverlay.addEventListener('pointermove', (e) => {
+                if (steveSpotlight) {
+                    steveSpotlight.style.transform = `translate3d(${e.clientX - 250}px, ${e.clientY - 250}px, 0)`;
+                }
+            });
+        }
+
+        function triggerOneMoreThing() {
+            playAppleChime();
+            steveOverlay.classList.add('show');
+            steveText.classList.remove('reveal');
+            steveAppleLogo.classList.remove('reveal');
+
+            setTimeout(() => {
+                steveText.textContent = "There is one more thing...";
+                steveText.classList.add('reveal');
+            }, 1000);
+
+            setTimeout(() => {
+                steveText.innerHTML = "There is one more thing...<br><span style='color: var(--accent-2); font-weight:800; font-size:1.1em;'>Rainbow Cursor Unlocked!</span>";
+                steveAppleLogo.classList.add('reveal');
+            }, 3200);
+
+            setTimeout(() => {
+                steveOverlay.classList.remove('show');
+                window.rainbowModeActive = true;
+                if (clickCtx) {
+                    for (let i = 0; i < 80; i++) {
+                        clickParticles.push(new SparkleParticle(window.innerWidth / 2, window.innerHeight / 2));
+                    }
+                    startParticleAnimation();
+                }
+            }, 6500);
+        }
+
+        function playAppleChime() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc1.type = 'sawtooth';
+                osc2.type = 'sine';
+                osc1.frequency.setValueAtTime(110, ctx.currentTime);
+                osc2.frequency.setValueAtTime(220, ctx.currentTime);
+
+                gain.gain.setValueAtTime(0.001, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 4);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc1.start();
+                osc2.start();
+                osc1.stop(ctx.currentTime + 4);
+                osc2.stop(ctx.currentTime + 4);
+            } catch (err) { }
+        }
+
+        // Macintosh 1984 Retro Mode Toggle & Floppy Beeps
+        const statusDot = document.querySelector('.status-dot');
+        if (statusDot) {
+            statusDot.style.cursor = 'pointer';
+            statusDot.addEventListener('dblclick', toggleRetroMode);
+        }
+
+        function toggleRetroMode() {
+            document.body.classList.toggle('retro-mode');
+            playRetroBeep();
+        }
+
+        function playRetroBeep() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(440, ctx.currentTime);
+                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
+
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + 0.36);
+            } catch (err) { }
+        }
+
+        // Siri Voice Assist + Spacebar Hold
+        document.addEventListener('keydown', (e) => {
+            if (e.repeat) return;
+
+            // Siri Spacebar Hold Trigger (2 seconds)
+            if (e.key === ' ') {
+                if (siriActive) return;
+                clearTimeout(spaceTimer);
+                spaceTimer = setTimeout(() => {
+                    triggerSiri();
+                }, 2000);
+                return;
+            }
+
+            // Shared Keylog listener
+            if (e.key.length === 1) {
+                typedKeys = (typedKeys + e.key.toLowerCase()).slice(-20);
+                if (typedKeys.includes('antigravity')) {
+                    typedKeys = '';
+                    toggleGravityMode();
+                } else if (typedKeys.includes('vision')) {
+                    typedKeys = '';
+                    toggleVisionMode();
+                } else if (typedKeys.includes('jobs')) {
+                    typedKeys = '';
+                    triggerJobsQuote();
+                }
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === ' ') {
+                clearTimeout(spaceTimer);
+                // Note: Siri is not dismissed on keyup anymore.
+                // It auto-dismisses when she finishes speaking.
+            }
+        });
+
+        function triggerSiri() {
+            siriActive = true;
+            const container = document.getElementById('siriWaveContainer');
+            if (container) {
+                container.classList.add('show');
+            }
+
+            const siriTexts = [
+                "Ich habe dich verstanden. Ich habe 14 Wege gefunden, wie du dein Geld im App Store ausgeben kannst.",
+                "Hallo Miro. Hallo Til. Ich habe euer System analysiert. Zu viel Koffein detected.",
+                "Hier ist Siri. Blopper Bold Labs online. Alle Systeme stabil außer Miro's Herzfrequenz.",
+                "One more thing... bitte kaufe das iCloud 50 Gigabyte Abo für neunundneunzig Cent pro Monat."
+            ];
+            const randomText = siriTexts[Math.floor(Math.random() * siriTexts.length)];
+            speakText(randomText);
+        }
+
+        function dismissSiri() {
+            siriActive = false;
+            const container = document.getElementById('siriWaveContainer');
+            if (container) {
+                container.classList.remove('show');
+            }
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function speakText(text) {
+            try {
+                if (!window.speechSynthesis) {
+                    // Fallback for browsers without speech synthesis
+                    setTimeout(dismissSiri, 4500);
+                    return;
+                }
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'de-DE';
+                utterance.rate = 1.05;
+                utterance.pitch = 1.1;
+
+                utterance.onend = () => {
+                    dismissSiri();
+                };
+                utterance.onerror = () => {
+                    dismissSiri();
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } catch (err) {
+                dismissSiri();
+            }
+        }
+
+        // Cursor Speed Shake (iPhone Crash Detection)
+        let crashActive = false;
+        let crashCount = 5;
+        let crashInterval = null;
+        let crashSirenInterval = null;
+        let sirenOscs = [];
+        let sirenCtx = null;
+
+        function triggerCrashOverlay() {
+            crashActive = true;
+            crashCount = 5;
+
+            const overlay = document.getElementById('crashOverlay');
+            const timerEl = document.getElementById('crashTimer');
+            if (overlay) {
+                overlay.classList.add('show');
+            }
+            if (timerEl) {
+                timerEl.textContent = crashCount;
+            }
+
+            crashInterval = setInterval(() => {
+                crashCount--;
+                if (timerEl) {
+                    timerEl.textContent = crashCount;
+                }
+
+                if (crashCount <= 0) {
+                    dismissCrashOverlay();
+                    triggerJobsQuote("SOS Notruf abgesetzt! Die Rettungskräfte wurden über dein mangelndes Fahrtalent informiert.");
+                }
+            }, 1000);
+
+            playCrashSiren();
+        }
+
+        function dismissCrashOverlay() {
+            crashActive = false;
+            clearInterval(crashInterval);
+            clearInterval(crashSirenInterval);
+
+            const overlay = document.getElementById('crashOverlay');
+            if (overlay) {
+                overlay.classList.remove('show');
+            }
+
+            sirenOscs.forEach(osc => {
+                try { osc.stop(); } catch (e) { }
+            });
+            sirenOscs = [];
+            if (sirenCtx) {
+                try { sirenCtx.close(); } catch (e) { }
+                sirenCtx = null;
+            }
+        }
+
+        const crashCancelBtn = document.getElementById('crashCancelBtn');
+        if (crashCancelBtn) {
+            crashCancelBtn.addEventListener('click', dismissCrashOverlay);
+        }
+
+        function playCrashSiren() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                sirenCtx = new AudioContext();
+
+                const osc1 = sirenCtx.createOscillator();
+                const osc2 = sirenCtx.createOscillator();
+                const gain = sirenCtx.createGain();
+
+                osc1.type = 'sine';
+                osc2.type = 'sine';
+                osc1.frequency.setValueAtTime(600, sirenCtx.currentTime);
+                osc2.frequency.setValueAtTime(800, sirenCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.18, sirenCtx.currentTime);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(sirenCtx.destination);
+
+                osc1.start();
+                osc2.start();
+                sirenOscs.push(osc1, osc2);
+
+                let high = true;
+                crashSirenInterval = setInterval(() => {
+                    if (!sirenCtx) return;
+                    high = !high;
+                    const f1 = high ? 700 : 500;
+                    const f2 = high ? 900 : 600;
+                    osc1.frequency.exponentialRampToValueAtTime(f1, sirenCtx.currentTime + 0.25);
+                    osc2.frequency.exponentialRampToValueAtTime(f2, sirenCtx.currentTime + 0.25);
+                }, 500);
+            } catch (e) { }
+        }
+
+        // Apple Vision Pro "Spatial Repulsion"
+        let visionModeActive = false;
+        let cardPositions = [];
+        let visionRectsRaf = null;
+
+        function updateVisionCardRects() {
+            if (!visionModeActive) return;
+            cardPositions.forEach(card => {
+                card.rect = card.element.getBoundingClientRect();
+            });
+        }
+
+        function throttledVisionCardRects() {
+            if (visionRectsRaf) return;
+            visionRectsRaf = requestAnimationFrame(() => {
+                updateVisionCardRects();
+                visionRectsRaf = null;
+            });
+        }
+
+        function toggleVisionMode() {
+            visionModeActive = !visionModeActive;
+
+            if (clickCtx) {
+                for (let i = 0; i < 40; i++) {
+                    clickParticles.push(new SparkleParticle(window.innerWidth / 2, window.innerHeight / 2));
+                }
+                startParticleAnimation();
+            }
+
+            const cards = document.querySelectorAll('.app-card');
+
+            if (visionModeActive) {
+                cardPositions = [];
+                cards.forEach(card => {
+                    card.style.transition = 'transform 0.2s ease-out';
+                    cardPositions.push({
+                        element: card,
+                        rect: card.getBoundingClientRect(),
+                        offsetX: 0,
+                        offsetY: 0
+                    });
+                });
+
+                window.addEventListener('scroll', throttledVisionCardRects, { passive: true });
+                window.addEventListener('resize', throttledVisionCardRects, { passive: true });
+
+                requestAnimationFrame(updateVisionRepulsion);
+            } else {
+                window.removeEventListener('scroll', throttledVisionCardRects);
+                window.removeEventListener('resize', throttledVisionCardRects);
+                cards.forEach(card => {
+                    card.style.transform = '';
+                    card.style.transition = '';
+                });
+                cardPositions = [];
+            }
+        }
+
+        function updateVisionRepulsion() {
+            if (!visionModeActive) return;
+
+            cardPositions.forEach(card => {
+                if (gravityModeActive) return;
+
+                const rect = card.rect;
+                if (!rect) return;
+                const cardCenterX = rect.left + rect.width / 2;
+                const cardCenterY = rect.top + rect.height / 2;
+
+                const dx = cardCenterX - mouseX;
+                const dy = cardCenterY - mouseY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                let targetX = 0;
+                let targetY = 0;
+
+                if (distance < 180) {
+                    const force = (180 - distance) / 180;
+                    const angle = Math.atan2(dy, dx);
+                    const pushDist = force * 60;
+                    targetX = Math.cos(angle) * pushDist;
+                    targetY = Math.sin(angle) * pushDist;
+                }
+
+                card.offsetX += (targetX - card.offsetX) * 0.15;
+                card.offsetY += (targetY - card.offsetY) * 0.15;
+
+                card.element.style.transform = `translate3d(${card.offsetX}px, ${card.offsetY}px, 0px) scale(${1 - Math.abs(card.offsetX) / 800})`;
+            });
+            requestAnimationFrame(updateVisionRepulsion);
+        }
+
+        // Steve Jobs Quote Toast (iToast)
+        let itoastClickCallback = null;
+        const mainToastContainer = document.getElementById('itoastContainer');
+        if (mainToastContainer) {
+            mainToastContainer.addEventListener('click', () => {
+                if (typeof itoastClickCallback === 'function') {
+                    itoastClickCallback();
+                }
+            });
+        }
+
+        function triggerJobsQuote(customText) {
+            const container = document.getElementById('itoastContainer');
+            const textEl = document.getElementById('itoastText');
+            if (!container || !textEl) return;
+
+            const titleEl = container.querySelector('.itoast-title');
+            const iconEl = container.querySelector('.itoast-icon');
+            if (titleEl) titleEl.textContent = "Steve Jobs";
+            if (iconEl) iconEl.textContent = "💬";
+
+            itoastClickCallback = null;
+            container.style.cursor = 'default';
+
+            const quotes = [
+                "Stay hungry, stay foolish. Und kauf mehr iCloud Speicher.",
+                "Design ist nicht nur wie es aussieht. Design ist wie es funktioniert. Also kauf ein iPhone.",
+                "Innovation unterscheidet den Anführer vom Nachfolger. Stell jetzt deine Kacheln richtig ein.",
+                "Deine Zeit ist begrenzt, also verschwende sie nicht damit, das Leben anderer zu leben. Klick die Glücksspiel-Sim!",
+                "Es ist cooler, ein Pirat zu sein, als der Marine beizutreten. BlopperBold Labs Ahoi!",
+                "Wir machen die Buttons auf dem Screen so toll, dass man sie ablecken möchte."
+            ];
+
+            const text = customText || quotes[Math.floor(Math.random() * quotes.length)];
+            textEl.textContent = text;
+            container.classList.add('show');
+
+            playNotificationSound();
+
+            setTimeout(() => {
+                container.classList.remove('show');
+            }, 4500);
+        }
+
+        // Apple Employee Recommendations (Idle Timer) with Escalating Spam Mode
+        let idleSeconds = 0;
+        let idleInterval = null;
+        let spamSpawnInterval = null;
+        let spamActive = false;
+        let currentSpamSpawnRate = 1200;
+        let recommendationActive = false;
+
+        function startIdleTicking() {
+            if (idleInterval) clearInterval(idleInterval);
+            idleInterval = setInterval(() => {
+                if (crashActive || siriActive || gravityModeActive) {
+                    resetIdleTimer();
+                    return;
+                }
+                idleSeconds++;
+                checkIdleStages();
+            }, 1000);
+        }
+
+        function resetIdleTimer() {
+            if (idleSeconds === 0 && !spamActive && !recommendationActive) {
+                return;
+            }
+
+            idleSeconds = 0;
+
+            if (spamActive) {
+                stopSpamMode();
+            }
+        }
+
+        ['pointermove', 'pointerdown', 'keydown', 'scroll'].forEach(event => {
+            window.addEventListener(event, resetIdleTimer, { passive: true });
+        });
+
+        function checkIdleStages() {
+            // Stage 1: Friendly recommendation at 10 seconds (lasts 7.5s, ends at 17.5s)
+            if (idleSeconds === 10) {
+                triggerAppleRecommendation();
+            }
+
+            // Stage 2: Urgent recommendation at 18 seconds (lasts 6s, ends at 24s)
+            if (idleSeconds === 18) {
+                triggerUrgentRecommendation();
+            }
+
+            // Stage 3: Spam Mode starts at 25 seconds
+            if (idleSeconds === 25) {
+                startSpamMode();
+            }
+
+            // Stage 4: Spam Mode speed increases at 30 seconds
+            if (idleSeconds === 30 && spamActive) {
+                adjustSpamRate(800);
+            }
+
+            // Stage 5: Spam Mode speed extreme at 35 seconds
+            if (idleSeconds === 35 && spamActive) {
+                adjustSpamRate(400);
+            }
+        }
+
+        function triggerAppleRecommendation() {
+            if (recommendationActive || crashActive || siriActive || gravityModeActive) return;
+            recommendationActive = true;
+
+            const container = document.getElementById('itoastContainer');
+            const textEl = document.getElementById('itoastText');
+            const titleEl = container ? container.querySelector('.itoast-title') : null;
+            const iconEl = container ? container.querySelector('.itoast-icon') : null;
+
+            if (!container || !textEl || !titleEl || !iconEl) {
+                recommendationActive = false;
+                return;
+            }
+
+            const employees = [
+                {
+                    name: "Tim Cook 👔",
+                    icon: "🍏",
+                    quotes: [
+                        { text: "Good morning! Der Investment Portfolio Rechner ist das fortschrittlichste Tool, das wir je gebaut haben. Klick zum Öffnen!", url: "Aktienrechner/Aktiv/Since.html" },
+                        { text: "Wir haben unglaublich hart an der Glücksspiel Simulation gearbeitet. Es ist absolut fantastisch. Probier es jetzt aus!", url: "Games/gambl.html" }
+                    ]
+                },
+                {
+                    name: "Jony Ive 📐",
+                    icon: "📐",
+                    quotes: [
+                        { text: "Die 100% Seite ist kompromisslos flach. Sie wurde aus einem einzigen digitalen Aluminiumblock gefräst. Du musst sie anklicken.", url: "Games/100prozent.html" },
+                        { text: "Das Runaway Soundboard besitzt ein bemerkenswert ehrliches Design. Die Piano-Tasten fühlen sich geradezu magisch an.", url: "ye-soundboard/index.html" }
+                    ]
+                },
+                {
+                    name: "Craig Federighi ⚡",
+                    icon: "💇‍♂️",
+                    quotes: [
+                        { text: "BOOM! Schau dir den Takt der 3. Expo an! 120 Hertz, butterweiche Physik und purer Spielspaß. Klick hier!", url: "Games/3expo.html" },
+                        { text: "Impuls ist ein absoluter Kracher! Schnell, responsiv und vollgepackt mit Metal-Grafikbeschleunigung. Starte es jetzt!", url: "Games/impuls.html" }
+                    ]
+                },
+                {
+                    name: "Phil Schiller 📣",
+                    icon: "📣",
+                    quotes: [
+                        { text: "Can't innovate anymore, my ass! Die Glücksspiel Simulation zeigt, wozu dieses Team fähig ist. Klick und verlier dein Geld!", url: "Games/gambl.html" },
+                        { text: "Unser Impuls-Game definiert Action völlig neu. Ein riesiger Durchbruch. Du musst es jetzt spielen!", url: "Games/impuls.html" }
+                    ]
+                }
+            ];
+
+            const employee = employees[Math.floor(Math.random() * employees.length)];
+            const quote = employee.quotes[Math.floor(Math.random() * employee.quotes.length)];
+
+            titleEl.textContent = employee.name;
+            iconEl.textContent = employee.icon;
+            textEl.textContent = quote.text;
+
+            itoastClickCallback = () => {
+                window.location.href = quote.url;
+            };
+            container.style.cursor = 'pointer';
+
+            container.classList.add('show');
+            playNotificationSound();
+
+            setTimeout(() => {
+                if (recommendationActive) {
+                    container.classList.remove('show');
+                    recommendationActive = false;
+                }
+            }, 7500);
+        }
+
+        function triggerUrgentRecommendation() {
+            if (recommendationActive || crashActive || siriActive || gravityModeActive) return;
+            recommendationActive = true;
+
+            const container = document.getElementById('itoastContainer');
+            const textEl = document.getElementById('itoastText');
+            const titleEl = container ? container.querySelector('.itoast-title') : null;
+            const iconEl = container ? container.querySelector('.itoast-icon') : null;
+
+            if (!container || !textEl || !titleEl || !iconEl) {
+                recommendationActive = false;
+                return;
+            }
+
+            const urgentAlerts = [
+                {
+                    name: "Tim Cook 👔 [EILMELDUNG]",
+                    icon: "🚨",
+                    text: "Hallo? Die Umsätze stagnieren! Warum klickst du auf nichts?! HOP JETZT MACH ENDLICH!",
+                    url: "Games/gambl.html"
+                },
+                {
+                    name: "Craig Federighi ⚡ [ALARM]",
+                    icon: "🔥",
+                    text: "Hey! Keine Interaktion detektiert! Klick die 3. Expo an bevor unser Server einschläft!",
+                    url: "Games/3expo.html"
+                },
+                {
+                    name: "Jony Ive 📐 [KRITISCH]",
+                    icon: "📏",
+                    text: "Dieses edle, minimalistische Meisterwerk verstaubt, während du untätig herumsitzt. Klick die 100% Seite!",
+                    url: "Games/100prozent.html"
+                }
+            ];
+
+            const alert = urgentAlerts[Math.floor(Math.random() * urgentAlerts.length)];
+
+            titleEl.textContent = alert.name;
+            iconEl.textContent = alert.icon;
+            textEl.textContent = alert.text;
+
+            itoastClickCallback = () => {
+                window.location.href = alert.url;
+            };
+            container.style.cursor = 'pointer';
+
+            container.classList.add('show');
+            playNotificationSound();
+
+            setTimeout(() => {
+                if (recommendationActive) {
+                    container.classList.remove('show');
+                    recommendationActive = false;
+                }
+            }, 6000);
+        }
+
+        function startSpamMode() {
+            if (crashActive || siriActive || gravityModeActive) return;
+            spamActive = true;
+            currentSpamSpawnRate = 1200;
+
+            document.body.classList.add('spam-flashing');
+            const mainContainer = document.querySelector('main.container');
+            if (mainContainer) {
+                mainContainer.classList.add('spam-wobble');
+            }
+
+            spawnSpamToast();
+            spamSpawnInterval = setInterval(spawnSpamToast, currentSpamSpawnRate);
+        }
+
+        function adjustSpamRate(newRate) {
+            if (!spamActive) return;
+            currentSpamSpawnRate = newRate;
+
+            document.body.classList.remove('spam-flashing', 'spam-flashing-fast', 'spam-flashing-extreme');
+            if (newRate === 800) {
+                document.body.classList.add('spam-flashing-fast');
+            } else if (newRate === 400) {
+                document.body.classList.add('spam-flashing-extreme');
+            }
+
+            if (spamSpawnInterval) clearInterval(spamSpawnInterval);
+            spamSpawnInterval = setInterval(spawnSpamToast, currentSpamSpawnRate);
+        }
+
+        function stopSpamMode() {
+            spamActive = false;
+            if (spamSpawnInterval) {
+                clearInterval(spamSpawnInterval);
+                spamSpawnInterval = null;
+            }
+
+            document.body.classList.remove('spam-flashing', 'spam-flashing-fast', 'spam-flashing-extreme');
+            const mainContainer = document.querySelector('main.container');
+            if (mainContainer) {
+                mainContainer.classList.remove('spam-wobble');
+            }
+
+            const spamToasts = document.querySelectorAll('.itoast-container.spam-toast');
+            spamToasts.forEach(toast => {
+                toast.remove();
+            });
+        }
+
+        function spawnSpamToast() {
+            if (crashActive || siriActive || gravityModeActive || !spamActive) return;
+
+            const toast = document.createElement('div');
+            toast.className = 'itoast-container spam-toast';
+            toast.setAttribute('role', 'alert');
+
+            const spamMessages = [
+                { title: "⚠️ JETZT MACH MAL HINNE!", text: "Klick endlich auf ein Experiment!" },
+                { title: "🚨 JONNY IVE WEINT!", text: "Seine Designleistung wird ignoriert!" },
+                { title: "🔥 TIM COOK TELEFONIERT!", text: "Er will wissen warum du schläfst!" },
+                { title: "⚠️ AKTIENKURS FÄLLT!", text: "BlopperBold Aktien sinken um 99%!" },
+                { title: "📢 STEVE JOBS ROTIERT!", text: "Im Grab mit 7200 RPM!" },
+                { title: "💇‍♂️ CRAIGS HAAR ALARM!", text: "Seine Frisur verliert den Schwung!" },
+                { title: "🚨 HOP NOW!", text: "Das hier ist kein Bildschirmschoner!" },
+                { title: "🔥 CRITICAL SYSTEM IDLE!", text: "Wir schmelzen gleich den Server!" },
+                { title: "⚠️ CLICK SOMETHING!", text: "Tu was für dein Karma!" },
+                { title: "🚨 HOP JETZT MACH ENDLICH!", text: "Keine Ausreden mehr!" },
+                { title: "🍎 PHIL SCHILLER DROHT!", text: "Er nimmt dir dein iPhone weg!" },
+                { title: "💣 ZERSTÖRUNG IN 3... 2...", text: "Nur ein Klick kann es aufhalten!" }
+            ];
+
+            const msg = spamMessages[Math.floor(Math.random() * spamMessages.length)];
+
+            toast.innerHTML = `
+                <div class="itoast-close" style="position: absolute; top: 6px; right: 10px; font-size: 0.8rem; opacity: 0.6; cursor: pointer; transition: opacity 0.2s;">✕</div>
+                <div class="itoast-icon">💥</div>
+                <div class="itoast-body">
+                    <span class="itoast-title">${msg.title}</span>
+                    <span class="itoast-text">${msg.text}</span>
+                </div>
+            `;
+
+            const closeBtn = toast.querySelector('.itoast-close');
+            closeBtn.addEventListener('mouseenter', () => closeBtn.style.opacity = '1');
+            closeBtn.addEventListener('mouseleave', () => closeBtn.style.opacity = '0.6');
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toast.style.opacity = '0';
+                toast.style.transform += ' scale(0.8)';
+                toast.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+                setTimeout(() => {
+                    if (toast.parentNode) toast.remove();
+                }, 200);
+            });
+
+            const randomTop = 5 + Math.random() * 70;
+            const randomLeft = 5 + Math.random() * 70;
+
+            toast.style.top = `${randomTop}%`;
+            toast.style.left = `${randomLeft}%`;
+
+            const randomRotate = (Math.random() - 0.5) * 20;
+            toast.style.transform = `rotate(${randomRotate}deg)`;
+
+            toast.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const links = [
+                    "Aktienrechner/Aktiv/Since.html",
+                    "Games/gambl.html",
+                    "Games/100prozent.html",
+                    "ye-soundboard/index.html",
+                    "Games/3expo.html",
+                    "Games/impuls.html"
+                ];
+                const dest = links[Math.floor(Math.random() * links.length)];
+                window.location.href = dest;
+            });
+
+            document.body.appendChild(toast);
+            playSpamBeep();
+        }
+
+        function playSpamBeep() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = Math.random() > 0.5 ? 'square' : 'sawtooth';
+                const startFreq = 400 + Math.random() * 600;
+                osc.frequency.setValueAtTime(startFreq, ctx.currentTime);
+                osc.frequency.setValueAtTime(startFreq * 1.5, ctx.currentTime + 0.05);
+
+                gain.gain.setValueAtTime(0.03, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + 0.13);
+            } catch (e) { }
+        }
+
+        // Initialize the idle timer immediately
+        startIdleTicking();
+
+        function playNotificationSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1046.50, ctx.currentTime);
+                osc.frequency.setValueAtTime(1318.51, ctx.currentTime + 0.1);
+
+                gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + 0.36);
+            } catch (e) { }
+        }
+
+        // Initialize Apple Over-animations
+        splitTitleText();
+        startGlowAnimation();
+        initCardTilts();
+        initSlideToUnlock();
+
+        // ----------------------------------------------
+
+        // Auto-show on load
+        window.setTimeout(openBetaPopup, 300);
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                document.body.classList.add('tab-hidden');
+                if (gravityModeActive && physicsRaf) {
+                    cancelAnimationFrame(physicsRaf);
+                    physicsRaf = null;
+                }
+                if (idleInterval) {
+                    clearInterval(idleInterval);
+                    idleInterval = null;
+                }
+            } else {
+                document.body.classList.remove('tab-hidden');
+                if (gravityModeActive && !physicsRaf) {
+                    physicsRaf = requestAnimationFrame(updatePhysics);
+                }
+                startIdleTicking();
             }
         });
 
@@ -1982,7 +4672,7 @@
         let lastTouchEnd = 0;
         const bbInteractiveTapSelector = 'button, a, input, select, textarea, label, [role="button"]';
 
-        document.addEventListener('touchend', function(event) {
+        document.addEventListener('touchend', function (event) {
             const now = Date.now();
             const isInteractive = event.target.closest && event.target.closest(bbInteractiveTapSelector);
 
@@ -1993,45 +4683,47 @@
             lastTouchEnd = now;
         }, { passive: false });
 
-        document.addEventListener('contextmenu', function(event) {
+        document.addEventListener('contextmenu', function (event) {
             if (event.target.closest('button, a, [role="button"]')) {
                 event.preventDefault();
             }
         });
     </script>
-<script id="bb-touch-zoom-guard">
-(function() {
-    if (window.__bbTouchZoomGuard) return;
-    window.__bbTouchZoomGuard = true;
+    <script id="bb-touch-zoom-guard">
+        (function () {
+            if (window.__bbTouchZoomGuard) return;
+            window.__bbTouchZoomGuard = true;
 
-    let lastTouchEnd = 0;
-    const interactiveSelector = 'button, a, input, select, textarea, label, [role="button"], .progress-bar-container, .card, .chart';
+            let lastTouchEnd = 0;
+            const interactiveSelector = 'button, a, input, select, textarea, label, [role="button"], .progress-bar-container, .card, .chart';
 
-    document.addEventListener('touchend', function(event) {
-        const now = Date.now();
-        const isInteractive = event.target.closest && event.target.closest(interactiveSelector);
+            document.addEventListener('touchend', function (event) {
+                const now = Date.now();
+                const isInteractive = event.target.closest && event.target.closest(interactiveSelector);
 
-        if (!isInteractive && now - lastTouchEnd <= 350 && event.cancelable) {
-            event.preventDefault();
-        }
+                if (!isInteractive && now - lastTouchEnd <= 350 && event.cancelable) {
+                    event.preventDefault();
+                }
 
-        lastTouchEnd = now;
-    }, { passive: false });
+                lastTouchEnd = now;
+            }, { passive: false });
 
-    document.addEventListener('dblclick', function(event) {
-        if (event.cancelable) {
-            event.preventDefault();
-        }
-    }, { passive: false });
+            document.addEventListener('dblclick', function (event) {
+                if (event.cancelable) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
 
-    ['gesturestart', 'gesturechange', 'gestureend'].forEach(function(eventName) {
-        document.addEventListener(eventName, function(event) {
-            if (event.cancelable) {
-                event.preventDefault();
-            }
-        }, { passive: false });
-    });
-})();
-</script>
+            ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (eventName) {
+                document.addEventListener(eventName, function (event) {
+                    if (event.cancelable) {
+                        event.preventDefault();
+                    }
+                }, { passive: false });
+            });
+        })();
+    </script>
+    <script src="tutorial.js" defer></script>
 </body>
+
 </html>

@@ -1,66 +1,633 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    >
+    <meta name="robots" content="noindex, nofollow">
+
     <title>Investment Portfolio Rechner</title>
-    <script src="consent.js"></script>
+
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- App styles -->
     <link rel="stylesheet" href="assets-beta/since-beta.css">
-<style id="bb-touch-zoom-guard-style">
-    html,
-    body {
-        touch-action: manipulation;
-        -ms-touch-action: manipulation;
-        -webkit-text-size-adjust: 100%;
-    }
-</style>
+
+    <!-- Touch zoom guard -->
+    <style id="bb-touch-zoom-guard-style">
+        html,
+        body {
+            touch-action: manipulation;
+            -ms-touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+        }
+    </style>
+
+    <!-- Hyper mode styles -->
+    <style id="bb-hyper-style">
+        .bb-hyper-toggle {
+            position: fixed;
+            top: 20px;
+            right: 18px;
+            z-index: 12000;
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 16px;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.86), rgba(99, 102, 241, 0.72));
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 950;
+            cursor: pointer;
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(18px);
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .bb-hyper-toggle:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
+
+        .bb-hyper-toggle.is-on {
+            background: linear-gradient(135deg, #fbc531, #38bdf8 52%, #a855f7);
+            box-shadow:
+                0 0 28px rgba(251, 197, 49, 0.35),
+                0 18px 48px rgba(56, 189, 248, 0.28);
+        }
+
+        .bb-hyper-panel {
+            position: fixed;
+            top: 76px;
+            right: 18px;
+            z-index: 12001;
+            width: min(340px, calc(100vw - 36px));
+            display: none;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 20px;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.94), rgba(49, 46, 129, 0.88));
+            color: #fff;
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.44);
+            backdrop-filter: blur(24px);
+            transform: scale(0.92) translateY(-8px);
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        .bb-hyper-panel.show {
+            display: block;
+            animation: bbHyperPanelIn 0.28s cubic-bezier(0.18, 0.9, 0.24, 1) forwards;
+        }
+
+        .bb-hyper-panel.closing {
+            display: block;
+            animation: bbHyperPanelOut 0.2s ease forwards;
+        }
+
+        .bb-hyper-title {
+            margin: 0 0 4px;
+            color: #fde68a;
+            font-size: 1rem;
+            font-weight: 950;
+        }
+
+        .bb-hyper-subtitle,
+        .bb-hyper-note {
+            line-height: 1.35;
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        .bb-hyper-subtitle {
+            margin: 0 0 14px;
+            font-size: 0.84rem;
+        }
+
+        .bb-hyper-note {
+            margin: 12px 0 0;
+            color: rgba(255, 255, 255, 0.62);
+            font-size: 0.78rem;
+        }
+
+        .bb-hyper-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .bb-hyper-row span {
+            font-size: 0.92rem;
+            font-weight: 850;
+        }
+
+        .bb-hyper-switch {
+            position: relative;
+            width: 56px;
+            height: 31px;
+            flex: 0 0 auto;
+        }
+
+        .bb-hyper-switch input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+        }
+
+        .bb-hyper-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+            transition: 0.2s;
+        }
+
+        .bb-hyper-slider::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 25px;
+            height: 25px;
+            border-radius: 999px;
+            background: #fff;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+            transition: 0.22s cubic-bezier(0.18, 0.9, 0.24, 1);
+        }
+
+        .bb-hyper-switch input:checked + .bb-hyper-slider {
+            background: linear-gradient(135deg, #fbc531, #38bdf8);
+        }
+
+        .bb-hyper-switch input:checked + .bb-hyper-slider::before {
+            transform: translateX(25px);
+        }
+
+        .bb-hyper-on h1,
+        .bb-hyper-on .hero h1 {
+            animation: bbHyperTitle 2.2s ease-in-out infinite;
+            text-shadow:
+                0 0 18px rgba(251, 197, 49, 0.55),
+                0 0 34px rgba(56, 189, 248, 0.34);
+        }
+
+        .bb-hyper-on button:not(.bb-hyper-toggle),
+        .bb-hyper-on .stat,
+        .bb-hyper-on .status-card,
+        .bb-hyper-on .probability-card,
+        .bb-hyper-on .box,
+        .bb-hyper-on .game-panel,
+        .bb-hyper-on .stat-box,
+        .bb-hyper-on .info-pill {
+            animation: bbHyperBreath 1.9s ease-in-out infinite;
+        }
+
+        .bb-hyper-on .chart,
+        .bb-hyper-on .chart-container,
+        .bb-hyper-on canvas,
+        .bb-hyper-on .progress-bar-container,
+        .bb-hyper-on .track,
+        .bb-hyper-on .card {
+            filter: saturate(1.28);
+            box-shadow:
+                0 0 34px rgba(56, 189, 248, 0.22),
+                0 0 54px rgba(251, 197, 49, 0.14);
+        }
+
+        .bb-hyper-on::after {
+            content: "";
+            position: fixed;
+            inset: -20%;
+            z-index: 11990;
+            pointer-events: none;
+            background: linear-gradient(
+                115deg,
+                transparent 0 38%,
+                rgba(255, 255, 255, 0.14) 44%,
+                transparent 52% 100%
+            );
+            mix-blend-mode: screen;
+            transform: translateX(-120%);
+            animation: bbHyperSweep 2.8s linear infinite;
+        }
+
+        .bb-hyper-spark,
+        .bb-hyper-star {
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-radius: 999px;
+            pointer-events: none;
+        }
+
+        .bb-hyper-spark {
+            z-index: 11999;
+            width: 8px;
+            height: 8px;
+            background: var(--bb-c, #fbc531);
+            box-shadow:
+                0 0 16px var(--bb-c, #fbc531),
+                0 0 28px rgba(255, 255, 255, 0.34);
+            transform: translate(-50%, -50%);
+            animation: bbHyperSpark 0.9s ease-out forwards;
+        }
+
+        .bb-hyper-star {
+            z-index: 11998;
+            width: 5px;
+            height: 5px;
+            background: #fff;
+            box-shadow:
+                0 0 14px #fff,
+                0 0 28px rgba(251, 197, 49, 0.72);
+            animation: bbHyperFall 1.9s linear forwards;
+        }
+
+        .bb-hyper-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            z-index: 12002;
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.86);
+            color: #fde68a;
+            font-weight: 950;
+            box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50%) scale(0.92);
+            animation: bbHyperToast 0.9s ease forwards;
+        }
+
+        .bb-aktiv-page .bb-hyper-toggle {
+            top: 76px;
+        }
+
+        .bb-aktiv-page .bb-hyper-panel {
+            top: 132px;
+        }
+
+        @keyframes bbHyperPanelIn {
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes bbHyperPanelOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.94) translateY(-8px);
+                filter: blur(10px);
+            }
+        }
+
+        @keyframes bbHyperTitle {
+            0%,
+            100% {
+                filter: hue-rotate(0) saturate(1);
+            }
+
+            50% {
+                filter: hue-rotate(55deg) saturate(1.8);
+                transform: translateY(-1px) scale(1.012);
+            }
+        }
+
+        @keyframes bbHyperBreath {
+            0%,
+            100% {
+                filter: saturate(1);
+                box-shadow: inherit;
+            }
+
+            50% {
+                filter: saturate(1.35) brightness(1.08);
+                box-shadow:
+                    0 0 26px rgba(251, 197, 49, 0.18),
+                    0 0 42px rgba(56, 189, 248, 0.14);
+            }
+        }
+
+        @keyframes bbHyperSweep {
+            from { transform: translateX(-120%); }
+            to { transform: translateX(120%); }
+        }
+
+        @keyframes bbHyperSpark {
+            to {
+                opacity: 0;
+                transform:
+                    translate(calc(-50% + var(--bb-x)), calc(-50% + var(--bb-y)))
+                    scale(0.18)
+                    rotate(240deg);
+            }
+        }
+
+        @keyframes bbHyperFall {
+            to {
+                opacity: 0;
+                transform: translate(var(--bb-x), 120vh) rotate(260deg);
+            }
+        }
+
+        @keyframes bbHyperToast {
+            20%,
+            78% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.96) translateY(8px);
+            }
+        }
+
+        @media (max-width: 720px) {
+            .bb-hyper-toggle {
+                top: 72px;
+                right: 12px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .bb-hyper-panel {
+                top: 124px;
+                right: 12px;
+                width: calc(100vw - 24px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bb-hyper-on h1,
+            .bb-hyper-on .hero h1,
+            .bb-hyper-on button,
+            .bb-hyper-on .stat,
+            .bb-hyper-on .status-card,
+            .bb-hyper-on .probability-card,
+            .bb-hyper-on .box,
+            .bb-hyper-on .game-panel,
+            .bb-hyper-on .stat-box,
+            .bb-hyper-on .info-pill,
+            .bb-hyper-on::after,
+            .bb-hyper-spark,
+            .bb-hyper-star,
+            .bb-hyper-toast {
+                animation: none !important;
+            }
+        }
+    </style>
 </head>
-<body>
-    <a class="back-home-btn" href="https://blopperbold.org" aria-label="Zurück zu BlopperBold">
-        <span class="back-home-btn-text">Zurück zu BlopperBold</span>
-        <span class="back-home-btn-icon">🏠</span>
-    </a>
-    <button class="graph-settings-btn" onclick="toggleGraphSettingsPanel()">⚙️ Graphen</button>
 
-    <div class="status-banner" id="statusBanner"></div>
+<body class="bb-aktiv-page">
+    <nav class="floating-actions" aria-label="Seitennavigation und Einstellungen">
+        <a class="back-home-btn" href="../../index.html" aria-label="Zurück zu BlopperBold">
+            <span class="back-home-btn-text">Zurück zu BlopperBold</span>
+            <span class="back-home-btn-icon" aria-hidden="true">🏠</span>
+        </a>
 
-    <div class="graph-settings-panel" id="graphSettingsPanel">
+        <!-- Hamburger Button -->
+        <button class="hamburger-menu-btn" type="button" onclick="toggleHamburgerMenu()" aria-label="Menü öffnen/schließen">
+            <span class="hamburger-bar bar-1"></span>
+            <span class="hamburger-bar bar-2"></span>
+            <span class="hamburger-bar bar-3"></span>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="hamburger-dropdown" id="hamburgerDropdown">
+            <button class="portfolio-settings-btn" type="button" onclick="togglePortfolioDrawerFromMenu()">
+                💼 Portfolio
+            </button>
+
+            <button class="graph-settings-btn" type="button" onclick="toggleGraphSettingsPanelFromMenu()">
+                ⚙️ Graphen
+            </button>
+
+            <button class="app-settings-btn" type="button" onclick="toggleAppSettingsPanelFromMenu()">
+                ⚙️ Einstellungen
+            </button>
+        </div>
+    </nav>
+
+    <div class="status-banner" id="statusBanner" role="status" aria-live="polite"></div>
+
+    <aside class="portfolio-drawer" id="portfolioDrawer" aria-label="Portfolio verwalten">
+        <header class="portfolio-drawer-header">
+            <div class="portfolio-drawer-title">💼 Portfolio verwalten</div>
+            <button class="portfolio-drawer-close" type="button" onclick="togglePortfolioDrawer()" aria-label="Schließen">
+                ×
+            </button>
+        </header>
+
+        <section class="portfolio-drawer-section">
+            <label class="settings-toggle">
+                <input type="checkbox" id="portfolioModeToggle" onchange="togglePortfolioMode(this.checked)">
+                <span>Portfolio-Modus aktivieren</span>
+            </label>
+            <div class="settings-hint">Schaltet um von einer einzelnen Aktie zu einem benutzerdefinierten Portfolio aus mehreren Aktien.</div>
+        </section>
+
+        <section class="portfolio-drawer-section" id="portfolioManagerSection" style="display: none;">
+            <div class="settings-label">Aktien hinzufügen</div>
+            <div class="portfolio-add-row">
+                <div class="autocomplete-container" style="flex: 1;">
+                    <input type="text" id="portfolioSearchInput" class="stock-input" placeholder="z. B. AAPL, MSFT, TSLA..." autocomplete="off">
+                </div>
+                <button class="settings-action-btn" type="button" onclick="addStockToPortfolio()" style="flex: 0 0 auto; margin-top: 0; padding: 0 14px; height: 42px;">+</button>
+            </div>
+
+            <div class="portfolio-assets-list" id="portfolioAssetsList">
+                <!-- Dynamisch gefüllte Asset-Liste mit Slidern -->
+            </div>
+
+            <div class="portfolio-summary-row">
+                <span>Gesamtgewichtung:</span>
+                <span id="portfolioTotalWeight" class="weight-badge error">0%</span>
+            </div>
+
+            <div class="settings-button-row" style="margin-top: 18px;">
+                <button class="settings-action-btn" type="button" onclick="equalizePortfolioWeights()">Gleichverteilen</button>
+                <button class="settings-action-btn danger" type="button" onclick="clearPortfolioAssets()">Alle leeren</button>
+            </div>
+            <button class="primary-btn" type="button" onclick="saveAndApplyPortfolio()" style="width: 100%; margin-top: 14px;">Anwenden & Berechnen</button>
+        </section>
+    </aside>
+
+    <aside class="graph-settings-panel" id="graphSettingsPanel" aria-label="Graphen auswählen">
         <div class="graph-settings-title">📋 Graphen auswählen</div>
+
         <div class="graph-toggle-list">
             <label class="graph-toggle-item">
                 <input type="checkbox" data-dataset-index="0" checked onchange="toggleDatasetVisibility(this)">
                 <span>Portfolio Wert</span>
             </label>
+
             <label class="graph-toggle-item">
                 <input type="checkbox" data-dataset-index="1" checked onchange="toggleDatasetVisibility(this)">
                 <span id="investedGraphToggleLabel">Investiert inkl. Dividenden</span>
             </label>
+
             <label class="graph-toggle-item">
                 <input type="checkbox" data-dataset-index="2" checked onchange="toggleDatasetVisibility(this)">
                 <span>Kumulierte Dividenden</span>
             </label>
+
             <label class="graph-toggle-item">
                 <input type="checkbox" data-dataset-index="3" checked onchange="toggleDatasetVisibility(this)">
                 <span>Aktienkurs</span>
             </label>
         </div>
-    </div>
+    </aside>
 
-    <div class="selection-popup" id="selectionPopup">
+    <aside class="selection-popup" id="selectionPopup" aria-label="Bereichsauswertung">
         <div class="selection-popup-title">Bereichsauswertung</div>
         <div class="selection-popup-grid" id="selectionPopupContent"></div>
-    </div>
+    </aside>
 
-    <div class="container">
-        <h1>Investment Portfolio Rechner</h1>
-        <p class="subtitle">Teste historische Investments mit Kursverlauf, Dividenden, Zoom-Auswertung und einem Reality Check, der nicht komplett auf Kuschelkurs fährt. Das ist eine Betaversion, also kannst du hier gucken was das nächste Update werden kann.</p>
-        <div class="market-strip" aria-label="Aktuelle Aktien">
+    <aside class="app-settings-panel" id="appSettingsPanel" aria-label="Einstellungen">
+        <header class="app-settings-header">
+            <div class="app-settings-title">Einstellungen</div>
+            <button class="app-settings-close" type="button" onclick="toggleAppSettingsPanel()" aria-label="Einstellungen schließen">
+                ×
+            </button>
+        </header>
+
+        <section class="settings-section">
+            <label class="settings-label" for="marketDataProviderSelect">Marktdaten-Quelle</label>
+            <select id="marketDataProviderSelect" onchange="setMarketDataProvider(this.value)">
+                <option value="twelve">Twelve Data</option>
+                <option value="yahoo">Yahoo Finance experimentell</option>
+                <option value="auto">Auto mit Fallback</option>
+            </select>
+            <div class="settings-hint">Yahoo kann im Browser je nach CORS blocken; Auto fällt dann auf Twelve Data zurück.</div>
+        </section>
+
+        <section class="settings-section">
+            <label class="settings-toggle">
+                <input type="checkbox" id="chartPerformanceModeToggle" onchange="setChartPerformanceMode(this.checked)">
+                <span>Performance-Modus</span>
+            </label>
+            <div class="settings-hint">Reduziert Renderlast auf High-DPI-Displays und hält Interaktionen ruhiger.</div>
+        </section>
+
+        <section class="settings-section">
+            <div class="settings-label">Hyperaktivität</div>
+
+            <label class="bb-hyper-row">
+                <span>Hyperaktivitätsmodus</span>
+                <span class="bb-hyper-switch">
+                    <input id="bbHyperMode" type="checkbox">
+                    <span class="bb-hyper-slider"></span>
+                </span>
+            </label>
+
+            <label class="bb-hyper-row">
+                <span>Klick-Explosionen</span>
+                <span class="bb-hyper-switch">
+                    <input id="bbHyperClicks" type="checkbox">
+                    <span class="bb-hyper-slider"></span>
+                </span>
+            </label>
+
+            <label class="bb-hyper-row">
+                <span>Glitzerregen</span>
+                <span class="bb-hyper-switch">
+                    <input id="bbHyperAmbient" type="checkbox">
+                    <span class="bb-hyper-slider"></span>
+                </span>
+            </label>
+
+            <div class="settings-hint">Dopamin-Spikes, Glitzer, Pop und Klick-Explosionen. Wird auf diesem Gerät gespeichert.</div>
+        </section>
+
+        <section class="settings-section">
+            <div class="settings-label">Investment-Profile Presets</div>
+            <div class="settings-button-row" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+                <button class="settings-action-btn" type="button" onclick="applyInvestmentPreset('tech')" style="font-weight: 850;">Tech Growth</button>
+                <button class="settings-action-btn" type="button" onclick="applyInvestmentPreset('dividend')" style="font-weight: 850;">Div Focus</button>
+                <button class="settings-action-btn" type="button" onclick="applyInvestmentPreset('allweather')" style="font-weight: 850;">All-Weather</button>
+            </div>
+            <div class="settings-hint">Vorkonfigurierte Profile für schnelles Testen typischer Strategien.</div>
+        </section>
+
+        <section class="settings-section">
+            <div class="settings-label">Cache</div>
+            <div class="cache-summary" id="cacheSummary">Cache wird gelesen...</div>
+
+            <div class="settings-button-row">
+                <button class="settings-action-btn" type="button" onclick="refreshCacheSummary()">Aktualisieren</button>
+                <button class="settings-action-btn danger" type="button" onclick="clearStockCache()">Cache leeren</button>
+            </div>
+        </section>
+
+        <section class="settings-section">
+            <label class="settings-label" for="cachePassword">Export/Import Passwort optional</label>
+            <input type="password" id="cachePassword" placeholder="leer = unverschlüsselt">
+
+            <div class="settings-button-row">
+                <button class="settings-action-btn" type="button" onclick="exportStockCache()">Cache exportieren</button>
+                <button class="settings-action-btn" type="button" onclick="triggerCacheImport()">Cache importieren</button>
+            </div>
+
+            <input
+                type="file"
+                id="cacheImportFile"
+                accept="application/json,.json"
+                hidden
+                onchange="importStockCache(this.files[0])"
+            >
+
+            <div class="settings-hint">Mit Passwort wird AES-GCM im Browser genutzt. Ohne Passwort ist die Datei normales JSON.</div>
+        </section>
+    </aside>
+
+    <main class="container">
+        <header class="hero">
+            <h1>Investment Portfolio Rechner</h1>
+            <p class="subtitle">
+                Teste historische Investments mit Kursverlauf, Dividenden, Zoom-Auswertung und einem Reality Check,
+                der nicht komplett auf Kuschelkurs fährt. Das ist eine Betaversion, also kannst du hier gucken,
+                was das nächste Update werden kann.
+            </p>
+        </header>
+
+        <section class="market-strip" aria-label="Aktuelle Aktien">
             <div class="market-strip-label">Aktuelle Aktien</div>
+
             <button class="market-ticker-btn" type="button" onclick="selectStock('NVDA', 'Nvidia', true)">NVIDIA</button>
             <button class="market-ticker-btn" type="button" onclick="selectStock('AAPL', 'Apple', true)">APPLE</button>
             <button class="market-ticker-btn" type="button" onclick="selectStock('MSFT', 'Microsoft', true)">MICROSOFT</button>
@@ -95,23 +662,33 @@
             <button class="market-ticker-btn" type="button" onclick="selectStock('ADDYY', 'Adidas', true)">Adidas</button>
             <button class="market-ticker-btn" type="button" onclick="selectStock('ASML', 'ASML', true)">ASML</button>
             <button class="market-ticker-btn" type="button" onclick="selectStock('LMT', 'Lockheed Martin', true)">Lockheed Martin</button>
-        </div>
+        </section>
 
-        <div class="controls">
+        <section class="controls" aria-label="Eingaben">
             <div class="control-group">
                 <label for="stock">Aktie (Ticker/Name):</label>
                 <div class="autocomplete-container">
-                    <input type="text" id="stock" class="stock-input" value="NVDA" placeholder="z.B. Nvidia, Apple, Tesla..." autocomplete="off">
+                    <input
+                        type="text"
+                        id="stock"
+                        class="stock-input"
+                        value="NVDA"
+                        placeholder="z.B. Nvidia, Apple, Tesla..."
+                        autocomplete="off"
+                    >
                 </div>
             </div>
+
             <div class="control-group">
                 <label for="monthlyAmount">Monatliche Investition (€):</label>
                 <input type="number" id="monthlyAmount" value="10" min="1">
             </div>
-            <button class="primary-btn" onclick="loadData()">Berechnen</button>
-        </div>
-        <div class="top-action-row">
-            <div class="quick-amounts">
+
+            <button class="primary-btn" type="button" onclick="loadData()">Berechnen</button>
+        </section>
+
+        <section class="top-action-row" aria-label="Schnellauswahl">
+            <div class="quick-amounts" aria-label="Schnelle Beträge">
                 <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(25)">€ 25</button>
                 <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(50)">€ 50</button>
                 <button class="quick-amount-btn" type="button" onclick="setMonthlyAmount(100)">€ 100</button>
@@ -120,15 +697,23 @@
             </div>
 
             <div class="dividend-mode-row" aria-label="Dividendenmodus">
-                <button class="dividend-mode-btn active" type="button" data-dividend-mode="reinvest" onclick="setDividendMode('reinvest')">Reinvestieren</button>
-                <button class="dividend-mode-btn" type="button" data-dividend-mode="payout" onclick="setDividendMode('payout')">Auszahlen</button>
+                <button class="dividend-mode-btn active" type="button" data-dividend-mode="reinvest" onclick="setDividendMode('reinvest')">
+                    Reinvestieren
+                </button>
+                <button class="dividend-mode-btn" type="button" data-dividend-mode="payout" onclick="setDividendMode('payout')">
+                    Auszahlen
+                </button>
             </div>
 
-            <div class="period-buttons">
-                <button class="zoom-btn" id="resetZoomBtn" onclick="resetZoom()">Zoom zurücksetzen</button>
-                <button class="period-btn" type="button" onclick="changePeriod(1)">+</button>
+            <div class="period-buttons" aria-label="Zeitraum wählen">
+                <button class="zoom-btn" id="resetZoomBtn" type="button" onclick="resetZoom()">Zoom zurücksetzen</button>
+                <button class="period-btn" type="button" onclick="changePeriod(1)" aria-label="Zeitraum erhöhen">+</button>
+
                 <div class="period-selector">
-                    <div class="period-display" id="periodDisplay" onclick="togglePeriodDropdown()">10 Jahre</div>
+                    <button class="period-display" id="periodDisplay" type="button" onclick="togglePeriodDropdown()">
+                        10 Jahre
+                    </button>
+
                     <div class="period-dropdown" id="periodDropdown">
                         <button class="period-option" type="button" data-years="1" onclick="selectPeriodOption(1)">1 Jahr</button>
                         <button class="period-option" type="button" data-years="2" onclick="selectPeriodOption(2)">2 Jahre</button>
@@ -142,79 +727,128 @@
                         <button class="period-option" type="button" data-years="40" onclick="selectPeriodOption(40)">40 Jahre</button>
                     </div>
                 </div>
-                <button class="period-btn" type="button" onclick="changePeriod(-1)">−</button>
+
+                <button class="period-btn" type="button" onclick="changePeriod(-1)" aria-label="Zeitraum verringern">−</button>
             </div>
-        </div>
-        <div class="zoom-controls">
-            <div class="zoom-hint" id="zoomHint">Ab 5 Jahren: Mit dem Mausrad scrollen, mit Shift + Mausrad zoomen, mit zwei Fingern seitlich scrollen oder mit gedrückter Maustaste einen Bereich markieren.</div>
-        </div>
-        <div class="info-row">
-            <div class="info-pill">
+        </section>
+
+        <section class="zoom-controls" aria-label="Zoom-Hinweis">
+            <div class="zoom-hint" id="zoomHint">
+                Ab 5 Jahren: Mit dem Mausrad scrollen, mit Shift + Mausrad zoomen,
+                mit zwei Fingern seitlich scrollen oder mit gedrückter Maustaste einen Bereich markieren.
+            </div>
+        </section>
+
+        <section class="info-row" aria-label="Aktuelle Informationen">
+            <article class="info-pill">
                 <div class="info-pill-label">Aktiver Ticker</div>
                 <div class="info-pill-value" id="activeTickerInfo">–</div>
-            </div>
-            <div class="info-pill">
+            </article>
+
+            <article class="info-pill">
                 <div class="info-pill-label">Sichtbarer Zeitraum</div>
                 <div class="info-pill-value" id="visibleRangeInfo">–</div>
-            </div>
-            <div class="info-pill">
+            </article>
+
+            <article class="info-pill">
                 <div class="info-pill-label">Letzter Kurs</div>
                 <div class="info-pill-value" id="latestPriceInfo">€ 0</div>
-            </div>
-        </div>
-        <div class="mobile-zoom-controls" id="mobileZoomControls" aria-label="Mobile Zoom-Steuerung">
+            </article>
+        </section>
+
+        <section class="mobile-zoom-controls" id="mobileZoomControls" aria-label="Mobile Zoom-Steuerung">
             <button class="mobile-zoom-btn" type="button" onclick="panMobileChart(-1)" aria-label="Nach links verschieben">←</button>
             <button class="mobile-zoom-btn" type="button" onclick="zoomMobileChart(1)" aria-label="Hineinzoomen">+</button>
             <button class="mobile-zoom-btn" type="button" onclick="zoomMobileChart(-1)" aria-label="Herauszoomen">−</button>
             <button class="mobile-zoom-btn" type="button" onclick="panMobileChart(1)" aria-label="Nach rechts verschieben">→</button>
-        </div>
+        </section>
 
         <div id="loadingMsg" class="loading" style="display: none;">Marktdaten werden geladen...</div>
 
-        <div class="chart-container">
+        <section class="chart-container" aria-label="Portfolio Diagramm">
             <canvas id="portfolioChart"></canvas>
-        </div>
+        </section>
 
-        <div class="stats">
-            <div class="stat-box">
+        <section class="stats" aria-label="Portfolio Kennzahlen">
+            <article class="stat-box">
                 <div class="stat-label">Aktueller Portfolio Wert</div>
                 <div class="stat-value" id="portfolioValue">€ 0</div>
-            </div>
-            <div class="stat-box">
+            </article>
+
+            <article class="stat-box">
                 <div class="stat-label" id="investedAmountLabel">Investiert inkl. Dividenden</div>
                 <div class="stat-value" id="investedAmount">€ 0</div>
-            </div>
-            <div class="stat-box">
+            </article>
+
+            <article class="stat-box">
                 <div class="stat-label">Gewinn / Verlust</div>
                 <div class="stat-value" id="gainLoss">€ 0</div>
                 <div class="dividend-subtext" id="dividendText">+ € 0 Dividenden</div>
-            </div>
-            <div class="stat-box">
+            </article>
+
+            <article class="stat-box">
                 <div class="stat-label">Rendite</div>
                 <div class="stat-value" id="returnPercent">0%</div>
+            </article>
+        </section>
+
+        <section class="dividend-dashboard" id="dividendDashboard" aria-label="Dividenden-Ertrags-Dashboard" style="margin-top: 20px; display: none;">
+            <div class="box" style="padding: 20px; border: 1px solid var(--border); border-radius: 22px; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(14px);">
+                <h3 style="margin: 0 0 14px 0; color: #fde68a; font-size: 1.15rem; font-weight: 950; display: flex; align-items: center; gap: 8px;">
+                    📊 Dividenden-Ertrags-Dashboard
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div>
+                        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 800;">Kumulierte Dividenden (gesamt)</div>
+                        <div id="divDashTotal" style="font-size: 1.6rem; font-weight: 900; color: #38bdf8; margin-top: 4px;">€ 0</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 800;">Durchschnittliche Dividende / Jahr</div>
+                        <div id="divDashAvgYear" style="font-size: 1.6rem; font-weight: 900; color: #26de81; margin-top: 4px;">€ 0</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 800;">Renditeanteil aus Dividenden</div>
+                        <div id="divDashYieldContribution" style="font-size: 1.6rem; font-weight: 900; color: #fbc531; margin-top: 4px;">0%</div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="reality-check">
-            <div class="reality-check-header">
+        </section>
+
+        <section class="reality-check" aria-label="Reality Check">
+            <header class="reality-check-header">
                 <div class="reality-check-title">Reality Check</div>
-                <div class="reality-mode-row">
+
+                <div class="reality-mode-row" aria-label="Reality Check Modus">
                     <button class="reality-mode-btn active" type="button" data-mode="LARP" onclick="setRealityMode('LARP')">LARP</button>
                     <button class="reality-mode-btn" type="button" data-mode="DERP" onclick="setRealityMode('DERP')">DERP</button>
                     <button class="reality-mode-btn" type="button" data-mode="BRUTAL" onclick="setRealityMode('BRUTAL')">BRUTAL</button>
                 </div>
-            </div>
-            <div class="reality-check-text" id="realityCheckText">Lade Daten, dann gibt's hier die kleine finanzielle Respektschelle.</div>
-            <div class="reality-check-footer">Hinweis: Das ist eine historische Simulation und keine Anlageberatung. Steuern, Gebühren, Spread und perfekte Ausführung sind hier bewusst nicht komplett realistisch abgebildet.</div>
-        </div>
-    </div>
+            </header>
 
-    <footer class="app-footer">Gebaut für schnelle Was-wäre-wenn-Rechnungen. Historische Performance ist keine Garantie für die Zukunft. 26.2.1</footer>
+            <div class="reality-check-text" id="realityCheckText">
+                Lade Daten, dann gibt's hier die kleine finanzielle Respektschelle.
+            </div>
+
+            <div class="reality-check-footer">
+                Hinweis: Das ist eine historische Simulation und keine Anlageberatung.
+                Steuern, Gebühren, Spread und perfekte Ausführung sind hier bewusst nicht komplett realistisch abgebildet.
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        Gebaut für schnelle Was-wäre-wenn-Rechnungen. Historische Performance ist keine Garantie für die Zukunft.
+        C26.3 Beta 1.1 Preview
+    </footer>
+
+    <!-- App scripts -->
     <script src="assets-beta/since-beta-state.js"></script>
     <script src="assets-beta/since-beta-reality.js"></script>
     <script src="assets-beta/since-beta-data.js"></script>
     <script src="assets-beta/since-beta-ui.js"></script>
     <script src="assets-beta/since-beta-chart.js"></script>
     <script src="assets-beta/since-beta-main.js"></script>
+
     <script>
         document.addEventListener('contextmenu', event => {
             if (event.target.closest('button, a, [role="button"]')) {
@@ -222,39 +856,175 @@
             }
         });
     </script>
-<script id="bb-touch-zoom-guard">
-(function() {
-    if (window.__bbTouchZoomGuard) return;
-    window.__bbTouchZoomGuard = true;
 
-    let lastTouchEnd = 0;
-    const interactiveSelector = 'button, a, input, select, textarea, label, [role="button"], .progress-bar-container, .card, .chart';
+    <script id="bb-touch-zoom-guard">
+        (() => {
+            if (window.__bbTouchZoomGuard) return;
+            window.__bbTouchZoomGuard = true;
 
-    document.addEventListener('touchend', function(event) {
-        const now = Date.now();
-        const isInteractive = event.target.closest && event.target.closest(interactiveSelector);
+            let lastTouchEnd = 0;
+            const interactiveSelector = [
+                'button',
+                'a',
+                'input',
+                'select',
+                'textarea',
+                'label',
+                '[role="button"]',
+                '.progress-bar-container',
+                '.card',
+                '.chart'
+            ].join(', ');
 
-        if (!isInteractive && now - lastTouchEnd <= 350 && event.cancelable) {
-            event.preventDefault();
-        }
+            document.addEventListener('touchend', event => {
+                const now = Date.now();
+                const isInteractive = event.target.closest?.(interactiveSelector);
 
-        lastTouchEnd = now;
-    }, { passive: false });
+                if (!isInteractive && now - lastTouchEnd <= 350 && event.cancelable) {
+                    event.preventDefault();
+                }
 
-    document.addEventListener('dblclick', function(event) {
-        if (event.cancelable) {
-            event.preventDefault();
-        }
-    }, { passive: false });
+                lastTouchEnd = now;
+            }, { passive: false });
 
-    ['gesturestart', 'gesturechange', 'gestureend'].forEach(function(eventName) {
-        document.addEventListener(eventName, function(event) {
-            if (event.cancelable) {
-                event.preventDefault();
+            document.addEventListener('dblclick', event => {
+                if (event.cancelable) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            ['gesturestart', 'gesturechange', 'gestureend'].forEach(eventName => {
+                document.addEventListener(eventName, event => {
+                    if (event.cancelable) {
+                        event.preventDefault();
+                    }
+                }, { passive: false });
+            });
+        })();
+    </script>
+
+    <script id="bb-hyper-script">
+        (() => {
+            if (window.__bbHyperController) return;
+            window.__bbHyperController = true;
+
+            const storageKey = `bbHyper:${location.pathname}`;
+            const defaultOffKey = `${storageKey}:defaultOffApplied`;
+
+            const modeToggle = document.getElementById('bbHyperMode');
+            const clicksToggle = document.getElementById('bbHyperClicks');
+            const ambientToggle = document.getElementById('bbHyperAmbient');
+
+            if (!modeToggle || !clicksToggle || !ambientToggle) return;
+
+            const getSavedState = () => {
+                try {
+                    return JSON.parse(localStorage.getItem(storageKey) || 'null');
+                } catch {
+                    return null;
+                }
+            };
+
+            const saveState = () => {
+                localStorage.setItem(storageKey, JSON.stringify(state));
+            };
+
+            const showToast = text => {
+                if (!state.mode) return;
+
+                const toast = document.createElement('div');
+                toast.className = 'bb-hyper-toast';
+                toast.textContent = text;
+                document.body.append(toast);
+
+                setTimeout(() => toast.remove(), 950);
+            };
+
+            const applyState = () => {
+                document.body.classList.toggle('bb-hyper-on', Boolean(state.mode));
+                document.body.classList.toggle('bb-hyper-clicks-on', Boolean(state.mode && state.clicks));
+
+                modeToggle.checked = Boolean(state.mode);
+                clicksToggle.checked = Boolean(state.clicks);
+                ambientToggle.checked = Boolean(state.ambient);
+
+                saveState();
+            };
+
+            const createBurst = (x, y, amount) => {
+                if (!state.mode || !state.clicks) return;
+
+                const colors = ['#fbc531', '#38bdf8', '#26de81', '#fb7185', '#a78bfa', '#fff'];
+
+                for (let i = 0; i < amount; i += 1) {
+                    const spark = document.createElement('span');
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 38 + Math.random() * 96;
+
+                    spark.className = 'bb-hyper-spark';
+                    spark.style.left = `${x}px`;
+                    spark.style.top = `${y}px`;
+                    spark.style.setProperty('--bb-c', colors[i % colors.length]);
+                    spark.style.setProperty('--bb-x', `${Math.cos(angle) * distance}px`);
+                    spark.style.setProperty('--bb-y', `${Math.sin(angle) * distance}px`);
+
+                    document.body.append(spark);
+                    setTimeout(() => spark.remove(), 950);
+                }
+            };
+
+            const createAmbientStar = () => {
+                if (!state.mode || !state.ambient || document.hidden) return;
+
+                const star = document.createElement('span');
+                star.className = 'bb-hyper-star';
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = '-12px';
+                star.style.setProperty('--bb-x', `${Math.random() * 90 - 45}px`);
+
+                document.body.append(star);
+                setTimeout(() => star.remove(), 2100);
+            };
+
+            let state = getSavedState() || {
+                mode: false,
+                clicks: true,
+                ambient: true
+            };
+
+            if (!localStorage.getItem(defaultOffKey)) {
+                state.mode = false;
+                localStorage.setItem(defaultOffKey, '1');
             }
-        }, { passive: false });
-    });
-})();
-</script>
+
+            modeToggle.addEventListener('change', () => {
+                state.mode = modeToggle.checked;
+                applyState();
+                showToast(state.mode ? 'Hypermodus an' : 'Hypermodus aus');
+            });
+
+            clicksToggle.addEventListener('change', () => {
+                state.clicks = clicksToggle.checked;
+                applyState();
+                showToast(state.clicks ? 'Klicks glitzern' : 'Klicks ruhig');
+            });
+
+            ambientToggle.addEventListener('change', () => {
+                state.ambient = ambientToggle.checked;
+                applyState();
+                showToast(state.ambient ? 'Glitzerregen an' : 'Glitzerregen aus');
+            });
+
+            document.addEventListener('click', event => {
+                const target = event.target.closest('button, a, [role="button"], .progress-bar-container, .card, .chart');
+                if (!target) return;
+
+                createBurst(event.clientX, event.clientY, 26);
+            });
+
+            setInterval(createAmbientStar, 180);
+            applyState();
+        })();
+    </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-        let chart = null;
+let chart = null;
         let currentPeriod = 10;
         let portfolioData = null;
         let zoomEnabled = false;
@@ -10,6 +10,12 @@
         let lastRequestedTicker = null;
         let isLoadingData = false;
         let latestLoadRequestId = 0;
+
+        // Portfolio-Modus Zustandsvariablen
+        let isPortfolioMode = localStorage.getItem('isPortfolioMode') === 'true';
+        let portfolioAssets = JSON.parse(localStorage.getItem('portfolioAssets')) || [];
+        let rawPortfolioStockData = {}; // Speichert Ticker -> { values, dividends }
+
         let realityMode = 'LARP';
         let dividendMode = localStorage.getItem('dividendMode') === 'payout' ? 'payout' : 'reinvest';
         let marketDataProvider = ['twelve', 'yahoo', 'auto'].includes(localStorage.getItem('marketDataProvider'))

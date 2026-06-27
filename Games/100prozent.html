@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>100 Prozent Risiko</title>
     <script src="consent.js"></script>
     <style>
         :root {
-            --ink: #17212f;
-            --muted: #657184;
-            --paper: rgba(255, 255, 255, 0.9);
-            --paper-strong: #ffffff;
-            --line: rgba(23, 33, 47, 0.12);
-            --accent: #f7b731;
-            --accent-2: #20bf6b;
-            --danger: #eb3b5a;
-            --blue: #2d98da;
-            --shadow: 0 24px 70px rgba(23, 33, 47, 0.22);
-            --bg-1: #0f172a;
-            --bg-2: #312e81;
-            --bg-3: #7c3aed;
+            --ink: #ffffff;
+            --muted: rgba(204, 251, 241, 0.65);
+            --paper: rgba(255, 255, 255, 0.08);
+            --paper-strong: rgba(255, 255, 255, 0.15);
+            --line: rgba(255, 255, 255, 0.14);
+            --accent: #e5a93b;
+            --accent-2: #2dd4bf;
+            --danger: #f43f5e;
+            --blue: #2dd4bf;
+            --shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
+            --bg-1: #0b0f19;
+            --bg-2: #072a3a;
+            --bg-3: #043e4f;
         }
 
         * {
@@ -46,10 +49,10 @@
             padding: 88px 18px 34px;
             color: var(--ink);
             background:
-                radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.34), transparent 28%),
-                radial-gradient(circle at 88% 14%, rgba(251, 197, 49, 0.25), transparent 24%),
-                radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.33), transparent 33%),
-                linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
             overflow-x: hidden;
         }
 
@@ -79,7 +82,7 @@
             border-radius: 999px;
             font-weight: 800;
             text-decoration: none;
-            box-shadow: 0 12px 28px rgba(23, 33, 47, 0.14);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -87,10 +90,10 @@
         }
 
         .back-home-btn:hover {
-            background: #fff8e1;
-            color: var(--ink);
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
             transform: translateX(-2px);
-            box-shadow: 0 16px 34px rgba(23, 33, 47, 0.18);
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
         }
 
         .container {
@@ -98,9 +101,9 @@
             z-index: 1;
             width: min(680px, 100%);
             text-align: center;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.78));
+            background: linear-gradient(145deg, var(--paper-strong), var(--paper));
             padding: clamp(24px, 6vw, 44px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--line);
             border-radius: 24px;
             box-shadow: var(--shadow);
             overflow: hidden;
@@ -112,7 +115,7 @@
             top: -56px;
             right: -8px;
             z-index: -1;
-            color: rgba(45, 152, 218, 0.08);
+            color: rgba(45, 212, 191, 0.05);
             font-size: clamp(7rem, 22vw, 13rem);
             font-weight: 950;
             line-height: 1;
@@ -125,12 +128,13 @@
             margin-bottom: 12px;
             padding: 7px 12px;
             border-radius: 999px;
-            background: rgba(247, 183, 49, 0.16);
-            color: #9a6500;
+            background: rgba(229, 169, 59, 0.16);
+            color: #fde68a;
             font-size: 0.82rem;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0;
+            border: 1px solid rgba(229, 169, 59, 0.22);
         }
 
         h1 {
@@ -153,29 +157,27 @@
             padding: clamp(16px, 4vw, 24px);
             border: 1px solid var(--line);
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.68);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .progress-bar-container {
             width: 100%;
             height: clamp(46px, 9vw, 58px);
-            background:
-                linear-gradient(180deg, rgba(23, 33, 47, 0.08), rgba(23, 33, 47, 0.03)),
-                #e8edf4;
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 999px;
             overflow: hidden;
             margin-top: 0;
-            border: 1px solid rgba(23, 33, 47, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             cursor: pointer;
-            box-shadow: inset 0 3px 10px rgba(23, 33, 47, 0.12);
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.4);
             -webkit-tap-highlight-color: transparent;
             transition: transform 0.12s ease, box-shadow 0.12s ease;
         }
 
         .progress-bar-container:hover {
             transform: translateY(-1px);
-            box-shadow: inset 0 3px 10px rgba(23, 33, 47, 0.12), 0 12px 24px rgba(45, 152, 218, 0.16);
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.4), 0 12px 24px rgba(45, 212, 191, 0.16);
         }
 
         .progress-bar-container:focus-visible {
@@ -209,7 +211,7 @@
             padding: 14px;
             border: 1px solid var(--line);
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .status-label {
@@ -240,7 +242,7 @@
             min-height: 42px;
             border: 1px solid var(--line);
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.62);
+            background: rgba(255, 255, 255, 0.08);
             color: var(--ink);
             cursor: pointer;
             font: inherit;
@@ -249,7 +251,7 @@
 
         .chance-option.active {
             background: var(--accent);
-            border-color: rgba(23, 33, 47, 0.18);
+            border-color: rgba(255, 255, 255, 0.22);
         }
 
         .reset-hold-button {
@@ -258,9 +260,9 @@
             width: 100%;
             min-height: 44px;
             margin-top: 14px;
-            border: 1px solid rgba(235, 59, 90, 0.24);
+            border: 1px solid rgba(244, 63, 94, 0.24);
             border-radius: 999px;
-            background: rgba(235, 59, 90, 0.08);
+            background: rgba(244, 63, 94, 0.08);
             color: var(--danger);
             cursor: pointer;
             font: inherit;
@@ -275,7 +277,7 @@
             position: absolute;
             inset: 0;
             z-index: 0;
-            background: rgba(235, 59, 90, 0.18);
+            background: rgba(244, 63, 94, 0.18);
             transform: scaleX(0);
             transform-origin: left center;
         }
@@ -305,9 +307,9 @@
             display: none;
             min-width: 68px;
             min-height: 44px;
-            border: 1px solid rgba(235, 59, 90, 0.24);
+            border: 1px solid rgba(244, 63, 94, 0.24);
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.62);
+            background: rgba(255, 255, 255, 0.08);
             color: var(--danger);
             cursor: pointer;
             font: inherit;
@@ -346,7 +348,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--ink);
+            color: var(--text);
             font-size: 0.95rem;
             font-weight: 850;
         }
@@ -369,7 +371,7 @@
             padding: 14px;
             border: 1px solid var(--line);
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.58);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .probability-card p {
@@ -408,7 +410,7 @@
             padding: 14px;
             border: 1px solid var(--line);
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.06);
             font-size: 0.95rem;
             color: var(--muted);
         }
@@ -467,9 +469,61 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .stats-panel-title {
+            font-weight: 950;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            color: var(--blue);
+            text-align: left;
+            margin-bottom: 12px;
+            letter-spacing: 0.04em;
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0 0;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            overflow: hidden;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.88rem;
+            color: var(--ink);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-tag-win {
+            background: rgba(32, 191, 107, 0.15);
+            color: var(--accent-2);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.76rem;
+        }
+
+        .history-tag-fail {
+            background: rgba(235, 59, 90, 0.1);
+            color: var(--danger);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.76rem;
+        }
     </style>
     <style>
-        .dopamine-burst{position:fixed;z-index:9999;left:0;top:0;width:14px;height:14px;border:2px solid rgba(251,197,49,.95);border-radius:999px;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineRing .55s ease-out forwards}.dopamine-spark{position:fixed;z-index:9999;left:0;top:0;width:7px;height:7px;border-radius:999px;background:#fbc531;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineSpark .58s ease-out forwards}.dopamine-hit{animation:dopamineHit .22s ease}@keyframes dopamineRing{to{width:110px;height:110px;opacity:0}}@keyframes dopamineSpark{to{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.2);opacity:0}}@keyframes dopamineHit{50%{filter:brightness(1.35) saturate(1.4);transform:scale(1.035)}}
+        .dopamine-burst{position:fixed;z-index:9999;left:0;top:0;width:14px;height:14px;border:2px solid rgba(229,169,59,.95);border-radius:999px;pointer-events:none;transform:translate(-50%,-50%);animation:dopamineRing .55s ease-out forwards}.dopamine-spark{position:fixed;z-index:9999;left:0;top:0;width:7px;height:7px;border-radius:999px;background:var(--accent,#e5a93b);pointer-events:none;transform:translate(-50%,-50%);animation:dopamineSpark .58s ease-out forwards}.dopamine-hit{animation:dopamineHit .22s ease}@keyframes dopamineRing{to{width:110px;height:110px;opacity:0}}@keyframes dopamineSpark{to{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(.2);opacity:0}}@keyframes dopamineHit{50%{filter:brightness(1.35) saturate(1.4);transform:scale(1.035)}}
     </style>
 <style id="bb-touch-zoom-guard-style">
     html,
@@ -480,17 +534,17 @@
     }
 </style>
 <style id="bb-hyper-style">
-.bb-hyper-toggle{position:fixed;top:20px;right:18px;z-index:12000;width:48px;height:48px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:linear-gradient(145deg,rgba(15,23,42,.86),rgba(99,102,241,.72));color:#fff;font-size:1.25rem;font-weight:950;display:grid;place-items:center;cursor:pointer;box-shadow:0 16px 42px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(18px);-webkit-tap-highlight-color:transparent;touch-action:manipulation}.bb-hyper-toggle:hover{transform:translateY(-2px);filter:brightness(1.08)}.bb-hyper-toggle.is-on{background:linear-gradient(135deg,#fbc531,#38bdf8 52%,#a855f7);box-shadow:0 0 28px rgba(251,197,49,.35),0 18px 48px rgba(56,189,248,.28)}.bb-hyper-panel{position:fixed;top:76px;right:18px;z-index:12001;width:min(340px,calc(100vw - 36px));padding:16px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(49,46,129,.88));color:#fff;box-shadow:0 28px 80px rgba(0,0,0,.44);backdrop-filter:blur(24px);display:none;transform:scale(.92) translateY(-8px);opacity:0;filter:blur(10px)}.bb-hyper-panel.show{display:block;animation:bbHyperPanelIn .28s cubic-bezier(.18,.9,.24,1) forwards}.bb-hyper-panel.closing{display:block;animation:bbHyperPanelOut .2s ease forwards}.bb-hyper-title{margin:0 0 4px;font-size:1rem;font-weight:950;color:#fde68a}.bb-hyper-subtitle{margin:0 0 14px;color:rgba(255,255,255,.72);font-size:.84rem;line-height:1.35}.bb-hyper-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.08);margin-top:10px}.bb-hyper-row span{font-size:.92rem;font-weight:850}.bb-hyper-switch{position:relative;width:56px;height:31px;flex:0 0 auto}.bb-hyper-switch input{position:absolute;opacity:0;inset:0}.bb-hyper-slider{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transition:.2s}.bb-hyper-slider:before{content:"";position:absolute;width:25px;height:25px;left:3px;top:3px;border-radius:999px;background:#fff;box-shadow:0 5px 12px rgba(0,0,0,.25);transition:.22s cubic-bezier(.18,.9,.24,1)}.bb-hyper-switch input:checked + .bb-hyper-slider{background:linear-gradient(135deg,#fbc531,#38bdf8)}.bb-hyper-switch input:checked + .bb-hyper-slider:before{transform:translateX(25px)}.bb-hyper-note{margin:12px 0 0;color:rgba(255,255,255,.62);font-size:.78rem;line-height:1.35}.bb-hyper-on h1,.bb-hyper-on .hero h1{animation:bbHyperTitle 2.2s ease-in-out infinite;text-shadow:0 0 18px rgba(251,197,49,.55),0 0 34px rgba(56,189,248,.34)}.bb-hyper-on button:not(.bb-hyper-toggle),.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill{animation:bbHyperBreath 1.9s ease-in-out infinite}.bb-hyper-on .chart,.bb-hyper-on .chart-container,.bb-hyper-on canvas,.bb-hyper-on .progress-bar-container,.bb-hyper-on .track,.bb-hyper-on .card{filter:saturate(1.28);box-shadow:0 0 34px rgba(56,189,248,.22),0 0 54px rgba(251,197,49,.14)}.bb-hyper-on::after{content:"";position:fixed;inset:-20%;z-index:11990;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,rgba(255,255,255,.14) 44%,transparent 52% 100%);mix-blend-mode:screen;transform:translateX(-120%);animation:bbHyperSweep 2.8s linear infinite}.bb-hyper-spark{position:fixed;z-index:11999;left:0;top:0;width:8px;height:8px;border-radius:999px;pointer-events:none;background:var(--bb-c,#fbc531);box-shadow:0 0 16px var(--bb-c,#fbc531),0 0 28px rgba(255,255,255,.34);transform:translate(-50%,-50%);animation:bbHyperSpark .9s ease-out forwards}.bb-hyper-star{position:fixed;z-index:11998;left:0;top:0;width:5px;height:5px;border-radius:999px;background:#fff;pointer-events:none;box-shadow:0 0 14px #fff,0 0 28px rgba(251,197,49,.72);animation:bbHyperFall 1.9s linear forwards}.bb-hyper-toast{position:fixed;z-index:12002;left:50%;bottom:22px;transform:translateX(-50%) scale(.92);padding:10px 14px;border-radius:999px;background:rgba(15,23,42,.86);border:1px solid rgba(255,255,255,.18);color:#fde68a;font-weight:950;box-shadow:0 18px 44px rgba(0,0,0,.35);opacity:0;pointer-events:none;animation:bbHyperToast .9s ease forwards}@keyframes bbHyperPanelIn{to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}@keyframes bbHyperPanelOut{from{opacity:1;transform:scale(1);filter:blur(0)}to{opacity:0;transform:scale(.94) translateY(-8px);filter:blur(10px)}}@keyframes bbHyperTitle{0%,100%{filter:hue-rotate(0) saturate(1)}50%{filter:hue-rotate(55deg) saturate(1.8);transform:translateY(-1px) scale(1.012)}}@keyframes bbHyperBreath{0%,100%{filter:saturate(1);box-shadow:inherit}50%{filter:saturate(1.35) brightness(1.08);box-shadow:0 0 26px rgba(251,197,49,.18),0 0 42px rgba(56,189,248,.14)}}@keyframes bbHyperSweep{from{transform:translateX(-120%)}to{transform:translateX(120%)}}@keyframes bbHyperSpark{to{transform:translate(calc(-50% + var(--bb-x)),calc(-50% + var(--bb-y))) scale(.18) rotate(240deg);opacity:0}}@keyframes bbHyperFall{to{transform:translate(var(--bb-x),120vh) rotate(260deg);opacity:0}}@keyframes bbHyperToast{20%,78%{opacity:1;transform:translateX(-50%) scale(1)}to{opacity:0;transform:translateX(-50%) scale(.96) translateY(8px)}}.bb-canary-page .bb-hyper-toggle{top:76px}.bb-canary-page .bb-hyper-panel{top:132px}@media(max-width:720px){.bb-hyper-toggle{top:72px;right:12px;width:44px;height:44px}.bb-hyper-panel{top:124px;right:12px;width:calc(100vw - 24px)}}@media(prefers-reduced-motion:reduce){.bb-hyper-on h1,.bb-hyper-on .hero h1,.bb-hyper-on button,.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill,.bb-hyper-on::after,.bb-hyper-spark,.bb-hyper-star,.bb-hyper-toast{animation:none!important}}
+.bb-hyper-toggle{position:fixed;top:20px;right:18px;z-index:12000;width:48px;height:48px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:linear-gradient(145deg,rgba(15,23,42,.86),rgba(99,102,241,.72));color:#fff;font-size:1.25rem;font-weight:950;display:grid;place-items:center;cursor:pointer;box-shadow:0 16px 42px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.2);backdrop-filter:blur(18px);-webkit-tap-highlight-color:transparent;touch-action:manipulation}.bb-hyper-toggle:hover{transform:translateY(-2px);filter:brightness(1.08)}.bb-hyper-toggle.is-on{background:linear-gradient(135deg,var(--accent),var(--accent-2) 52%,#a855f7);box-shadow:0 0 28px rgba(229,169,59,.35),0 18px 48px rgba(45,212,191,.28)}.bb-hyper-panel{position:fixed;top:76px;right:18px;z-index:12001;width:min(340px,calc(100vw - 36px));padding:16px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(49,46,129,.88));color:#fff;box-shadow:0 28px 80px rgba(0,0,0,.44);backdrop-filter:blur(24px);display:none;transform:scale(.92) translateY(-8px);opacity:0;filter:blur(10px)}.bb-hyper-panel.show{display:block;animation:bbHyperPanelIn .28s cubic-bezier(.18,.9,.24,1) forwards}.bb-hyper-panel.closing{display:block;animation:bbHyperPanelOut .2s ease forwards}.bb-hyper-title{margin:0 0 4px;font-size:1rem;font-weight:950;color:#fde68a}.bb-hyper-subtitle{margin:0 0 14px;color:rgba(255,255,255,.72);font-size:.84rem;line-height:1.35}.bb-hyper-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.08);margin-top:10px}.bb-hyper-row span{font-size:.92rem;font-weight:850}.bb-hyper-switch{position:relative;width:56px;height:31px;flex:0 0 auto}.bb-hyper-switch input{position:absolute;opacity:0;inset:0}.bb-hyper-slider{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transition:.2s}.bb-hyper-slider:before{content:"";position:absolute;width:25px;height:25px;left:3px;top:3px;border-radius:999px;background:#fff;box-shadow:0 5px 12px rgba(0,0,0,.25);transition:.22s cubic-bezier(.18,.9,.24,1)}.bb-hyper-switch input:checked + .bb-hyper-slider{background:linear-gradient(135deg,var(--accent),var(--accent-2))}.bb-hyper-switch input:checked + .bb-hyper-slider:before{transform:translateX(25px)}.bb-hyper-note{margin:12px 0 0;color:rgba(255,255,255,.62);font-size:.78rem;line-height:1.35}.bb-hyper-on h1,.bb-hyper-on .hero h1{animation:bbHyperTitle 2.2s ease-in-out infinite;text-shadow:0 0 18px rgba(229,169,59,.55),0 0 34px rgba(45,212,191,.34)}.bb-hyper-on button:not(.bb-hyper-toggle),.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill{animation:bbHyperBreath 1.9s ease-in-out infinite}.bb-hyper-on .chart,.bb-hyper-on .chart-container,.bb-hyper-on canvas,.bb-hyper-on .progress-bar-container,.bb-hyper-on .track,.bb-hyper-on .card{filter:saturate(1.28);box-shadow:0 0 34px rgba(45,212,191,.22),0 0 54px rgba(229,169,59,.14)}.bb-hyper-on::after{content:"";position:fixed;inset:-20%;z-index:11990;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,rgba(255,255,255,.14) 44%,transparent 52% 100%);mix-blend-mode:screen;transform:translateX(-120%);animation:bbHyperSweep 2.8s linear infinite}.bb-hyper-spark{position:fixed;z-index:11999;left:0;top:0;width:8px;height:8px;border-radius:999px;pointer-events:none;background:var(--bb-c,var(--accent));box-shadow:0 0 16px var(--bb-c,var(--accent)),0 0 28px rgba(255,255,255,.34);transform:translate(-50%,-50%);animation:bbHyperSpark .9s ease-out forwards}.bb-hyper-star{position:fixed;z-index:11998;left:0;top:0;width:5px;height:5px;border-radius:999px;background:#fff;pointer-events:none;box-shadow:0 0 14px #fff,0 0 28px rgba(229,169,59,.72);animation:bbHyperFall 1.9s linear forwards}.bb-hyper-toast{position:fixed;z-index:12002;left:50%;bottom:22px;transform:translateX(-50%) scale(.92);padding:10px 14px;border-radius:999px;background:rgba(15,23,42,.86);border:1px solid rgba(255,255,255,.18);color:#fde68a;font-weight:950;box-shadow:0 18px 44px rgba(0,0,0,.35);opacity:0;pointer-events:none;animation:bbHyperToast .9s ease forwards}@keyframes bbHyperPanelIn{to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}@keyframes bbHyperPanelOut{from{opacity:1;transform:scale(1);filter:blur(0)}to{opacity:0;transform:scale(.94) translateY(-8px);filter:blur(10px)}}@keyframes bbHyperTitle{0%,100%{filter:hue-rotate(0) saturate(1)}50%{filter:hue-rotate(55deg) saturate(1.8);transform:translateY(-1px) scale(1.012)}}@keyframes bbHyperBreath{0%,100%{filter:saturate(1);box-shadow:inherit}50%{filter:saturate(1.35) brightness(1.08);box-shadow:0 0 26px rgba(229,169,59,.18),0 0 42px rgba(45,212,191,.14)}}@keyframes bbHyperSweep{from{transform:translateX(-120%)}to{transform:translateX(120%)}}@keyframes bbHyperSpark{to{transform:translate(calc(-50% + var(--bb-x)),calc(-50% + var(--bb-y))) scale(.18) rotate(240deg);opacity:0}}@keyframes bbHyperFall{to{transform:translate(var(--bb-x),120vh) rotate(260deg);opacity:0}}@keyframes bbHyperToast{20%,78%{opacity:1;transform:translateX(-50%) scale(1)}to{opacity:0;transform:translateX(-50%) scale(.96) translateY(8px)}}.bb-canary-page .bb-hyper-toggle{top:76px}.bb-canary-page .bb-hyper-panel{top:132px}@media(max-width:720px){.bb-hyper-toggle{top:72px;right:12px;width:44px;height:44px}.bb-hyper-panel{top:124px;right:12px;width:calc(100vw - 24px)}}@media(prefers-reduced-motion:reduce){.bb-hyper-on h1,.bb-hyper-on .hero h1,.bb-hyper-on button,.bb-hyper-on .stat,.bb-hyper-on .status-card,.bb-hyper-on .probability-card,.bb-hyper-on .box,.bb-hyper-on .game-panel,.bb-hyper-on .stat-box,.bb-hyper-on .info-pill,.bb-hyper-on::after,.bb-hyper-spark,.bb-hyper-star,.bb-hyper-toast{animation:none!important}}
 </style>
 
 <style id="bb-hyper-button-fix">
 .bb-hyper-toggle{border:0!important;display:grid!important;place-items:center!important;text-align:center!important;line-height:1!important;padding:0!important;box-shadow:0 10px 24px rgba(56,189,248,.24)!important}.bb-hyper-toggle::before,.bb-hyper-toggle::after{display:none!important}.bb-hyper-toggle svg,.bb-hyper-toggle img,.bb-hyper-toggle span{display:block;margin:auto}.bb-hyper-toggle:focus-visible{outline:2px solid rgba(255,255,255,.55);outline-offset:3px}@media(max-width:720px){.bb-hyper-toggle{font-size:1.12rem!important}}
 </style>
-
+<link rel="stylesheet" href="../tutorial.css">
 </head>
 <body><button class="bb-hyper-toggle" id="bbHyperToggle" type="button" aria-label="Hyperaktivitäts-Einstellungen" aria-expanded="false">⚙</button><div class="bb-hyper-panel" id="bbHyperPanel" aria-hidden="true"><p class="bb-hyper-title" id="bbHyperTitle">Hyper-Einstellungen</p><p class="bb-hyper-subtitle">Dopamin-Spikes, Glitzer, Pop und Klick-Explosionen. Kann jederzeit wieder ruhig gestellt werden.</p><label class="bb-hyper-row"><span>Hyperaktivitätsmodus</span><span class="bb-hyper-switch"><input id="bbHyperMode" type="checkbox"><span class="bb-hyper-slider"></span></span></label><label class="bb-hyper-row"><span>Klick-Explosionen</span><span class="bb-hyper-switch"><input id="bbHyperClicks" type="checkbox"><span class="bb-hyper-slider"></span></span></label><label class="bb-hyper-row"><span>Glitzerregen</span><span class="bb-hyper-switch"><input id="bbHyperAmbient" type="checkbox"><span class="bb-hyper-slider"></span></span></label><p class="bb-hyper-note">Die Einstellung wird pro Seite gespeichert.</p></div>
 
-    <a class="back-home-btn" href="https://blopperbold.org" aria-label="Zurück zu BlopperBold">← BlopperBold</a>
+    <a class="back-home-btn" href="../index.html" aria-label="Zurück zu BlopperBold">← BlopperBold</a>
 
     <main class="container">
         <div class="eyebrow">Risiko steigt mit jedem Klick</div>
@@ -553,6 +607,28 @@
             </div>
 
             <p id="message" aria-live="polite"></p>
+
+            <div style="margin: 24px 0 16px; border-top: 1px solid var(--line);"></div>
+
+            <div class="stats-panel-title">Statistik &amp; Verlauf</div>
+            <div class="status-grid">
+                <div class="status-card">
+                    <p class="status-label">Gesamt Spiele</p>
+                    <p id="totalGamesStat">0</p>
+                </div>
+                <div class="status-card">
+                    <p class="status-label">Erfolgsquote</p>
+                    <p id="winRateStat">0%</p>
+                </div>
+                <div class="status-card">
+                    <p class="status-label">Ø Klicks vor Reset</p>
+                    <p id="avgClicksStat">0</p>
+                </div>
+            </div>
+            <div style="text-align: left; margin-top: 18px;">
+                <p class="status-label">Letzte 5 Runden</p>
+                <ul id="historyList" class="history-list"></ul>
+            </div>
         </section>
     </main>
 
@@ -576,6 +652,12 @@
         const debugPanel = document.getElementById('debugPanel');
         const disableResetChanceToggle = document.getElementById('disableResetChanceToggle');
 
+        // New cached stats elements
+        const totalGamesStatDisplay = document.getElementById('totalGamesStat');
+        const winRateStatDisplay = document.getElementById('winRateStat');
+        const avgClicksStatDisplay = document.getElementById('avgClicksStat');
+        const historyListDisplay = document.getElementById('historyList');
+
         let clicks = 0;
         const totalClicks = 100;
         let resetChanceIncrement = 1; // Chance steigt pro Klick um den gewählten Wert
@@ -587,6 +669,85 @@
         let maxResetRecord = localStorage.getItem('maxResetRecord') ? parseInt(localStorage.getItem('maxResetRecord')) : 0;
         let minResetRecordIncrement = localStorage.getItem('minResetRecordIncrement') ? parseFloat(localStorage.getItem('minResetRecordIncrement')) : 1;
         let maxResetRecordIncrement = localStorage.getItem('maxResetRecordIncrement') ? parseFloat(localStorage.getItem('maxResetRecordIncrement')) : 1;
+
+        // Statistiken laden
+        let totalGames = localStorage.getItem('stats_100p_games') ? parseInt(localStorage.getItem('stats_100p_games')) : 0;
+        let totalWins = localStorage.getItem('stats_100p_wins') ? parseInt(localStorage.getItem('stats_100p_wins')) : 0;
+        let sumClicksEnded = localStorage.getItem('stats_100p_sum_clicks') ? parseInt(localStorage.getItem('stats_100p_sum_clicks')) : 0;
+        let gamesEnded = localStorage.getItem('stats_100p_ended_count') ? parseInt(localStorage.getItem('stats_100p_ended_count')) : 0;
+        let runHistory = [];
+        try {
+            runHistory = JSON.parse(localStorage.getItem('stats_100p_history') || '[]');
+        } catch (e) {
+            runHistory = [];
+        }
+
+        // Memoization-Cache für probability
+        let probabilityCache = {};
+
+        function updateStatsDashboard() {
+            totalGamesStatDisplay.textContent = totalGames;
+            
+            const winRate = totalGames > 0 ? (totalWins / totalGames * 100) : 0;
+            winRateStatDisplay.textContent = winRate.toFixed(1) + '%';
+            
+            const avgClicks = gamesEnded > 0 ? (sumClicksEnded / gamesEnded) : 0;
+            avgClicksStatDisplay.textContent = avgClicks.toFixed(1);
+
+            // History rendering
+            historyListDisplay.innerHTML = '';
+            runHistory.slice(-5).reverse().forEach(run => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                
+                const timeSpan = document.createElement('span');
+                timeSpan.textContent = run.time;
+                timeSpan.style.color = 'var(--muted)';
+                
+                const infoSpan = document.createElement('span');
+                if (run.result === 'win') {
+                    infoSpan.innerHTML = `<span class="history-tag-win">Erfolg</span> bei ${run.increment}%`;
+                } else {
+                    infoSpan.innerHTML = `Reset bei <strong>${run.clicks}</strong> (${run.increment}%)`;
+                }
+
+                li.appendChild(timeSpan);
+                li.appendChild(infoSpan);
+                historyListDisplay.appendChild(li);
+            });
+        }
+
+        function addRunToHistory(result, reachedClicks, increment) {
+            totalGames++;
+            if (result === 'win') {
+                totalWins++;
+            } else {
+                gamesEnded++;
+                sumClicksEnded += reachedClicks;
+            }
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            runHistory.push({
+                result,
+                clicks: reachedClicks,
+                increment,
+                time: timeStr
+            });
+
+            if (runHistory.length > 50) {
+                runHistory.shift();
+            }
+
+            localStorage.setItem('stats_100p_games', totalGames);
+            localStorage.setItem('stats_100p_wins', totalWins);
+            localStorage.setItem('stats_100p_sum_clicks', sumClicksEnded);
+            localStorage.setItem('stats_100p_ended_count', gamesEnded);
+            localStorage.setItem('stats_100p_history', JSON.stringify(runHistory));
+
+            updateStatsDashboard();
+        }
 
         // Funktion zum Aktualisieren der Rekordanzeigen
         function updateRecordDisplays() {
@@ -659,14 +820,20 @@
         }
 
         function getReachProbability(targetClicks) {
-            let probability = 1;
+            const cacheKey = `${targetClicks}_${resetChanceIncrement}`;
+            if (probabilityCache[cacheKey] !== undefined) {
+                return probabilityCache[cacheKey];
+            }
 
+            let probability = 1;
             for (let clickIndex = 0; clickIndex < targetClicks; clickIndex++) {
                 const resetChance = Math.min(clickIndex * resetChanceIncrement / 100, 1);
                 probability *= 1 - resetChance;
             }
 
-            return probability * 100;
+            const result = probability * 100;
+            probabilityCache[cacheKey] = result;
+            return result;
         }
 
         function updateProbabilityDisplays() {
@@ -706,11 +873,26 @@
             localStorage.removeItem('minResetRecordIncrement');
             localStorage.removeItem('maxResetRecordIncrement');
 
+            // clear stats too
+            localStorage.removeItem('stats_100p_games');
+            localStorage.removeItem('stats_100p_wins');
+            localStorage.removeItem('stats_100p_sum_clicks');
+            localStorage.removeItem('stats_100p_ended_count');
+            localStorage.removeItem('stats_100p_history');
+
             minResetRecord = Infinity;
             maxResetRecord = 0;
             minResetRecordIncrement = resetChanceIncrement;
             maxResetRecordIncrement = resetChanceIncrement;
+            
+            totalGames = 0;
+            totalWins = 0;
+            sumClicksEnded = 0;
+            gamesEnded = 0;
+            runHistory = [];
+
             updateRecordDisplays();
+            updateStatsDashboard();
         }
 
         function resetGameProgress() {
@@ -750,8 +932,9 @@
             setDebugPanel(!debugPanel.classList.contains('show'));
         }
 
-        // Rekorde beim Start der Seite laden und anzeigen
+        // Rekorde und Dashboard beim Start laden
         updateRecordDisplays();
+        updateStatsDashboard();
 
         function playRound() {
             // Nur klicken, wenn das Spiel noch läuft (nicht schon 100 Klicks erreicht)
@@ -759,10 +942,10 @@
                 const currentClicksBeforeAttempt = clicks; // Klicks vor dem aktuellen Versuch speichern
                 
                 // Überprüfen, ob ein Reset stattfindet
-                const currentResetChance = clicks * resetChanceIncrement; // Chance ist Klickzahl * 1%
+                const currentResetChance = clicks * resetChanceIncrement; // Chance ist Klickzahl * X%
                 const randomNumber = Math.random() * 100; // Zufallszahl zwischen 0 und 100
 
-                if (!isResetChanceDisabled && randomNumber < currentResetChance && clicks > 0) { // Reset nur, wenn die Klickzahl > 0 ist, damit ein Reset bei 0 Klicks nicht zählt
+                if (!isResetChanceDisabled && randomNumber < currentResetChance && clicks > 0) { // Reset nur, wenn die Klickzahl > 0 ist
                     // Reset!
                     messageDisplay.textContent = `Oh nein! Der Balken wurde bei ${currentClicksBeforeAttempt} Klicks zurückgesetzt!`;
                     messageDisplay.classList.add('reset-message');
@@ -783,13 +966,16 @@
                     }
                     updateRecordDisplays(); // Rekordanzeigen aktualisieren
 
+                    // Statistik loggen
+                    addRunToHistory('fail', currentClicksBeforeAttempt, resetChanceIncrement);
+
                     clicks = 0;
                     progressBar.style.width = '0%';
                     
                     setTimeout(() => {
                         messageDisplay.classList.remove('reset-message');
                         messageDisplay.textContent = ''; // Nachricht zurücksetzen
-                    }, 2500); // Nachricht für 2.5 Sekunden anzeigen, um die Reset-Info zu sehen
+                    }, 2500); // Nachricht für 2.5 Sekunden anzeigen
 
                 } else {
                     // Kein Reset, Fortschritt machen
@@ -810,18 +996,25 @@
                     messageDisplay.textContent = 'Geschafft! Du hast den Balken 100 Mal geklickt!';
                     messageDisplay.classList.remove('reset-message');
                     messageDisplay.classList.add('win-message');
-                    // Wenn man 100 Klicks erreicht, gibt es keinen Reset, daher keine Rekordaktualisierung hier.
+
+                    // Statistik loggen
+                    addRunToHistory('win', 100, resetChanceIncrement);
                 }
             }
         }
 
         progressBarContainer.addEventListener('click', playRound);
 
-        chanceOptionButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                setResetChanceIncrement(Number(button.dataset.increment));
+        // Event-Delegation für die Wahrscheinlichkeits-Schaltflächen (.chance-controls)
+        const chanceControls = document.querySelector('.chance-controls');
+        if (chanceControls) {
+            chanceControls.addEventListener('click', event => {
+                const button = event.target.closest('.chance-option');
+                if (button) {
+                    setResetChanceIncrement(Number(button.dataset.increment));
+                }
             });
-        });
+        }
 
         resetButton.addEventListener('pointerdown', event => {
             if (event.button && event.button !== 0) return;
@@ -888,7 +1081,7 @@
         });
     </script>
     <script>
-        document.addEventListener('click',event=>{if(!document.body.classList.contains('bb-hyper-clicks-on'))return;const target=event.target.closest('button,a,[role="button"],.progress-bar-container');if(!target)return;target.classList.remove('dopamine-hit');void target.offsetWidth;target.classList.add('dopamine-hit');const ring=document.createElement('span');ring.className='dopamine-burst';ring.style.left=event.clientX+'px';ring.style.top=event.clientY+'px';document.body.append(ring);setTimeout(()=>ring.remove(),620);for(let i=0;i<12;i++){const spark=document.createElement('span');spark.className='dopamine-spark';spark.style.left=event.clientX+'px';spark.style.top=event.clientY+'px';spark.style.background=i%3===0?'#38bdf8':i%3===1?'#fbc531':'#26de81';const angle=Math.random()*Math.PI*2,dist=32+Math.random()*42;spark.style.setProperty('--x',Math.cos(angle)*dist+'px');spark.style.setProperty('--y',Math.sin(angle)*dist+'px');document.body.append(spark);setTimeout(()=>spark.remove(),650)}});
+        document.addEventListener('click',event=>{if(!document.body.classList.contains('bb-hyper-clicks-on'))return;const target=event.target.closest('button,a,[role="button"],.progress-bar-container');if(!target)return;target.classList.remove('dopamine-hit');void target.offsetWidth;target.classList.add('dopamine-hit');const ring=document.createElement('span');ring.className='dopamine-burst';ring.style.left=event.clientX+'px';ring.style.top=event.clientY+'px';document.body.append(ring);setTimeout(()=>ring.remove(),620);for(let i=0;i<12;i++){const spark=document.createElement('span');spark.className='dopamine-spark';spark.style.left=event.clientX+'px';spark.style.top=event.clientY+'px';spark.style.background=i%3===0?'var(--accent-2)':i%3===1?'var(--accent)':'#26de81';const angle=Math.random()*Math.PI*2,dist=32+Math.random()*42;spark.style.setProperty('--x',Math.cos(angle)*dist+'px');spark.style.setProperty('--y',Math.sin(angle)*dist+'px');document.body.append(spark);setTimeout(()=>spark.remove(),650)}});
     </script>
 <script id="bb-touch-zoom-guard">
 (function() {
@@ -946,7 +1139,7 @@
   function apply(){document.body.classList.toggle('bb-hyper-on',!!state.mode);document.body.classList.toggle('bb-hyper-clicks-on',!!state.mode&&!!state.clicks);gear.classList.toggle('is-on',!!state.mode);mode.checked=!!state.mode;clicks.checked=!!state.clicks;ambient.checked=!!state.ambient;save()}
   function openPanel(){clearTimeout(closeTimer);panel.classList.remove('closing');panel.classList.add('show');panel.setAttribute('aria-hidden','false');gear.setAttribute('aria-expanded','true')}
   function closePanel(){if(!panel.classList.contains('show'))return;clearTimeout(closeTimer);panel.classList.remove('show');panel.classList.add('closing');panel.setAttribute('aria-hidden','true');gear.setAttribute('aria-expanded','false');closeTimer=setTimeout(()=>panel.classList.remove('closing'),220)}
-  function burst(x,y,amount){if(!state.mode||!state.clicks)return;const colors=['#fbc531','#38bdf8','#26de81','#fb7185','#a78bfa','#fff'];for(let i=0;i<amount;i++){const s=document.createElement('span');s.className='bb-hyper-spark';s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--bb-c',colors[i%colors.length]);const angle=Math.random()*Math.PI*2;const dist=38+Math.random()*96;s.style.setProperty('--bb-x',Math.cos(angle)*dist+'px');s.style.setProperty('--bb-y',Math.sin(angle)*dist+'px');document.body.append(s);setTimeout(()=>s.remove(),950)}}
+  function burst(x,y,amount){if(!state.mode||!state.clicks)return;const colors=['var(--accent)','var(--accent-2)','#26de81','#fb7185','#a78bfa','#fff'];for(let i=0;i<amount;i++){const s=document.createElement('span');s.className='bb-hyper-spark';s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--bb-c',colors[i%colors.length]);const angle=Math.random()*Math.PI*2;const dist=38+Math.random()*96;s.style.setProperty('--bb-x',Math.cos(angle)*dist+'px');s.style.setProperty('--bb-y',Math.sin(angle)*dist+'px');document.body.append(s);setTimeout(()=>s.remove(),950)}}
   gear.addEventListener('click',event=>{event.stopPropagation();panel.classList.contains('show')?closePanel():openPanel();burst(event.clientX,event.clientY,18)});
   panel.addEventListener('click',event=>event.stopPropagation());
   document.addEventListener('click',event=>{if(!panel.contains(event.target)&&event.target!==gear)closePanel()});
@@ -959,6 +1152,6 @@
   apply();
 })();
 </script>
-
+<script src="../tutorial.js" defer></script>
 </body>
 </html>

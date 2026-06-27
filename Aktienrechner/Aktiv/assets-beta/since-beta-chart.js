@@ -1,3 +1,15 @@
+        // Performance: rAF-based throttle so stat DOM updates fire at most once per frame
+        let _statsRafId = null;
+        let _lastStatsRange = { start: -1, end: -1 };
+
+        function scheduleVisibleStatsUpdate() {
+            if (_statsRafId !== null) return;
+            _statsRafId = requestAnimationFrame(() => {
+                _statsRafId = null;
+                updateVisibleStats();
+            });
+        }
+
         function getIndexFromCanvasX(chartInstance, clientX) {
             if (!chartInstance || !chartInstance.scales || !chartInstance.scales.x) return null;
 
@@ -29,7 +41,11 @@
         }
 
         function simulateSelectedRange(startIndex, endIndex) {
-            if (!portfolioData || !rawStockData || !currentLoadedStock) return null;
+            if (isPortfolioMode) {
+                if (!portfolioData || Object.keys(rawPortfolioStockData).length === 0) return null;
+            } else {
+                if (!portfolioData || !rawStockData || !currentLoadedStock) return null;
+            }
 
             const months = portfolioData.months;
             const prices = portfolioData.prices;
@@ -43,7 +59,7 @@
             const monthlyAmount = parseMonthlyAmount();
             if (!monthlyAmount || monthlyAmount <= 0 || selectedMonths.length === 0) return null;
 
-            const dividendMap = buildDividendMap(rawStockData.dividends);
+            const dividendMap = isPortfolioMode ? new Map() : buildDividendMap(rawStockData.dividends);
             const shouldReinvestDividends = dividendMode === 'reinvest';
             let shares = 0;
             let cumulativeDividend = 0;
@@ -75,6 +91,36 @@
             const invested = shouldReinvestDividends
                 ? monthlyInvested + reinvestedDividendCapital
                 : monthlyInvested;
+            if (isPortfolioMode) {
+                const portfolioValues = portfolioData.portfolioValues;
+                const investedAmounts = portfolioData.investedAmounts;
+                const cumulativeDividends = portfolioData.cumulativeDividends;
+
+                const finalVal = portfolioValues[safeEnd] || 0;
+                const startVal = safeStart > 0 ? portfolioValues[safeStart - 1] : 0;
+                const finalInv = investedAmounts[safeEnd] || 0;
+                const startInv = safeStart > 0 ? investedAmounts[safeStart - 1] : 0;
+                
+                const finalDiv = cumulativeDividends[safeEnd] || 0;
+                const startDiv = safeStart > 0 ? cumulativeDividends[safeStart - 1] : 0;
+
+                const rangeInvested = finalInv - startInv;
+                const gainLoss = finalVal - startVal - rangeInvested;
+                const returnPercent = (startVal + rangeInvested) > 0 ? (gainLoss / (startVal + rangeInvested) * 100) : 0;
+                const dividends = finalDiv - startDiv;
+
+                return {
+                    startDate: selectedMonths[0],
+                    endDate: selectedMonths[selectedMonths.length - 1],
+                    invested: rangeInvested,
+                    portfolioValue: finalVal - startVal,
+                    gainLoss,
+                    returnPercent,
+                    dividends,
+                    opportunityMultiple: rangeInvested > 0 ? (finalVal - startVal) / rangeInvested : 0
+                };
+            }
+
             const finalPrice = selectedPrices[selectedPrices.length - 1] || 0;
             const portfolioValue = shouldReinvestDividends
                 ? shares * finalPrice
@@ -112,6 +158,7 @@
             showSelectionPopupAt(lastPointerPosition.x, lastPointerPosition.y, html);
         }
 
+
         function setAnimatedStatText(elementId, nextText) {
             const element = document.getElementById(elementId);
 
@@ -122,7 +169,7 @@
             element.dataset.statRawValue = nextText;
             element.setAttribute('aria-label', nextText);
 
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (chartPerformanceMode || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                 element.innerText = nextText;
                 return;
             }
@@ -213,14 +260,22 @@
             const opportunityMultiple = investedInRange > 0 ? currentPortfolio / investedInRange : 0;
             const realityCheckText = document.getElementById('realityCheckText');
 
-            document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
+            if (isPortfolioMode) {
+                // Generiere ein Label wie "NVDA(50%) / AAPL(50%)" oder "PORTFOLIO" falls zu lang
+                const shortLabel = portfolioAssets.map(a => `${a.symbol}(${a.weight}%)`).join(' / ');
+                const labelText = shortLabel.length > 35 ? 'PORTFOLIO' : shortLabel;
+                document.getElementById('activeTickerInfo').innerText = labelText;
+            } else {
+                document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
+            }
+            
             setAnimatedStatText('visibleRangeInfo', `${rangeStart} → ${rangeEnd}`);
-            setAnimatedStatText('latestPriceInfo', formatCurrency(latestPrice));
+            setAnimatedStatText('latestPriceInfo', isPortfolioMode ? '€ 100,00 (Index)' : formatCurrency(latestPrice));
 
             if (realityCheckText) {
                 realityCheckText.innerText = investedInRange > 0
                     ? currentRealityCheckMessage
-                    : 'Zoome oder lade Daten, dann gibt es hier den kleinen finanziellen Realitätscheck für genau diesen Abschnitt.';
+                    : 'Reality Check bereit.';
             }
 
             setAnimatedStatText('portfolioValue', '€ ' + currentPortfolio.toLocaleString('de-DE', { maximumFractionDigits: 2 }));
@@ -231,15 +286,45 @@
 
             const gainLossElement = document.getElementById('gainLoss');
             gainLossElement.style.color = gainLoss >= 0 ? '#2ecc71' : '#e74c3c';
+
+            // Update Dividenden-Ertrags-Dashboard dynamically
+            const dividendDashboard = document.getElementById('dividendDashboard');
+            if (dividendDashboard) {
+                if (dividendsInRange > 0) {
+                    dividendDashboard.style.display = 'block';
+                    document.getElementById('divDashTotal').innerText = formatCurrency(dividendsInRange);
+                    
+                    const monthsCount = Math.max(1, safeEnd - safeStart + 1);
+                    const yearsCount = monthsCount / 12;
+                    const avgYear = yearsCount > 0 ? (dividendsInRange / yearsCount) : dividendsInRange;
+                    document.getElementById('divDashAvgYear').innerText = formatCurrency(avgYear);
+                    
+                    const yieldContrib = investedInRange > 0 ? (dividendsInRange / investedInRange * 100) : 0;
+                    document.getElementById('divDashYieldContribution').innerText = yieldContrib.toFixed(2) + '%';
+                } else {
+                    dividendDashboard.style.display = 'none';
+                }
+            }
         }
 
         function updateVisibleStats() {
             if (!portfolioData) return;
 
             if (!chart || !chart.scales || !chart.scales.x) {
-                document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
-                document.getElementById('latestPriceInfo').innerText = formatCurrency(getLatestPrice());
-                applyStatsFromRange(0, portfolioData.months.length - 1);
+                if (isPortfolioMode) {
+                    const shortLabel = portfolioAssets.map(a => `${a.symbol}(${a.weight}%)`).join(' / ');
+                    const labelText = shortLabel.length > 35 ? 'PORTFOLIO' : shortLabel;
+                    document.getElementById('activeTickerInfo').innerText = labelText;
+                    document.getElementById('latestPriceInfo').innerText = '€ 100,00 (Index)';
+                } else {
+                    document.getElementById('activeTickerInfo').innerText = currentLoadedStock || '–';
+                    document.getElementById('latestPriceInfo').innerText = formatCurrency(getLatestPrice());
+                }
+                const fullEnd = portfolioData.months.length - 1;
+                if (_lastStatsRange.start !== 0 || _lastStatsRange.end !== fullEnd) {
+                    _lastStatsRange = { start: 0, end: fullEnd };
+                    applyStatsFromRange(0, fullEnd);
+                }
                 return;
             }
 
@@ -247,30 +332,44 @@
             const startIndex = Number.isFinite(xScale.min) ? Math.max(0, Math.floor(xScale.min)) : 0;
             const endIndex = Number.isFinite(xScale.max) ? Math.min(portfolioData.months.length - 1, Math.ceil(xScale.max)) : portfolioData.months.length - 1;
 
+            // Skip expensive DOM updates when visible range is unchanged
+            if (startIndex === _lastStatsRange.start && endIndex === _lastStatsRange.end) return;
+            _lastStatsRange = { start: startIndex, end: endIndex };
+
             document.title = `Investment Portfolio Rechner – ${currentLoadedStock || 'Aktie'} – ${currentPeriod} Jahre – Kurs € ${getLatestPrice().toLocaleString('de-DE', { maximumFractionDigits: 2 })}`;
             applyStatsFromRange(startIndex, endIndex);
         }
 
         function updateChart() {
             if (!portfolioData) return;
+            _lastStatsRange = { start: -1, end: -1 }; // reset cache for new data
 
-            // Verwende alle Daten (da sie bereits für den Zeitraum generiert wurden)
             const months = portfolioData.months;
             const portfolioValues = portfolioData.portfolioValues;
             const investedAmounts = portfolioData.investedAmounts;
             const cumulativeDividends = portfolioData.cumulativeDividends;
             const prices = portfolioData.prices;
 
-            // Erstelle Chart
             const ctx = document.getElementById('portfolioChart').getContext('2d');
-
-            if (chart) {
-                chart.destroy();
-            }
-
             const isMobileChart = window.matchMedia('(max-width: 640px)').matches;
             const chartTickColor = isMobileChart ? 'rgba(226, 232, 240, 0.58)' : 'white';
             const priceTickColor = isMobileChart ? 'rgba(226, 232, 240, 0.58)' : '#38bdf8';
+
+            // If chart already exists, update data in-place to avoid the blank flash
+            if (chart) {
+                chart.data.labels = months;
+                chart.data.datasets[0].data = portfolioValues;
+                chart.data.datasets[1].data = investedAmounts;
+                chart.data.datasets[1].label = dividendMode === 'reinvest' ? 'Investiert inkl. Dividenden (€)' : 'Eingezahlte Summe (€)';
+                chart.data.datasets[2].data = cumulativeDividends;
+                chart.data.datasets[3].data = prices;
+                chart.update('none'); // 'none' = sofort, kein Fade-Übergang
+                
+                // Sofortiges Update der Infoboxen erzwingen
+                _lastStatsRange = { start: -1, end: -1 };
+                updateVisibleStats();
+                return;
+            }
 
             chart = new Chart(ctx, {
                 type: 'line',
@@ -333,6 +432,31 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    resizeDelay: 100,
+                    devicePixelRatio: chartPerformanceMode ? Math.min(window.devicePixelRatio || 1, 1.5) : undefined,
+                    animation: chartPerformanceMode ? false : undefined,
+                    transitions: chartPerformanceMode ? {
+                        active: {
+                            animation: {
+                                duration: 0
+                            }
+                        },
+                        resize: {
+                            animation: {
+                                duration: 0
+                            }
+                        },
+                        show: {
+                            animation: {
+                                duration: 0
+                            }
+                        },
+                        hide: {
+                            animation: {
+                                duration: 0
+                            }
+                        }
+                    } : undefined,
                     interaction: {
                         mode: 'index',
                         intersect: false
@@ -348,7 +472,7 @@
                                 mode: 'x',
                                 threshold: 2,
                                 onPanComplete: function() {
-                                    updateVisibleStats();
+                                    scheduleVisibleStatsUpdate();
                                     hideSelectionPopup();
                                 }
                             },
@@ -488,7 +612,7 @@
                 chart.setDatasetVisibility(index, isVisible);
             });
 
-            chart.update();
+            chart.update('none');
             syncDatasetCheckboxes();
             updateVisibleStats();
         }

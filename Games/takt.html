@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script>
     <meta charset="UTF-8" />
     <meta
         name="viewport"
@@ -15,17 +18,17 @@
            1. Base / Theme
         ========================================================= */
         :root {
-            --bg-1: #0f172a;
-            --bg-2: #312e81;
-            --bg-3: #7c3aed;
-            --border: rgba(255, 255, 255, 0.18);
+            --bg-1: #0b0f19;
+            --bg-2: #072a3a;
+            --bg-3: #043e4f;
+            --border: rgba(255, 255, 255, 0.14);
             --text: #fff;
-            --muted: rgba(255, 255, 255, 0.72);
-            --accent: #fbc531;
-            --accent-2: #38bdf8;
-            --good: #26de81;
-            --danger: #ef4444;
-            --dark: #1e272e;
+            --muted: rgba(204, 251, 241, 0.65);
+            --accent: #e5a93b;
+            --accent-2: #2dd4bf;
+            --good: #10b981;
+            --danger: #f43f5e;
+            --dark: #0b0f19;
         }
 
         * {
@@ -47,10 +50,10 @@
             color: var(--text);
             font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             background:
-                radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.34), transparent 28%),
-                radial-gradient(circle at 88% 14%, rgba(251, 197, 49, 0.25), transparent 24%),
-                radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.33), transparent 33%),
-                linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+                radial-gradient(circle at 12% 18%, rgba(45, 212, 191, 0.3), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(229, 169, 59, 0.22), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.25), transparent 33%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 48%, var(--bg-3));
         }
 
         body::before {
@@ -1203,6 +1206,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../tutorial.css">
 </head>
 
 <body>
@@ -1249,7 +1253,7 @@
         <p class="bb-hyper-note">Die Einstellung wird pro Seite gespeichert.</p>
     </div>
 
-    <a class="back-home-btn" href="https://blopperbold.org">← BlopperBold</a>
+    <a class="back-home-btn" href="../index.html">← BlopperBold</a>
 
     <main class="shell">
         <section class="hero">
@@ -1352,22 +1356,25 @@
     </div>
 
     <script>
-        const track = document.getElementById("track");
-        const tapBtn = document.getElementById("tap");
-        const scoreEl = document.getElementById("score");
-        const streakEl = document.getElementById("streak");
-        const roundEl = document.getElementById("round");
-        const bestEl = document.getElementById("best");
-        const logEl = document.getElementById("log");
-        const resetBtn = document.getElementById("reset");
-        const difficultyButton = document.getElementById("difficultyButton");
-        const difficultyBackdrop = document.getElementById("difficultyBackdrop");
-        const difficultyOptionButtons = document.querySelectorAll("[data-difficulty]");
-        const debugPanel = document.getElementById("debugPanel");
-        const debugAutoToggle = document.getElementById("debugAutoToggle");
-        const debugSlowToggle = document.getElementById("debugSlowToggle");
-        const debugPerfectBtn = document.getElementById("debugPerfect");
-        const debugFinishBtn = document.getElementById("debugFinish");
+        const DOM = {
+            track: document.getElementById("track"),
+            tapBtn: document.getElementById("tap"),
+            score: document.getElementById("score"),
+            streak: document.getElementById("streak"),
+            round: document.getElementById("round"),
+            best: document.getElementById("best"),
+            log: document.getElementById("log"),
+            resetBtn: document.getElementById("reset"),
+            difficultyButton: document.getElementById("difficultyButton"),
+            difficultyBackdrop: document.getElementById("difficultyBackdrop"),
+            difficultyOptionButtons: document.querySelectorAll("[data-difficulty]"),
+            difficultyOptionsContainer: document.querySelector(".difficulty-options"),
+            debugPanel: document.getElementById("debugPanel"),
+            debugAutoToggle: document.getElementById("debugAutoToggle"),
+            debugSlowToggle: document.getElementById("debugSlowToggle"),
+            debugPerfectBtn: document.getElementById("debugPerfect"),
+            debugFinishBtn: document.getElementById("debugFinish")
+        };
 
         /* =========================================================
            2. Game State
@@ -1379,6 +1386,7 @@
 
         let score = 0;
         let streak = 0;
+        let perfectStreak = 0;
         let round = 0;
         let running = false;
 
@@ -1429,8 +1437,8 @@
             },
         };
 
-        bestEl.textContent = best;
-        [scoreEl, streakEl, roundEl, bestEl].forEach((el) => el.classList.add("stat-number"));
+        DOM.best.textContent = best;
+        [DOM.score, DOM.streak, DOM.round, DOM.best].forEach((el) => el.classList.add("stat-number"));
 
         /* =========================================================
            3. Helpers
@@ -1440,16 +1448,19 @@
         }
 
         function saveState() {
-            localStorage.setItem(
-                "taktState",
-                JSON.stringify({
-                    score,
-                    streak,
-                    round,
-                    best,
-                    log: logEl.textContent,
-                })
-            );
+            try {
+                localStorage.setItem(
+                    "taktState",
+                    JSON.stringify({
+                        score,
+                        streak,
+                        perfectStreak,
+                        round,
+                        best,
+                        log: DOM.log.textContent,
+                    })
+                );
+            } catch(e) {}
         }
 
         function renderStat(el, value) {
@@ -1470,10 +1481,10 @@
         function render() {
             const config = getConfig();
 
-            renderStat(scoreEl, score);
-            renderStat(streakEl, streak);
-            renderStat(roundEl, `${round}/${config.rounds}`);
-            renderStat(bestEl, best);
+            renderStat(DOM.score, score);
+            renderStat(DOM.streak, streak);
+            renderStat(DOM.round, `${round}/${config.rounds}`);
+            renderStat(DOM.best, best);
         }
 
         function update() {
@@ -1494,9 +1505,10 @@
 
                 score = state.score || 0;
                 streak = state.streak || 0;
+                perfectStreak = state.perfectStreak || 0;
                 round = state.round || 0;
                 best = state.best || best;
-                logEl.textContent = state.log || logEl.textContent;
+                DOM.log.textContent = state.log || DOM.log.textContent;
 
                 render();
             } catch (error) {
@@ -1510,29 +1522,29 @@
         let logAnimationTimeouts = [];
 
         function setLog(text) {
-            if (logEl.textContent === text) return;
+            if (DOM.log.textContent === text) return;
 
             if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                logEl.textContent = text;
+                DOM.log.textContent = text;
                 return;
             }
 
             logAnimationTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId));
             logAnimationTimeouts = [];
 
-            logEl.classList.remove("reality-text-enter");
-            logEl.classList.add("reality-text-exit");
+            DOM.log.classList.remove("reality-text-enter");
+            DOM.log.classList.add("reality-text-exit");
 
             const updateTimeout = window.setTimeout(() => {
-                logEl.textContent = text;
-                logEl.classList.remove("reality-text-exit");
+                DOM.log.textContent = text;
+                DOM.log.classList.remove("reality-text-exit");
 
-                void logEl.offsetWidth;
+                void DOM.log.offsetWidth;
 
-                logEl.classList.add("reality-text-enter");
+                DOM.log.classList.add("reality-text-enter");
 
                 const cleanupTimeout = window.setTimeout(() => {
-                    logEl.classList.remove("reality-text-enter");
+                    DOM.log.classList.remove("reality-text-enter");
                     logAnimationTimeouts = logAnimationTimeouts.filter((timeoutId) => timeoutId !== cleanupTimeout);
                 }, 460);
 
@@ -1547,9 +1559,9 @@
         ========================================================= */
         function updateDifficultyUi() {
             const config = getConfig();
-            difficultyButton.firstChild.nodeValue = config.label;
+            DOM.difficultyButton.firstChild.nodeValue = config.label;
 
-            difficultyOptionButtons.forEach((button) => {
+            DOM.difficultyOptionButtons.forEach((button) => {
                 button.classList.toggle("active", button.dataset.difficulty === difficulty);
             });
         }
@@ -1558,23 +1570,23 @@
             window.clearTimeout(difficultyCloseTimer);
             updateDifficultyUi();
 
-            difficultyBackdrop.classList.remove("show", "closing");
-            void difficultyBackdrop.offsetWidth;
+            DOM.difficultyBackdrop.classList.remove("show", "closing");
+            void DOM.difficultyBackdrop.offsetWidth;
 
-            difficultyBackdrop.classList.add("show");
-            difficultyBackdrop.setAttribute("aria-hidden", "false");
+            DOM.difficultyBackdrop.classList.add("show");
+            DOM.difficultyBackdrop.setAttribute("aria-hidden", "false");
         }
 
         function closeDifficultyMenu() {
-            if (!difficultyBackdrop.classList.contains("show") && !difficultyBackdrop.classList.contains("closing")) return;
+            if (!DOM.difficultyBackdrop.classList.contains("show") && !DOM.difficultyBackdrop.classList.contains("closing")) return;
 
             window.clearTimeout(difficultyCloseTimer);
-            difficultyBackdrop.classList.remove("show");
-            difficultyBackdrop.classList.add("closing");
-            difficultyBackdrop.setAttribute("aria-hidden", "true");
+            DOM.difficultyBackdrop.classList.remove("show");
+            DOM.difficultyBackdrop.classList.add("closing");
+            DOM.difficultyBackdrop.setAttribute("aria-hidden", "true");
 
             difficultyCloseTimer = window.setTimeout(() => {
-                difficultyBackdrop.classList.remove("closing");
+                DOM.difficultyBackdrop.classList.remove("closing");
             }, 280);
         }
 
@@ -1603,10 +1615,12 @@
 
             beat = document.createElement("div");
             beat.className = "beat";
-            track.append(beat);
+            DOM.track.append(beat);
 
             pos = -70;
-            speed = (config.base + Math.min(4.8, round * config.growth)) * (slowMo ? 0.45 : 1);
+            // Progressive speed increase based on consecutive perfect hits
+            const speedMultiplier = 1 + perfectStreak * 0.035;
+            speed = (config.base + Math.min(4.8, round * config.growth)) * speedMultiplier * (slowMo ? 0.45 : 1);
         }
 
         function loop() {
@@ -1616,14 +1630,14 @@
             beat.style.left = `${pos}px`;
 
             const perfectAutoClickDistance = Math.max(5, getConfig().perfect * 0.45);
-            const isInAutoClickRange = Math.abs(pos + 28 - track.clientWidth / 2) < perfectAutoClickDistance;
+            const isInAutoClickRange = Math.abs(pos + 28 - DOM.track.clientWidth / 2) < perfectAutoClickDistance;
 
             if (autoClick && isInAutoClickRange) {
                 tap();
                 return;
             }
 
-            if (pos > track.clientWidth + 70) {
+            if (pos > DOM.track.clientWidth + 70) {
                 miss("Vorbei");
                 next();
                 return;
@@ -1654,10 +1668,11 @@
 
             score = 0;
             streak = 0;
+            perfectStreak = 0;
             round = 0;
             running = true;
 
-            track.querySelectorAll(".beat").forEach((b) => b.remove());
+            DOM.track.querySelectorAll(".beat").forEach((b) => b.remove());
 
             update();
             makeBeat();
@@ -1667,7 +1682,7 @@
 
         function finish() {
             running = false;
-            celebrate(track.clientWidth / 2, 62, true);
+            celebrate(DOM.track.clientWidth / 2, 62, true);
 
             if (score > best) {
                 best = score;
@@ -1683,10 +1698,11 @@
 
         function miss(text) {
             streak = 0;
-            track.classList.add("miss");
+            perfectStreak = 0;
+            DOM.track.classList.add("miss");
             setLog(text);
 
-            setTimeout(() => track.classList.remove("miss"), 180);
+            setTimeout(() => DOM.track.classList.remove("miss"), 180);
         }
 
         function tap() {
@@ -1694,31 +1710,34 @@
 
             const config = getConfig();
             const center = pos + 28;
-            const target = track.clientWidth / 2;
+            const target = DOM.track.clientWidth / 2;
             const distance = Math.abs(center - target);
             const x = center;
             const y = 62;
 
             if (distance < config.perfect) {
                 streak++;
+                perfectStreak++;
                 score += config.score + streak * 8;
                 setLog("Perfekt");
-                track.classList.add("perfect");
+                DOM.track.classList.add("perfect");
                 celebrate(x, y, true);
             } else if (distance < config.good) {
                 streak++;
+                perfectStreak = 0;
                 score += Math.round(config.score * 0.47) + streak * 4;
                 setLog("Gut");
-                track.classList.add("hit");
+                DOM.track.classList.add("hit");
                 celebrate(x, y, false);
             } else {
+                perfectStreak = 0;
                 miss("Daneben");
                 next();
                 return;
             }
 
             popUi();
-            setTimeout(() => track.classList.remove("hit", "perfect"), 220);
+            setTimeout(() => DOM.track.classList.remove("hit", "perfect"), 220);
             next();
         }
 
@@ -1726,16 +1745,16 @@
            7. Effects
         ========================================================= */
         function popUi() {
-            scoreEl.parentElement.classList.add("bump");
-            streakEl.parentElement.classList.add("bump");
-            logEl.classList.add("pop");
-            tapBtn.classList.add("kick");
+            DOM.score.parentElement.classList.add("bump");
+            DOM.streak.parentElement.classList.add("bump");
+            DOM.log.classList.add("pop");
+            DOM.tapBtn.classList.add("kick");
 
             setTimeout(() => {
-                scoreEl.parentElement.classList.remove("bump");
-                streakEl.parentElement.classList.remove("bump");
-                logEl.classList.remove("pop");
-                tapBtn.classList.remove("kick");
+                DOM.score.parentElement.classList.remove("bump");
+                DOM.streak.parentElement.classList.remove("bump");
+                DOM.log.classList.remove("pop");
+                DOM.tapBtn.classList.remove("kick");
             }, 260);
         }
 
@@ -1744,7 +1763,7 @@
             ring.className = "ring";
             ring.style.left = `${x - 28}px`;
             ring.style.top = `${y - 28}px`;
-            track.append(ring);
+            DOM.track.append(ring);
 
             setTimeout(() => ring.remove(), 560);
 
@@ -1764,7 +1783,7 @@
                 particle.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
                 particle.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
 
-                track.append(particle);
+                DOM.track.append(particle);
                 setTimeout(() => particle.remove(), 680);
             }
         }
@@ -1819,6 +1838,7 @@
 
             score = 0;
             streak = 0;
+            perfectStreak = 0;
             round = 0;
             best = 0;
 
@@ -1827,7 +1847,7 @@
         }
 
         function spawnResetExplosion() {
-            const rect = resetBtn.getBoundingClientRect();
+            const rect = DOM.resetBtn.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
 
@@ -1863,29 +1883,29 @@
             resetHoldRaf = null;
             resetHoldStart = 0;
 
-            resetBtn.classList.remove("holding", "reset-ready", "easter-growing");
-            resetBtn.style.setProperty("--hold-progress", 0);
-            resetBtn.style.setProperty("--egg-scale", 1);
-            resetBtn.querySelector(".reset-label").textContent = "Reset halten";
+            DOM.resetBtn.classList.remove("holding", "reset-ready", "easter-growing");
+            DOM.resetBtn.style.setProperty("--hold-progress", 0);
+            DOM.resetBtn.style.setProperty("--egg-scale", 1);
+            DOM.resetBtn.querySelector(".reset-label").textContent = "Reset halten";
         }
 
         function tickResetHold(now) {
             const elapsed = now - resetHoldStart;
             const normalProgress = Math.min(elapsed / 5000, 1);
             const eggProgress = Math.max(0, (elapsed - 5000) / 13500);
-            const label = resetBtn.querySelector(".reset-label");
+            const label = DOM.resetBtn.querySelector(".reset-label");
 
-            resetBtn.style.setProperty("--hold-progress", normalProgress);
-            resetBtn.style.setProperty("--egg-scale", 1 + Math.min(eggProgress, 1) * 2.9);
+            DOM.resetBtn.style.setProperty("--hold-progress", normalProgress);
+            DOM.resetBtn.style.setProperty("--egg-scale", 1 + Math.min(eggProgress, 1) * 2.9);
 
             if (!resetHasFired && elapsed >= 5000) {
                 resetHasFired = true;
-                resetBtn.classList.add("reset-ready");
+                DOM.resetBtn.classList.add("reset-ready");
                 doReset();
             }
 
             if (elapsed >= 5000) {
-                resetBtn.classList.add("easter-growing");
+                DOM.resetBtn.classList.add("easter-growing");
                 label.textContent = `weiter halten ${Math.max(0, Math.ceil((18500 - elapsed) / 1000))}s`;
             } else {
                 label.textContent = `Reset ${Math.ceil(normalProgress * 100)}%`;
@@ -1893,12 +1913,12 @@
 
             if (!resetEggFired && elapsed >= 18500) {
                 resetEggFired = true;
-                resetBtn.classList.add("exploding");
+                DOM.resetBtn.classList.add("exploding");
                 spawnResetExplosion();
                 setLog("Reset ist verdampft.");
 
                 setTimeout(() => {
-                    resetBtn.classList.remove("exploding");
+                    DOM.resetBtn.classList.remove("exploding");
                     stopResetHold();
                 }, 720);
 
@@ -1917,8 +1937,8 @@
             resetHasFired = false;
             resetEggFired = false;
 
-            resetBtn.setPointerCapture?.(event.pointerId);
-            resetBtn.classList.add("holding");
+            DOM.resetBtn.setPointerCapture?.(event.pointerId);
+            DOM.resetBtn.classList.add("holding");
 
             tickResetHold(resetHoldStart);
         }
@@ -1929,8 +1949,8 @@
         function toggleDebug(force) {
             debugMode = typeof force === "boolean" ? force : !debugMode;
 
-            debugPanel.classList.toggle("show", debugMode);
-            debugPanel.setAttribute("aria-hidden", String(!debugMode));
+            DOM.debugPanel.classList.toggle("show", debugMode);
+            DOM.debugPanel.setAttribute("aria-hidden", String(!debugMode));
             setLog(debugMode ? "Debug an." : "Debug aus.");
         }
 
@@ -1938,44 +1958,48 @@
 
         function setAutoClick(value) {
             autoClick = value;
-            debugAutoToggle.checked = autoClick;
+            DOM.debugAutoToggle.checked = autoClick;
             setLog(autoClick ? "Auto klickt." : "Auto aus.");
         }
 
         function setSlowMo(value) {
             slowMo = value;
-            debugSlowToggle.checked = slowMo;
+            DOM.debugSlowToggle.checked = slowMo;
             setLog(slowMo ? "Slow an." : "Slow aus.");
         }
 
         /* =========================================================
            10. Event Listeners
         ========================================================= */
-        difficultyButton.addEventListener("click", openDifficultyMenu);
+        DOM.difficultyButton.addEventListener("click", openDifficultyMenu);
 
-        difficultyBackdrop.addEventListener("click", (event) => {
-            if (event.target === difficultyBackdrop) closeDifficultyMenu();
+        DOM.difficultyBackdrop.addEventListener("click", (event) => {
+            if (event.target === DOM.difficultyBackdrop) closeDifficultyMenu();
         });
 
-        difficultyOptionButtons.forEach((button) => {
-            button.addEventListener("click", () => setDifficulty(button.dataset.difficulty));
+        // Event Delegation for difficulty modal options
+        DOM.difficultyOptionsContainer.addEventListener("click", (event) => {
+            const btn = event.target.closest("[data-difficulty]");
+            if (btn) {
+                setDifficulty(btn.dataset.difficulty);
+            }
         });
 
-        debugAutoToggle.addEventListener("change", () => setAutoClick(debugAutoToggle.checked));
-        debugSlowToggle.addEventListener("change", () => setSlowMo(debugSlowToggle.checked));
+        DOM.debugAutoToggle.addEventListener("change", () => setAutoClick(DOM.debugAutoToggle.checked));
+        DOM.debugSlowToggle.addEventListener("change", () => setSlowMo(DOM.debugSlowToggle.checked));
 
-        debugPerfectBtn.addEventListener("click", () => {
+        DOM.debugPerfectBtn.addEventListener("click", () => {
             if (!running || !beat) {
                 setLog("Debug: erst starten.");
                 return;
             }
 
-            pos = track.clientWidth / 2 - 28;
+            pos = DOM.track.clientWidth / 2 - 28;
             beat.style.left = `${pos}px`;
             tap();
         });
 
-        debugFinishBtn.addEventListener("click", () => {
+        DOM.debugFinishBtn.addEventListener("click", () => {
             round = getConfig().rounds - 1;
             score += 333;
             update();
@@ -1983,7 +2007,7 @@
         });
 
         document.getElementById("start").addEventListener("click", start);
-        tapBtn.addEventListener("click", tap);
+        DOM.tapBtn.addEventListener("click", tap);
 
         document.addEventListener("keydown", (event) => {
             const key = event.key;
@@ -1993,7 +2017,7 @@
                 return;
             }
 
-            if (key === "Escape" && difficultyBackdrop.classList.contains("show")) {
+            if (key === "Escape" && DOM.difficultyBackdrop.classList.contains("show")) {
                 event.preventDefault();
                 closeDifficultyMenu();
                 return;
@@ -2005,11 +2029,11 @@
             }
         });
 
-        resetBtn.addEventListener("pointerdown", startResetHold);
-        resetBtn.addEventListener("pointerup", stopResetHold);
-        resetBtn.addEventListener("pointerleave", stopResetHold);
-        resetBtn.addEventListener("pointercancel", stopResetHold);
-        resetBtn.addEventListener("click", (event) => event.preventDefault());
+        DOM.resetBtn.addEventListener("pointerdown", startResetHold);
+        DOM.resetBtn.addEventListener("pointerup", stopResetHold);
+        DOM.resetBtn.addEventListener("pointerleave", stopResetHold);
+        DOM.resetBtn.addEventListener("pointercancel", stopResetHold);
+        DOM.resetBtn.addEventListener("click", (event) => event.preventDefault());
 
         document.addEventListener("contextmenu", (event) => {
             if (event.target.closest("button, a, [role='button']")) event.preventDefault();
@@ -2258,5 +2282,6 @@
             apply();
         })();
     </script>
+    <script src="../tutorial.js" defer></script>
 </body>
 </html>

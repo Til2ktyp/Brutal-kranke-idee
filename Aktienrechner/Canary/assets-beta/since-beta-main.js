@@ -1,92 +1,152 @@
-        async function loadData() {
-            const requestId = ++latestLoadRequestId;
-            const stock = normalizeTickerInput(document.getElementById('stock').value);
-            const monthlyAmount = parseMonthlyAmount();
-            updateQuickAmountButtons();
+async function loadData() {
+    const requestId = ++latestLoadRequestId;
+    const stock = normalizeTickerInput(document.getElementById('stock').value);
+    const monthlyAmount = parseMonthlyAmount();
+    updateQuickAmountButtons();
 
-            if (!stock || monthlyAmount <= 0) {
-                showStatus('Bitte gültige Werte eingeben.', 'error');
+    if (monthlyAmount <= 0) {
+        showStatus('Bitte einen gültigen monatlichen Betrag eingeben.', 'error');
+        return;
+    }
+
+    zoomEnabled = currentPeriod >= 5;
+    updateZoomControls();
+
+    setLoadingState(true);
+    clearStatus();
+
+    try {
+        if (isPortfolioMode) {
+            if (portfolioAssets.length === 0) {
+                showStatus('Bitte füge mindestens ein Asset im Portfolio-Drawer hinzu.', 'error');
+                setLoadingState(false);
                 return;
             }
 
-            zoomEnabled = currentPeriod >= 5;
-            updateZoomControls();
+            showStatus(`Lade Daten für ${portfolioAssets.length} Portfolio-Assets...`, 'success');
 
-            // Only reload external data if ticker changed
-            if (currentLoadedStock === stock && rawStockData) {
-                recalculatePortfolioFromRawData();
-                showStatus(`Lokale Neuberechnung für ${stock} abgeschlossen.`, 'success');
-                return;
-            }
-
-            setLoadingState(true);
-            clearStatus();
-            lastRequestedTicker = stock;
-
-            try {
-                const cached = loadStockDataFromCache(stock);
+            // Lade alle Assets parallel
+            await Promise.all(portfolioAssets.map(async (asset) => {
+                const symbol = asset.symbol;
+                const cached = loadStockDataFromCache(symbol);
 
                 if (cached && isCacheFresh(cached)) {
-                    rawStockData = {
+                    rawPortfolioStockData[symbol] = {
                         values: cached.values,
                         dividends: cached.dividends
                     };
-                    currentLoadedStock = stock;
-                    portfolioData = buildPortfolioFromMonthlyData(
-                        stock,
-                        monthlyAmount,
-                        currentPeriod,
-                        rawStockData.values,
-                        buildDividendMap(rawStockData.dividends)
-                    );
-
-                    if (requestId !== latestLoadRequestId) return;
-                    const totalInvested = portfolioData.investedAmounts[portfolioData.investedAmounts.length - 1] || 0;
-                    const totalCurrent = portfolioData.portfolioValues[portfolioData.portfolioValues.length - 1] || 0;
-                    const totalMultiple = totalInvested > 0 ? (totalCurrent / totalInvested).toFixed(2) : '0.00';
-                    currentRealityCheckMessage = totalInvested > 0
-                        ? getRandomRealityCheck(totalInvested, totalCurrent, totalMultiple)
-                        : 'Zoome oder lade Daten, dann gibt es hier den kleinen finanziellen Realitätscheck für genau diesen Abschnitt.';
-                    updateChart();
-                    showStatus(`Daten aus dem Cache geladen: ${stock}`, 'success');
                 } else {
-                    showStatus(`Lade neue Marktdaten für ${stock}...`, 'success');
-
                     const [values, dividends] = await Promise.all([
-                        fetchMonthlyValues(stock, 40),
-                        fetchAlphaVantageDividends(stock)
+                        fetchMonthlyValues(symbol, 40),
+                        fetchAlphaVantageDividends(symbol)
                     ]);
-
-                    if (requestId !== latestLoadRequestId) return;
-
-                    rawStockData = { values, dividends };
-                    currentLoadedStock = stock;
-                    saveStockDataToCache(stock, values, dividends);
-
-                    portfolioData = buildPortfolioFromMonthlyData(
-                        stock,
-                        monthlyAmount,
-                        currentPeriod,
-                        values,
-                        buildDividendMap(dividends)
-                    );
-                    const totalInvested = portfolioData.investedAmounts[portfolioData.investedAmounts.length - 1] || 0;
-                    const totalCurrent = portfolioData.portfolioValues[portfolioData.portfolioValues.length - 1] || 0;
-                    const totalMultiple = totalInvested > 0 ? (totalCurrent / totalInvested).toFixed(2) : '0.00';
-                    currentRealityCheckMessage = totalInvested > 0
-                        ? getRandomRealityCheck(totalInvested, totalCurrent, totalMultiple)
-                        : 'Zoome oder lade Daten, dann gibt es hier den kleinen finanziellen Realitätscheck für genau diesen Abschnitt.';
-                    updateChart();
-                    showStatus(`Neue Daten erfolgreich geladen: ${stock}`, 'success');
+                    rawPortfolioStockData[symbol] = { values, dividends };
+                    saveStockDataToCache(symbol, values, dividends);
                 }
-            } catch (error) {
-                showStatus('Fehler beim Laden: ' + error.message, 'error');
-            } finally {
-                if (requestId === latestLoadRequestId) {
-                    setLoadingState(false);
-                }
+            }));
+
+            if (requestId !== latestLoadRequestId) return;
+
+            portfolioData = buildAggregatedPortfolio(
+                portfolioAssets,
+                monthlyAmount,
+                currentPeriod,
+                rawPortfolioStockData
+            );
+
+            currentLoadedStock = 'Portfolio';
+
+            const totalInvested = portfolioData.investedAmounts[portfolioData.investedAmounts.length - 1] || 0;
+            const totalCurrent = portfolioData.portfolioValues[portfolioData.portfolioValues.length - 1] || 0;
+            const totalMultiple = totalInvested > 0 ? (totalCurrent / totalInvested).toFixed(2) : '0.00';
+            currentRealityCheckMessage = totalInvested > 0
+                ? getRandomRealityCheck(totalInvested, totalCurrent, totalMultiple)
+                : 'Reality Check bereit.';
+            
+            updateChart();
+            showStatus(`Portfolio-Simulation erfolgreich geladen.`, 'success');
+        } else {
+            // Einzel-Asset-Modus
+            if (!stock) {
+                showStatus('Bitte eine gültige Aktie eingeben.', 'error');
+                setLoadingState(false);
+                return;
+            }
+
+            // Falls bereits geladen, lokal berechnen
+            if (currentLoadedStock === stock && rawStockData) {
+                recalculatePortfolioFromRawData();
+                showStatus(`Lokale Neuberechnung für ${stock} abgeschlossen.`, 'success');
+                setLoadingState(false);
+                return;
+            }
+
+            lastRequestedTicker = stock;
+            const cached = loadStockDataFromCache(stock);
+
+            if (cached && isCacheFresh(cached)) {
+                rawStockData = {
+                    values: cached.values,
+                    dividends: cached.dividends
+                };
+                currentLoadedStock = stock;
+                portfolioData = buildPortfolioFromMonthlyData(
+                    stock,
+                    monthlyAmount,
+                    currentPeriod,
+                    rawStockData.values,
+                    buildDividendMap(rawStockData.dividends)
+                );
+
+                if (requestId !== latestLoadRequestId) return;
+                const totalInvested = portfolioData.investedAmounts[portfolioData.investedAmounts.length - 1] || 0;
+                const totalCurrent = portfolioData.portfolioValues[portfolioData.portfolioValues.length - 1] || 0;
+                const totalMultiple = totalInvested > 0 ? (totalCurrent / totalInvested).toFixed(2) : '0.00';
+                currentRealityCheckMessage = totalInvested > 0
+                    ? getRandomRealityCheck(totalInvested, totalCurrent, totalMultiple)
+                    : 'Reality Check bereit.';
+                updateChart();
+                showStatus(`Daten aus dem Cache geladen: ${stock}`, 'success');
+            } else {
+                showStatus(`Lade neue Marktdaten für ${stock}...`, 'success');
+
+                const [values, dividends] = await Promise.all([
+                    fetchMonthlyValues(stock, 40),
+                    fetchAlphaVantageDividends(stock)
+                ]);
+
+                if (requestId !== latestLoadRequestId) return;
+
+                rawStockData = { values, dividends };
+                currentLoadedStock = stock;
+                saveStockDataToCache(stock, values, dividends);
+
+                portfolioData = buildPortfolioFromMonthlyData(
+                    stock,
+                    monthlyAmount,
+                    currentPeriod,
+                    values,
+                    buildDividendMap(dividends)
+                );
+                const totalInvested = portfolioData.investedAmounts[portfolioData.investedAmounts.length - 1] || 0;
+                const totalCurrent = portfolioData.portfolioValues[portfolioData.portfolioValues.length - 1] || 0;
+                const totalMultiple = totalInvested > 0 ? (totalCurrent / totalInvested).toFixed(2) : '0.00';
+                currentRealityCheckMessage = totalInvested > 0
+                    ? getRandomRealityCheck(totalInvested, totalCurrent, totalMultiple)
+                    : 'Reality Check bereit.';
+                updateChart();
+                showStatus(`Neue Daten erfolgreich geladen: ${stock}`, 'success');
             }
         }
+    } catch (error) {
+        showStatus('Fehler beim Laden: ' + error.message, 'error');
+    } finally {
+        if (requestId === latestLoadRequestId) {
+            setLoadingState(false);
+        }
+    }
+}
+
 
         window.addEventListener('load', () => {
             loadDatasetVisibility();
@@ -99,11 +159,17 @@
             updateDividendModeControls();
             syncSettingsControls();
             refreshCacheSummary();
+            
+            // Portfolio Initialisierung
+            if (typeof syncPortfolioDrawerUI === 'function') {
+                syncPortfolioDrawerUI();
+            }
+
             loadData();
             updateQuickAmountButtons();
 
             document.getElementById('monthlyAmount').addEventListener('change', () => {
-                if (rawStockData && currentLoadedStock) {
+                if (isPortfolioMode || (rawStockData && currentLoadedStock)) {
                     recalculatePortfolioFromRawData();
                 }
             });
@@ -116,10 +182,16 @@
 
             const canvas = document.getElementById('portfolioChart');
 
+            canvas.addEventListener('click', () => {
+                // Ein einfacher Klick blendet das Auswertungs-Popup aus
+                hideSelectionPopup();
+            });
+
             canvas.addEventListener('mousemove', (e) => {
                 lastPointerPosition = { x: e.clientX, y: e.clientY };
                 updateLiveDragSelectionPopup(e.clientX, e.clientY);
             });
+
             canvas.addEventListener('mouseup', () => {
                 isDragSelecting = false;
                 dragSelectionStartIndex = null;

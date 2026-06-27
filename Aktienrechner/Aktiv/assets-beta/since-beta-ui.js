@@ -1,17 +1,42 @@
+        let _statusDismissTimeout = null;
+        let _statusExitTimeout = null;
+        // Set to true during period-only recalculations so the canvas fade is skipped
+        let isPeriodUpdate = false;
+
         function showStatus(message, type = 'success') {
             const banner = document.getElementById('statusBanner');
             if (!banner) return;
 
+            // Cancel any in-flight dismiss/exit
+            if (_statusDismissTimeout) clearTimeout(_statusDismissTimeout);
+            if (_statusExitTimeout) clearTimeout(_statusExitTimeout);
+
             banner.textContent = message;
             banner.className = `status-banner show ${type}`;
+
+            // Auto-dismiss success banners after 3.5 s
+            if (type === 'success') {
+                _statusDismissTimeout = setTimeout(() => {
+                    clearStatus();
+                }, 3500);
+            }
         }
 
         function clearStatus() {
             const banner = document.getElementById('statusBanner');
             if (!banner) return;
 
-            banner.textContent = '';
-            banner.className = 'status-banner';
+            if (_statusDismissTimeout) clearTimeout(_statusDismissTimeout);
+
+            // Play slide-out, then fully hide
+            banner.classList.remove('show');
+            banner.classList.add('exiting');
+
+            _statusExitTimeout = setTimeout(() => {
+                banner.classList.remove('exiting');
+                banner.textContent = '';
+                banner.className = 'status-banner';
+            }, 360);
         }
 
         function updateQuickAmountButtons() {
@@ -75,6 +100,9 @@
 
             if (!chartContainer) return;
 
+            // Skip canvas fade during period-only recalculations — chart stays visible
+            if (isPeriodUpdate) return;
+
             if (isLoading) {
                 chartContainer.classList.remove('chart-data-enter');
                 chartContainer.classList.add('chart-data-loading');
@@ -115,20 +143,276 @@
             popup.style.top = `${Math.max(12, top)}px`;
         }
         function selectStock(ticker, name, shouldLoad = false) {
+            // Bei Auswahl einer einzelnen Aktie den Portfolio-Modus deaktivieren
+            isPortfolioMode = false;
+            localStorage.setItem('isPortfolioMode', 'false');
+            const toggle = document.getElementById('portfolioModeToggle');
+            if (toggle) toggle.checked = false;
+            const managerSection = document.getElementById('portfolioManagerSection');
+            if (managerSection) managerSection.style.display = 'none';
+
             stockInput.value = ticker;
             if (autocompleteList) {
                 autocompleteList.classList.remove('show');
             }
             clearStatus();
 
+            // Spring-highlight the active ticker button
+            document.querySelectorAll('.market-ticker-btn.ticker-active').forEach(btn => {
+                btn.classList.remove('ticker-active');
+            });
+            document.querySelectorAll('.market-ticker-btn').forEach(btn => {
+                const onclick = btn.getAttribute('onclick') || '';
+                if (onclick.includes(`'${ticker}'`)) {
+                    btn.classList.add('ticker-active');
+                }
+            });
+
             if (shouldLoad) {
                 loadData();
             }
         }
 
+        function toggleHamburgerMenu(forceState) {
+            const btn = document.querySelector('.hamburger-menu-btn');
+            const dropdown = document.getElementById('hamburgerDropdown');
+            if (!btn || !dropdown) return;
+            
+            const isShow = forceState !== undefined ? forceState : !dropdown.classList.contains('show');
+            
+            if (isShow) {
+                btn.classList.add('open');
+                dropdown.classList.add('show');
+            } else {
+                btn.classList.remove('open');
+                dropdown.classList.remove('show');
+            }
+        }
+
+        function togglePortfolioDrawerFromMenu() {
+            toggleHamburgerMenu(false);
+            togglePortfolioDrawer();
+        }
+
+        function toggleGraphSettingsPanelFromMenu() {
+            toggleHamburgerMenu(false);
+            toggleGraphSettingsPanel();
+        }
+
+        function toggleAppSettingsPanelFromMenu() {
+            toggleHamburgerMenu(false);
+            toggleAppSettingsPanel();
+        }
+
         function toggleGraphSettingsPanel() {
             const panel = document.getElementById('graphSettingsPanel');
             panel.classList.toggle('show');
+        }
+
+        function toggleAppSettingsPanel() {
+            const panel = document.getElementById('appSettingsPanel');
+            if (!panel) return;
+            panel.classList.toggle('show');
+            refreshCacheSummary();
+            syncSettingsControls();
+        }
+
+        function syncSettingsControls() {
+            const providerSelect = document.getElementById('marketDataProviderSelect');
+            const performanceToggle = document.getElementById('chartPerformanceModeToggle');
+
+            if (providerSelect) providerSelect.value = marketDataProvider;
+            if (performanceToggle) performanceToggle.checked = chartPerformanceMode;
+        }
+
+        function setMarketDataProvider(provider) {
+            if (!['twelve', 'yahoo', 'auto'].includes(provider)) return;
+
+            marketDataProvider = provider;
+            localStorage.setItem('marketDataProvider', marketDataProvider);
+            rawStockData = null;
+            currentLoadedStock = null;
+            showStatus(`Marktdaten-Quelle: ${provider === 'twelve' ? 'Twelve Data' : provider === 'yahoo' ? 'Yahoo Finance' : 'Auto mit Fallback'}`, 'success');
+        }
+
+        function setChartPerformanceMode(isEnabled) {
+            chartPerformanceMode = Boolean(isEnabled);
+            localStorage.setItem('chartPerformanceMode', String(chartPerformanceMode));
+            applyPerformanceMode();
+
+            if (portfolioData) {
+                updateChart();
+            }
+
+            showStatus(chartPerformanceMode ? 'Performance-Modus aktiviert.' : 'Performance-Modus deaktiviert.', 'success');
+        }
+
+        function applyPerformanceMode() {
+            document.body.classList.toggle('performance-mode', chartPerformanceMode);
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes) return '0 KB';
+
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let value = bytes;
+            let unitIndex = 0;
+
+            while (value >= 1024 && unitIndex < units.length - 1) {
+                value /= 1024;
+                unitIndex++;
+            }
+
+            return `${value.toLocaleString('de-DE', { maximumFractionDigits: unitIndex === 0 ? 0 : 2 })} ${units[unitIndex]}`;
+        }
+
+        function refreshCacheSummary() {
+            const summaryElement = document.getElementById('cacheSummary');
+            if (!summaryElement) return;
+
+            const summary = getStockCacheSummary();
+            summaryElement.textContent = `${summary.entries} Einträge · ${summary.tickers} Ticker · ${formatBytes(summary.bytes)}`;
+        }
+
+        function getCachePassword() {
+            const input = document.getElementById('cachePassword');
+            return input ? input.value : '';
+        }
+
+        function encodeBase64(bytes) {
+            let binary = '';
+            bytes.forEach(byte => {
+                binary += String.fromCharCode(byte);
+            });
+            return btoa(binary);
+        }
+
+        function decodeBase64(value) {
+            const binary = atob(value);
+            const bytes = new Uint8Array(binary.length);
+
+            for (let index = 0; index < binary.length; index++) {
+                bytes[index] = binary.charCodeAt(index);
+            }
+
+            return bytes;
+        }
+
+        async function deriveCacheCryptoKey(password, salt) {
+            if (!window.crypto || !crypto.subtle) {
+                throw new Error('WebCrypto ist in diesem Kontext nicht verfügbar');
+            }
+
+            const encodedPassword = new TextEncoder().encode(password);
+            const baseKey = await crypto.subtle.importKey('raw', encodedPassword, 'PBKDF2', false, ['deriveKey']);
+
+            return crypto.subtle.deriveKey(
+                {
+                    name: 'PBKDF2',
+                    salt,
+                    iterations: 120000,
+                    hash: 'SHA-256'
+                },
+                baseKey,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt', 'decrypt']
+            );
+        }
+
+        async function encryptCachePayload(payload, password) {
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const key = await deriveCacheCryptoKey(password, salt);
+            const encodedPayload = new TextEncoder().encode(JSON.stringify(payload));
+            const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encodedPayload);
+
+            return {
+                encrypted: true,
+                algorithm: 'AES-GCM',
+                kdf: 'PBKDF2-SHA256',
+                iterations: 120000,
+                salt: encodeBase64(salt),
+                iv: encodeBase64(iv),
+                data: encodeBase64(new Uint8Array(encrypted))
+            };
+        }
+
+        async function decryptCachePayload(payload, password) {
+            const salt = decodeBase64(payload.salt);
+            const iv = decodeBase64(payload.iv);
+            const data = decodeBase64(payload.data);
+            const key = await deriveCacheCryptoKey(password, salt);
+            const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+            return JSON.parse(new TextDecoder().decode(decrypted));
+        }
+
+        function downloadJson(filename, payload) {
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        async function exportStockCache() {
+            try {
+                const entries = getStockCacheEntries().map(entry => ({
+                    key: entry.key,
+                    value: entry.value
+                }));
+                const payload = {
+                    type: 'blopperbold-stock-cache',
+                    version: 1,
+                    exportedAt: new Date().toISOString(),
+                    entries
+                };
+                const password = getCachePassword();
+                const exportPayload = password ? await encryptCachePayload(payload, password) : payload;
+                const suffix = password ? 'encrypted' : 'plain';
+
+                downloadJson(`blopperbold-stock-cache-${suffix}.json`, exportPayload);
+                showStatus(`Cache exportiert: ${entries.length} Einträge`, 'success');
+            } catch (error) {
+                showStatus(`Export fehlgeschlagen: ${error.message}`, 'error');
+            }
+        }
+
+        function triggerCacheImport() {
+            const input = document.getElementById('cacheImportFile');
+            if (!input) return;
+            input.value = '';
+            input.click();
+        }
+
+        async function importStockCache(file) {
+            if (!file) return;
+
+            try {
+                const raw = await file.text();
+                const parsed = JSON.parse(raw);
+                const password = getCachePassword();
+                const payload = parsed.encrypted ? await decryptCachePayload(parsed, password) : parsed;
+
+                if (!payload || payload.type !== 'blopperbold-stock-cache' || !Array.isArray(payload.entries)) {
+                    throw new Error('Keine gültige Cache-Datei');
+                }
+
+                payload.entries.forEach(entry => {
+                    if (entry && isStockCacheKey(entry.key) && typeof entry.value === 'string') {
+                        localStorage.setItem(entry.key, entry.value);
+                    }
+                });
+
+                refreshCacheSummary();
+                showStatus(`Cache importiert: ${payload.entries.length} Einträge`, 'success');
+            } catch (error) {
+                showStatus(`Import fehlgeschlagen: ${error.message}`, 'error');
+            }
         }
 
         function saveDatasetVisibility() {
@@ -169,9 +453,9 @@
         }
                 function updatePeriodDisplay() {
             const periodDisplay = document.getElementById('periodDisplay');
-            if (periodDisplay) {
-                periodDisplay.innerText = currentPeriod === 1 ? '1 Jahr' : `${currentPeriod} Jahre`;
-            }
+            if (!periodDisplay) return;
+            const nextText = currentPeriod === 1 ? '1 Jahr' : `${currentPeriod} Jahre`;
+            periodDisplay.innerText = nextText;
         }
 
         function syncPeriodDropdownSelection() {
@@ -339,6 +623,39 @@
             applyMobileXRange(range.min + offset, range.max + offset);
         }
 
+        function applyInvestmentPreset(presetName) {
+            let ticker = 'NVDA';
+            let amount = 100;
+            let divMode = 'reinvest';
+
+            if (presetName === 'tech') {
+                ticker = 'NVDA';
+                amount = 150;
+                divMode = 'reinvest';
+            } else if (presetName === 'dividend') {
+                ticker = 'KO';
+                amount = 250;
+                divMode = 'payout';
+            } else if (presetName === 'allweather') {
+                ticker = 'MSFT';
+                amount = 100;
+                divMode = 'reinvest';
+            }
+
+            document.getElementById('stock').value = ticker;
+            document.getElementById('monthlyAmount').value = amount;
+
+            setDividendMode(divMode);
+            loadData();
+
+            const panel = document.getElementById('appSettingsPanel');
+            if (panel) {
+                panel.classList.remove('show');
+            }
+
+            showStatus(`Profil "${presetName === 'tech' ? 'Tech Growth' : presetName === 'dividend' ? 'Dividend Focus' : 'All-Weather'}" geladen: ${ticker}, €${amount}/Monat.`, 'success');
+        }
+
         const stockInput = document.getElementById('stock');
         const autocompleteList = document.getElementById('autocompleteList');
 
@@ -354,11 +671,185 @@
                 graphPanel.classList.remove('show');
             }
 
+            const settingsPanel = document.getElementById('appSettingsPanel');
+            const settingsButton = document.querySelector('.app-settings-btn');
+
+            if (settingsPanel && settingsButton && !settingsPanel.contains(e.target) && !settingsButton.contains(e.target)) {
+                settingsPanel.classList.remove('show');
+            }
+
+            const portfolioDrawer = document.getElementById('portfolioDrawer');
+            const portfolioButton = document.querySelector('.portfolio-settings-btn');
+            if (portfolioDrawer && portfolioButton && !portfolioDrawer.contains(e.target) && !portfolioButton.contains(e.target)) {
+                portfolioDrawer.classList.remove('show');
+            }
+
             const periodSelector = document.querySelector('.period-selector');
             if (periodSelector && !periodSelector.contains(e.target)) {
                 closePeriodDropdown();
             }
+
+            // Hamburger Dropdown schließen bei Klick außerhalb
+            const hamburgerDropdown = document.getElementById('hamburgerDropdown');
+            const hamburgerButton = document.querySelector('.hamburger-menu-btn');
+            if (hamburgerDropdown && hamburgerButton && !hamburgerDropdown.contains(e.target) && !hamburgerButton.contains(e.target)) {
+                toggleHamburgerMenu(false);
+            }
         });
+
+        // --- Portfolio UI-Controller ---
+        function togglePortfolioDrawer() {
+            const drawer = document.getElementById('portfolioDrawer');
+            if (!drawer) return;
+            drawer.classList.toggle('show');
+            if (drawer.classList.contains('show')) {
+                syncPortfolioDrawerUI();
+            }
+        }
+
+        function syncPortfolioDrawerUI() {
+            const toggle = document.getElementById('portfolioModeToggle');
+            if (toggle) {
+                toggle.checked = isPortfolioMode;
+            }
+            const managerSection = document.getElementById('portfolioManagerSection');
+            if (managerSection) {
+                managerSection.style.display = isPortfolioMode ? 'block' : 'none';
+            }
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+        }
+
+        function togglePortfolioMode(isEnabled) {
+            isPortfolioMode = isEnabled;
+            localStorage.setItem('isPortfolioMode', isPortfolioMode);
+            const managerSection = document.getElementById('portfolioManagerSection');
+            if (managerSection) {
+                managerSection.style.display = isPortfolioMode ? 'block' : 'none';
+            }
+            if (isPortfolioMode && portfolioAssets.length === 0) {
+                // Standardmäßig NVDA & AAPL eintragen
+                portfolioAssets = [
+                    { symbol: 'NVDA', weight: 50 },
+                    { symbol: 'AAPL', weight: 50 }
+                ];
+                localStorage.setItem('portfolioAssets', JSON.stringify(portfolioAssets));
+            }
+            syncPortfolioDrawerUI();
+        }
+
+        function addStockToPortfolio() {
+            const input = document.getElementById('portfolioSearchInput');
+            if (!input) return;
+            const ticker = normalizeTickerInput(input.value);
+            if (!ticker) {
+                showStatus('Bitte einen Ticker eingeben.', 'error');
+                return;
+            }
+            if (portfolioAssets.some(asset => asset.symbol === ticker)) {
+                showStatus(`${ticker} ist bereits im Portfolio.`, 'error');
+                return;
+            }
+            
+            // Neues Asset mit 0% Gewichtung hinzufügen
+            portfolioAssets.push({ symbol: ticker, weight: 0 });
+            input.value = '';
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+            showStatus(`${ticker} zum Portfolio hinzugefügt.`, 'success');
+        }
+
+        function removeStockFromPortfolio(symbol) {
+            portfolioAssets = portfolioAssets.filter(asset => asset.symbol !== symbol);
+            localStorage.setItem('portfolioAssets', JSON.stringify(portfolioAssets));
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+        }
+
+        function updateAssetWeight(symbol, value) {
+            const asset = portfolioAssets.find(a => a.symbol === symbol);
+            if (asset) {
+                asset.weight = parseInt(value, 10) || 0;
+                const display = document.getElementById(`weight-val-${symbol}`);
+                if (display) {
+                    display.textContent = `${asset.weight}%`;
+                }
+                updatePortfolioTotalWeight();
+            }
+        }
+
+        function updatePortfolioTotalWeight() {
+            const total = portfolioAssets.reduce((sum, asset) => sum + asset.weight, 0);
+            const weightBadge = document.getElementById('portfolioTotalWeight');
+            if (weightBadge) {
+                weightBadge.textContent = `${total}%`;
+                if (total === 100) {
+                    weightBadge.className = 'weight-badge success';
+                } else {
+                    weightBadge.className = 'weight-badge error';
+                }
+            }
+        }
+
+        function renderPortfolioAssetsList() {
+            const container = document.getElementById('portfolioAssetsList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            portfolioAssets.forEach(asset => {
+                const item = document.createElement('div');
+                item.className = 'portfolio-asset-item';
+                item.innerHTML = `
+                    <div class="portfolio-asset-info">
+                        <span class="portfolio-asset-name">${asset.symbol}</span>
+                        <button class="portfolio-asset-remove" type="button" onclick="removeStockFromPortfolio('${asset.symbol}')">Entfernen</button>
+                    </div>
+                    <div class="portfolio-slider-container">
+                        <input type="range" min="0" max="100" value="${asset.weight}" oninput="updateAssetWeight('${asset.symbol}', this.value)" onchange="savePortfolioAssetsToStorage()">
+                        <span class="portfolio-weight-value" id="weight-val-${asset.symbol}">${asset.weight}%</span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function savePortfolioAssetsToStorage() {
+            localStorage.setItem('portfolioAssets', JSON.stringify(portfolioAssets));
+        }
+
+        function equalizePortfolioWeights() {
+            if (portfolioAssets.length === 0) return;
+            const share = Math.floor(100 / portfolioAssets.length);
+            let remainder = 100 - (share * portfolioAssets.length);
+
+            portfolioAssets.forEach((asset, idx) => {
+                asset.weight = share + (idx < remainder ? 1 : 0);
+            });
+
+            savePortfolioAssetsToStorage();
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+        }
+
+        function clearPortfolioAssets() {
+            portfolioAssets = [];
+            savePortfolioAssetsToStorage();
+            renderPortfolioAssetsList();
+            updatePortfolioTotalWeight();
+            showStatus('Portfolio geleert.', 'success');
+        }
+
+        function saveAndApplyPortfolio() {
+            const total = portfolioAssets.reduce((sum, asset) => sum + asset.weight, 0);
+            if (total !== 100) {
+                showStatus('Die Gesamtgewichtung muss genau 100% betragen!', 'error');
+                return;
+            }
+            savePortfolioAssetsToStorage();
+            togglePortfolioDrawer();
+            loadData();
+        }
+
 
         window.addEventListener('resize', updateZoomControls);
 

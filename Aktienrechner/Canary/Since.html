@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta name="google-adsense-account" content="ca-pub-5795114678692881">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5795114678692881"
+        crossorigin="anonymous" data-bb-adsense="true"></script>
     <meta charset="UTF-8">
     <meta
         name="viewport"
@@ -412,21 +415,77 @@
 
 <body class="bb-canary-page">
     <nav class="floating-actions" aria-label="Seitennavigation und Einstellungen">
-        <a class="back-home-btn" href="https://blopperbold.org" aria-label="Zurück zu BlopperBold">
+        <a class="back-home-btn" href="../../index.html" aria-label="Zurück zu BlopperBold">
             <span class="back-home-btn-text">Zurück zu BlopperBold</span>
             <span class="back-home-btn-icon" aria-hidden="true">🏠</span>
         </a>
 
-        <button class="graph-settings-btn" type="button" onclick="toggleGraphSettingsPanel()">
-            ⚙️ Graphen
+        <!-- Hamburger Button -->
+        <button class="hamburger-menu-btn" type="button" onclick="toggleHamburgerMenu()" aria-label="Menü öffnen/schließen">
+            <span class="hamburger-bar bar-1"></span>
+            <span class="hamburger-bar bar-2"></span>
+            <span class="hamburger-bar bar-3"></span>
         </button>
 
-        <button class="app-settings-btn" type="button" onclick="toggleAppSettingsPanel()">
-            ⚙️ Einstellungen
-        </button>
+        <!-- Dropdown Menu -->
+        <div class="hamburger-dropdown" id="hamburgerDropdown">
+            <button class="portfolio-settings-btn" type="button" onclick="togglePortfolioDrawerFromMenu()">
+                💼 Portfolio
+            </button>
+
+            <button class="graph-settings-btn" type="button" onclick="toggleGraphSettingsPanelFromMenu()">
+                ⚙️ Graphen
+            </button>
+
+            <button class="app-settings-btn" type="button" onclick="toggleAppSettingsPanelFromMenu()">
+                ⚙️ Einstellungen
+            </button>
+        </div>
     </nav>
 
     <div class="status-banner" id="statusBanner" role="status" aria-live="polite"></div>
+
+    <aside class="portfolio-drawer" id="portfolioDrawer" aria-label="Portfolio verwalten">
+        <header class="portfolio-drawer-header">
+            <div class="portfolio-drawer-title">💼 Portfolio verwalten</div>
+            <button class="portfolio-drawer-close" type="button" onclick="togglePortfolioDrawer()" aria-label="Schließen">
+                ×
+            </button>
+        </header>
+
+        <section class="portfolio-drawer-section">
+            <label class="settings-toggle">
+                <input type="checkbox" id="portfolioModeToggle" onchange="togglePortfolioMode(this.checked)">
+                <span>Portfolio-Modus aktivieren</span>
+            </label>
+            <div class="settings-hint">Schaltet um von einer einzelnen Aktie zu einem benutzerdefinierten Portfolio aus mehreren Aktien.</div>
+        </section>
+
+        <section class="portfolio-drawer-section" id="portfolioManagerSection" style="display: none;">
+            <div class="settings-label">Aktien hinzufügen</div>
+            <div class="portfolio-add-row">
+                <div class="autocomplete-container" style="flex: 1;">
+                    <input type="text" id="portfolioSearchInput" class="stock-input" placeholder="z. B. AAPL, MSFT, TSLA..." autocomplete="off">
+                </div>
+                <button class="settings-action-btn" type="button" onclick="addStockToPortfolio()" style="flex: 0 0 auto; margin-top: 0; padding: 0 14px; height: 42px;">+</button>
+            </div>
+
+            <div class="portfolio-assets-list" id="portfolioAssetsList">
+                <!-- Dynamisch gefüllte Asset-Liste mit Slidern -->
+            </div>
+
+            <div class="portfolio-summary-row">
+                <span>Gesamtgewichtung:</span>
+                <span id="portfolioTotalWeight" class="weight-badge error">0%</span>
+            </div>
+
+            <div class="settings-button-row" style="margin-top: 18px;">
+                <button class="settings-action-btn" type="button" onclick="equalizePortfolioWeights()">Gleichverteilen</button>
+                <button class="settings-action-btn danger" type="button" onclick="clearPortfolioAssets()">Alle leeren</button>
+            </div>
+            <button class="primary-btn" type="button" onclick="saveAndApplyPortfolio()" style="width: 100%; margin-top: 14px;">Anwenden & Berechnen</button>
+        </section>
+    </aside>
 
     <aside class="graph-settings-panel" id="graphSettingsPanel" aria-label="Graphen auswählen">
         <div class="graph-settings-title">📋 Graphen auswählen</div>
@@ -513,6 +572,16 @@
             </label>
 
             <div class="settings-hint">Dopamin-Spikes, Glitzer, Pop und Klick-Explosionen. Wird auf diesem Gerät gespeichert.</div>
+        </section>
+
+        <section class="settings-section">
+            <div class="settings-label">Investment-Profile Presets</div>
+            <div class="settings-button-row" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+                <button class="settings-action-btn" type="button" onclick="applyInvestmentPreset('tech')" style="font-weight: 850;">Tech Growth</button>
+                <button class="settings-action-btn" type="button" onclick="applyInvestmentPreset('dividend')" style="font-weight: 850;">Div Focus</button>
+                <button class="settings-action-btn" type="button" onclick="applyInvestmentPreset('allweather')" style="font-weight: 850;">All-Weather</button>
+            </div>
+            <div class="settings-hint">Vorkonfigurierte Profile für schnelles Testen typischer Strategien.</div>
         </section>
 
         <section class="settings-section">
@@ -721,6 +790,28 @@
                 <div class="stat-label">Rendite</div>
                 <div class="stat-value" id="returnPercent">0%</div>
             </article>
+        </section>
+
+        <section class="dividend-dashboard" id="dividendDashboard" aria-label="Dividenden-Ertrags-Dashboard" style="margin-top: 20px; display: none;">
+            <div class="box" style="padding: 20px; border: 1px solid var(--border); border-radius: 22px; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(14px);">
+                <h3 style="margin: 0 0 14px 0; color: #fde68a; font-size: 1.15rem; font-weight: 950; display: flex; align-items: center; gap: 8px;">
+                    📊 Dividenden-Ertrags-Dashboard
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div>
+                        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 800;">Kumulierte Dividenden (gesamt)</div>
+                        <div id="divDashTotal" style="font-size: 1.6rem; font-weight: 900; color: #38bdf8; margin-top: 4px;">€ 0</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 800;">Durchschnittliche Dividende / Jahr</div>
+                        <div id="divDashAvgYear" style="font-size: 1.6rem; font-weight: 900; color: #26de81; margin-top: 4px;">€ 0</div>
+                    </div>
+                    <div>
+                        <div style="color: var(--muted); font-size: 0.8rem; font-weight: 800;">Renditeanteil aus Dividenden</div>
+                        <div id="divDashYieldContribution" style="font-size: 1.6rem; font-weight: 900; color: #fbc531; margin-top: 4px;">0%</div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="reality-check" aria-label="Reality Check">

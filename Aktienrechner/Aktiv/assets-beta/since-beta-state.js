@@ -1,4 +1,4 @@
-        let chart = null;
+let chart = null;
         let currentPeriod = 10;
         let portfolioData = null;
         let zoomEnabled = false;
@@ -10,8 +10,18 @@
         let lastRequestedTicker = null;
         let isLoadingData = false;
         let latestLoadRequestId = 0;
+
+        // Portfolio-Modus Zustandsvariablen
+        let isPortfolioMode = localStorage.getItem('isPortfolioMode') === 'true';
+        let portfolioAssets = JSON.parse(localStorage.getItem('portfolioAssets')) || [];
+        let rawPortfolioStockData = {}; // Speichert Ticker -> { values, dividends }
+
         let realityMode = 'LARP';
         let dividendMode = localStorage.getItem('dividendMode') === 'payout' ? 'payout' : 'reinvest';
+        let marketDataProvider = ['twelve', 'yahoo', 'auto'].includes(localStorage.getItem('marketDataProvider'))
+            ? localStorage.getItem('marketDataProvider')
+            : 'twelve';
+        let chartPerformanceMode = localStorage.getItem('chartPerformanceMode') === 'true';
         let currentRealityCheckMessage = 'Lade Daten, dann gibt\'s hier die kleine finanzielle Respektschelle.';
         let lastPointerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         let isDragSelecting = false;
@@ -47,7 +57,7 @@
             { name: 'McDonalds', ticker: 'MCD' },
             { name: 'Nike', ticker: 'NKE' },
             { name: 'Volkswagen', ticker: 'VWAGY' },
-            { name: 'BMW', ticker: 'BMWYY' },
+            { name: 'BMW', ticker: 'BMWKY' },
             { name: 'Siemens', ticker: 'SIEGY' },
             { name: 'SAP', ticker: 'SAP' },
             { name: 'Adidas', ticker: 'ADDYY' },
@@ -60,11 +70,6 @@
             { name: 'Infineon', ticker: 'IFNNY' },
             { name: 'Linde', ticker: 'LIN' },
             { name: 'Bayer', ticker: 'BAYRY' },
-            { name: 'Volkswagen', ticker: 'VWAGY' },
-            { name: 'BMW', ticker: 'BMWKY' },
-            { name: 'Siemens', ticker: 'SIEGY' },
-            { name: 'SAP', ticker: 'SAP' },
-            { name: 'Adidas', ticker: 'ADDYY' },
             { name: 'Deutsche Telekom', ticker: 'DTEGY' },
             { name: 'ADOBE', ticker: 'ADBE' },
             { name: 'ASML', ticker: 'ASML' },
